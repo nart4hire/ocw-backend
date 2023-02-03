@@ -1,0 +1,3 @@
+bin/
+tmp/
+app/wire_gen.go
