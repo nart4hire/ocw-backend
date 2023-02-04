@@ -5,7 +5,7 @@ import (
 )
 
 type MiddlewareCollection interface {
-	Register() []Middleware
+	Register() ([]Middleware, []string)
 }
 
 type Middleware interface {

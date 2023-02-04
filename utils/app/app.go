@@ -12,12 +12,13 @@ import (
 )
 
 type HttpServer struct {
-	server   *chi.Mux
-	log      logger.Logger
-	logUtil  log.LogUtils
-	res      res.Resource
-	env      *env.Environment
-	reporter reporter.Reporter
+	server          *chi.Mux
+	log             logger.Logger
+	logUtil         log.LogUtils
+	res             res.Resource
+	env             *env.Environment
+	reporter        reporter.Reporter
+	middlewaresName []string
 }
 
 func New(
@@ -31,7 +32,8 @@ func New(
 ) *HttpServer {
 	r := chi.NewRouter()
 
-	for _, handler := range middlewares.Register() {
+	middlewareHandlers, middlewareName := middlewares.Register()
+	for _, handler := range middlewareHandlers {
 		r.Use(handler.Handle)
 	}
 
@@ -40,11 +42,12 @@ func New(
 	}
 
 	return &HttpServer{
-		server:   r,
-		log:      log,
-		res:      res,
-		logUtil:  logUtil,
-		env:      env,
-		reporter: reporter,
+		server:          r,
+		log:             log,
+		res:             res,
+		logUtil:         logUtil,
+		env:             env,
+		reporter:        reporter,
+		middlewaresName: middlewareName,
 	}
 }

@@ -55,13 +55,17 @@ func (l *LogtailReporter) Flush() {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 
+	if len(l.logQueue) == 0 {
+		return
+	}
+
 	payloadBytes, err := json.Marshal(l.logQueue)
 
 	if err != nil {
 		l.logUtil.PrintFormattedOutput(
 			fmt.Sprintf("Some error happened when parse json: %s", err),
-			"REPORT",
-			"ERROR",
+			"Report",
+			"error",
 			log.ForeRed,
 		)
 	} else {
@@ -74,8 +78,8 @@ func (l *LogtailReporter) Flush() {
 			if err != nil {
 				l.logUtil.PrintFormattedOutput(
 					fmt.Sprintf("Some error happened when creating request: %s", err),
-					"REPORT",
-					"ERROR",
+					"Report",
+					"error",
 					log.ForeRed,
 				)
 				return
@@ -89,18 +93,18 @@ func (l *LogtailReporter) Flush() {
 			if err != nil {
 				l.logUtil.PrintFormattedOutput(
 					fmt.Sprintf("Some error happened when sending request: %s", err),
-					"REPORT",
-					"ERROR",
+					"Report",
+					"error",
 					log.ForeRed,
 				)
 				return
 			}
 
-			if res.StatusCode != http.StatusOK {
+			if res.StatusCode < 200 && res.StatusCode >= 300 {
 				l.logUtil.PrintFormattedOutput(
 					fmt.Sprintf("Request respose is not 200 OK: got %d", res.StatusCode),
-					"REPORT",
-					"ERROR",
+					"Report",
+					"error",
 					log.ForeRed,
 				)
 			}
@@ -110,11 +114,20 @@ func (l *LogtailReporter) Flush() {
 }
 
 func (l *LogtailReporter) Start(ctx context.Context) {
+	if !l.env.UseReporter {
+		l.logUtil.PrintFormattedOutput(
+			"Reporter is not started due to disabled by env",
+			"Report",
+			"warning",
+			log.ForeYellow)
+		return
+	}
+
 	if l.env.AppEnvironment != "PRODUCTION" {
 		l.logUtil.PrintFormattedOutput(
 			"Reporter is not started due to non-production environment",
-			"REPORT",
-			"WARNING",
+			"Report",
+			"warning",
 			log.ForeYellow)
 		return
 	}
@@ -124,14 +137,15 @@ func (l *LogtailReporter) Start(ctx context.Context) {
 		defer func() { l.isStarted = false }()
 		defer l.Flush()
 
-		timer := time.NewTicker(time.Second)
+		interval := time.Duration(l.env.LogFlushInterval)
+		timer := time.NewTicker(interval * time.Millisecond)
 		defer timer.Stop()
 
 		l.logUtil.PrintFormattedOutput(
-			"Reporter started to listen...",
-			"REPORT",
-			"INFO",
-			log.ForeBlue,
+			fmt.Sprintf("Reporter started to listen... (interval: %dms)", interval),
+			"Report",
+			"info",
+			log.ForeGreen,
 		)
 
 		for {

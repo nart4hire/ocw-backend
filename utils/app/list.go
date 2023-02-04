@@ -69,3 +69,16 @@ func (l HttpServer) ListRoute() {
 
 	l.log.Info("")
 }
+
+func (l HttpServer) ListMiddleware() {
+	if len(l.middlewaresName) > 0 {
+		l.log.Info("Registered Middlewares:")
+		for _, middleware := range l.middlewaresName {
+			l.log.Info("- " + l.logUtil.ColoredOutput(middleware, log.ForeGreen))
+		}
+	} else {
+		l.log.Info("No middleware registered")
+	}
+
+	l.log.Info("")
+}

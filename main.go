@@ -8,6 +8,8 @@ func main() {
 	}
 
 	server.Version()
+	server.ListMiddleware()
 	server.ListRoute()
+
 	server.Start()
 }

@@ -14,7 +14,10 @@ type Environment struct {
 	ListenPort   int    `env:"PORT" envDefault:"8080"`
 	LogtailToken string `env:"LOGTAIL_TOKEN"`
 
-	HttpReqTimeout int64 `env:"HTTP_SEC_TIMEOUT" envDefault:"1"`
+	HttpReqTimeout   int64 `env:"HTTP_TIMEOUT_SEC" envDefault:"1"`
+	LogFlushInterval int64 `env:"LOG_FLUSH_INTERVAL_MS" envDefault:"1000"`
+
+	UseReporter bool `env:"USE_REPORTER" envDefault:"true"`
 }
 
 func New() (*Environment, error) {
