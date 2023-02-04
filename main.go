@@ -1,5 +1,13 @@
 package main
 
 func main() {
-	println("Hello, World")
+	server, err := CreateServer()
+
+	if err != nil {
+		panic(err)
+	}
+
+	server.Version()
+	server.ListRoute()
+	server.Start()
 }

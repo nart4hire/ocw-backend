@@ -1,4 +1,27 @@
+definitions:
+  web.BaseResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        enum:
+        - success
+        - failed
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /:
+    get:
+      description: Give server index page response
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Index page
 swagger: "2.0"
