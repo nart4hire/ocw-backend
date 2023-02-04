@@ -1,0 +1,33 @@
+stages:
+  - testing
+  - deploy
+
+test:
+  stage: testing
+  image: "docker:latest"
+  services:
+    - docker:latest-dind
+  tags:
+    - cicd
+  script:
+    - docker build -t ocw-backend-test:latest -f Dockerfile.test .
+    - docker run -it --rm ocw-backend-test:latest
+
+deploy:
+  stage: deploy
+  image: "docker:latest"
+  when: on_success
+  services:
+    - docker:latest-dind
+  tags:
+    - cicd
+  only:
+    refs:
+      - tags
+    variables:
+      - ($CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "staging")
+  script:
+    - docker login registry.digitalocean.com --username $DO_ACCESS_TOKEN --password $DO_ACCESS_TOKEN
+    - docker build -t registry.digitalocean.com/ocw-container/ocw-backend:latest -t registry.digitalocean.com/ocw-container/ocw-backend:$CI_COMMIT_TAG .
+    - docker push registry.digitalocean.com/ocw-container/ocw-backend:$CI_COMMIT_TAG
+    - docker push registry.digitalocean.com/ocw-container/ocw-backend:latest

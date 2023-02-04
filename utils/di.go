@@ -10,10 +10,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/utils/wrapper"
 )
 
-var UtilSet = wire.NewSet(
-	// env
-	env.New,
-
+var UtilSetTest = wire.NewSet(
 	// httputil utility
 	wire.Struct(new(httputil.HttpUtilImpl), "*"),
 	wire.Bind(new(httputil.HttpUtil), new(*httputil.HttpUtilImpl)),
@@ -33,4 +30,11 @@ var UtilSet = wire.NewSet(
 	// app
 	app.New,
 	wire.Bind(new(app.Server), new(*app.HttpServer)),
+)
+
+var UtilSet = wire.NewSet(
+	UtilSetTest,
+
+	// env
+	env.New,
 )

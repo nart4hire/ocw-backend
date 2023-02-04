@@ -21,6 +21,7 @@ type CommonRoutes struct {
 func (cr CommonRoutes) Register(r chi.Router) {
 	r.Get("/", cr.CommonHandler.Home)
 	r.Get("/test", cr.CommonHandler.Home)
+	r.Handle("/ping", http.HandlerFunc(cr.CommonHandler.Home))
 
 	r.Handle("/*", http.HandlerFunc(cr.CommonHandler.NotFound))
 }

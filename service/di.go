@@ -8,12 +8,22 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/service/reporter"
 )
 
-var ServiceSet = wire.NewSet(
+var ServiceTestSet = wire.NewSet(
 	// Common service
 	wire.NewSet(
 		wire.Struct(new(common.CommonServiceImpl), "*"),
 		wire.Bind(new(common.CommonService), new(*common.CommonServiceImpl)),
 	),
+
+	// Reporter service
+	wire.NewSet(
+		reporter.New,
+		wire.Bind(new(reporter.Reporter), new(*reporter.LogtailReporter)),
+	),
+)
+
+var ServiceSet = wire.NewSet(
+	ServiceTestSet,
 
 	// Logger service
 	wire.NewSet(
@@ -22,11 +32,5 @@ var ServiceSet = wire.NewSet(
 		wire.Struct(new(hooks.LogrusReporter), "*"),
 		wire.Struct(new(logger.LogrusFormatter), "*"),
 		wire.Bind(new(logger.Logger), new(*logger.LogrusLogger)),
-	),
-
-	// Reporter service
-	wire.NewSet(
-		reporter.New,
-		wire.Bind(new(reporter.Reporter), new(*reporter.LogtailReporter)),
 	),
 )
