@@ -6,7 +6,7 @@ test:
   stage: testing
   image: "docker:latest"
   services:
-    - docker:latest-dind
+    - docker:dind
   tags:
     - cicd
   script:
@@ -18,7 +18,7 @@ deploy:
   image: "docker:latest"
   when: on_success
   services:
-    - docker:latest-dind
+    - docker:dind
   tags:
     - cicd
   only:
