@@ -14,7 +14,7 @@ test:
     - cicd
   script:
     - docker build -t ocw-backend-test:latest -f Dockerfile.test .
-    - docker run -it --rm ocw-backend-test:latest
+    - docker run -t --rm ocw-backend-test:latest
 
 deploy:
   stage: deploy
