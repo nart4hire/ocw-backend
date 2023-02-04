@@ -1,0 +1,16 @@
+FROM cosmtrek/air
+
+RUN apt install -y make
+
+RUN go install github.com/google/wire/cmd/wire@latest
+RUN go install github.com/swaggo/swag/cmd/swag@latest
+
+COPY . /app
+WORKDIR /app
+
+EXPOSE 8080
+
+RUN go get
+RUN go get -u github.com/cosmtrek/air
+
+CMD ["make", "watch"]

@@ -8,8 +8,10 @@ import (
 )
 
 type AppRouter struct {
-	common.CommonRoutes
+	// Routes
 	swagger.SwaggerRoutes
+	common.CommonRoutes
 
+	// Utility
 	Logger logger.Logger
 }
