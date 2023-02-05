@@ -12,6 +12,9 @@ definitions:
     type: object
 info:
   contact: {}
+  description: This is Open Couseware backend
+  title: Open Courseware Application
+  version: 1.0.1
 paths:
   /:
     get:
