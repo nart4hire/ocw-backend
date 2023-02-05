@@ -28,12 +28,11 @@ deploy:
   only:
     - tags
   before_script:
-    - apk update
-    - apk add wget
+    - apk add --no-cache wget
+    - apk add --no-cache tar
     - wget https://github.com/digitalocean/doctl/releases/download/v1.92.0/doctl-1.92.0-linux-amd64.tar.gz
     - tar xf doctl-1.92.0-linux-amd64.tar.gz
     - mv doctl /usr/local/bin
-
     - doctl auth init -t $DO_ACCESS_TOKEN
     - doctl registry login
   script:
