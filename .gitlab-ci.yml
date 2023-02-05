@@ -25,12 +25,10 @@ deploy:
   tags:
     - cicd
   only:
-    refs:
-      - tags
-    variables:
-      - ($CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "staging")
+    - tags
+  before_script:
+    - echo $DO_ACCESS_TOKEN | docker login registry.digitalocean.com --username $DO_ACCESS_TOKEN --password-stdin
   script:
-    - docker login registry.digitalocean.com --username $DO_ACCESS_TOKEN --password $DO_ACCESS_TOKEN
     - docker build -t registry.digitalocean.com/ocw-container/ocw-backend:latest -t registry.digitalocean.com/ocw-container/ocw-backend:$CI_COMMIT_TAG .
     - docker push registry.digitalocean.com/ocw-container/ocw-backend:$CI_COMMIT_TAG
     - docker push registry.digitalocean.com/ocw-container/ocw-backend:latest
