@@ -13,6 +13,7 @@ Ini adalah requirement untuk menjalankan template ini:
 5. Minio (Optional, when using docker)
 6. Google wire v0.5.0 (https://github.com/google/wire) [MANDATORY]
 7. Air command line (https://github.com/cosmtrek/air)
+8. Redis
 
 ## Cara menjalankan
 
