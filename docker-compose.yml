@@ -25,6 +25,7 @@ services:
     depends_on:
       - database
       - minio
+      - redis
     networks:
       - api_network
   database:
@@ -36,6 +37,21 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     env_file: .env.docker
+  redis:
+    ports:
+      - 6379:6379
+    image: redis:latest
+    env_file: .env
+    networks:
+      - api_network
+  mailhog:
+    ports:
+      - 1025:1025
+      - 8025:8025
+    image: mailhog/mailhog:latest
+    env_file: .env
+    networks:
+      - api_network
 
 networks:
   api_network:
