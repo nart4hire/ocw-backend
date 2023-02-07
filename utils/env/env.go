@@ -17,7 +17,8 @@ type Environment struct {
 	HttpReqTimeout   int64 `env:"HTTP_TIMEOUT_SEC" envDefault:"1"`
 	LogFlushInterval int64 `env:"LOG_FLUSH_INTERVAL_MS" envDefault:"1000"`
 
-	UseReporter bool `env:"USE_REPORTER" envDefault:"true"`
+	UseReporter        bool   `env:"USE_REPORTER" envDefault:"true"`
+	DatabaseConnection string `env:"DB_STRING"`
 }
 
 func New() (*Environment, error) {
