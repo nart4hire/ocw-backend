@@ -1,24 +1,32 @@
-# OCW Backend
+# ITBOpenCourseWare Backend
 
-Repository ini adalah repository untuk OCW Backend
+## Development Guide
 
-## Requirements
+1. Checkout ke branch staging + pull
 
-Ini adalah requirement untuk menjalankan template ini:
+   ```sh
+   git checkout staging
+   git pull
+   ```
 
-1. Go v1.19.3 [MANDATORY]
-2. Docker (Optional)
-3. Postgresql (Optional, when using docker)
-4. GNU Make 4.3 (Optional, when using docker)
-5. Minio (Optional, when using docker)
-6. Google wire v0.5.0 (https://github.com/google/wire) [MANDATORY]
-7. Air command line (https://github.com/cosmtrek/air)
-8. Redis
+2. Buat branch baru dari staging dengan format `feat/s<nomor sprint>-sb<nomor sb>-<nama fitur dipisah dengan strip (-)>`. Jika membuat perubahan dari fitur yang sudah ada di staging, formatnya menjadi `fix/s<nomor sprint>-sb<nomor sb>-<apa yang diubah dari fitur tersebut>`
 
-## Cara menjalankan
+   ```sh
+   git checkout -b feat/s1-sb1-login
+   ```
 
-Untuk menjalankan server ini, gunakan:
+3. Lakukan perubahan pada branch tersebut, commit dengan format `feat(<scope fitur>): <isi perubahan>`. Jika melakukan perubahan pada fitur yang sudah ada, formatnya menjadi `fix(<scope fitur>): <isi perubahan>`, lain-lainnya bisa dilihat di [semantic commit](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
 
-```sh
-make watch
-```
+   ```sh
+   git commit -m "feat(login): add login page"
+   ```
+
+4. Push branch ke remote
+
+   ```sh
+   git push origin feat/s1-sb1-login
+   ```
+
+5. Buat merge request ke branch staging, tambah assignee diri sendiri dan reviewer
+
+<!-- TODO: how to handle conflict -->
