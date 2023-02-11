@@ -3,11 +3,16 @@ package utils
 import (
 	"github.com/google/wire"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/app"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/db"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/httputil"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/log"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/res"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/wrapper"
+)
+
+var DatabaseTestingSet = wire.NewSet(
+	db.NewPostgresConn,
 )
 
 var UtilSetTest = wire.NewSet(
@@ -34,6 +39,10 @@ var UtilSetTest = wire.NewSet(
 
 var UtilSet = wire.NewSet(
 	UtilSetTest,
+
+	// Database utility
+	wire.Bind(new(db.Database), new(*db.DatabaseImpl)),
+	db.NewPostgresEnv,
 
 	// env
 	env.New,

@@ -10,4 +10,5 @@ type UserClaim struct {
 	Name  string        `json:"name"`
 	Email string        `json:"email"`
 	Role  user.UserRole `json:"role"`
+	Type  TokenType     `json:"type"`
 }
