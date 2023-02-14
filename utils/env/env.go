@@ -19,6 +19,14 @@ type Environment struct {
 
 	UseReporter        bool   `env:"USE_REPORTER" envDefault:"true"`
 	DatabaseConnection string `env:"DB_STRING"`
+
+	PasswordCost int `env:"PASSWORD_COST" envDefault:"10"`
+
+	TokenMethod         string `env:"TOKEN_SIGNING_METHOD" envDefault:"hs512"`
+	TokenSecret         string `env:"TOKEN_SECRET"`
+	TokenRefreshExpired int64  `env:"TOKEN_REFRESH_EXPIRED_MS" envDefault:"86400000"`
+	TokenAccessExpired  int64  `env:"TOKEN_ACCESS_EXPIRED_MS" envDefault:"300000"`
+	TokenIssuer         string `env:"TOKEN_ISSUER" envDefault:"ocw"`
 }
 
 func New() (*Environment, error) {

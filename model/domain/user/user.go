@@ -1,7 +1,7 @@
 package user
 
 type User struct {
-	Username    string `gorm:"primaryKey"`
+	Email       string `gorm:"primaryKey"`
 	Password    string
 	Name        string
 	Role        UserRole `gorm:"type:user_role"`

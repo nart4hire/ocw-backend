@@ -16,21 +16,25 @@ func New(
 	return &UserRepositoryImpl{db.Connect()}
 }
 
-func (repo UserRepositoryImpl) Add(user user.User) {
-	repo.db.Create(user)
+func (repo UserRepositoryImpl) Add(user user.User) error {
+	return repo.db.Create(user).Error
 }
 
-func (repo UserRepositoryImpl) Get(username string) user.User {
-	result := user.User{}
-	repo.db.First(&result, "username = ?", username)
+func (repo UserRepositoryImpl) Get(username string) (*user.User, error) {
+	result := &user.User{}
+	err := repo.db.Where("username = ?", username).First(result).Error
 
-	return result
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
-func (repo UserRepositoryImpl) Update(user user.User) {
-	repo.db.Save(user)
+func (repo UserRepositoryImpl) Update(user user.User) error {
+	return repo.db.Save(user).Error
 }
 
-func (repo UserRepositoryImpl) Delete(username string) {
-	repo.db.Delete(&user.User{}, "username = ?", username)
+func (repo UserRepositoryImpl) Delete(username string) error {
+	return repo.db.Where("username = ?", username).Delete(&user.User{}).Error
 }
