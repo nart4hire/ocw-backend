@@ -12,8 +12,9 @@ Ini adalah requirement untuk menjalankan template ini:
 4. GNU Make 4.3 (Optional, when using docker)
 5. Minio (Optional, when using docker)
 6. Google wire v0.5.0 (<https://github.com/google/wire>) [MANDATORY]
-7. Air command line (<https://github.com/cosmtrek/air>)
-8. Redis
+7. swaggo (<https://github.com/swaggo/swag>)
+8. Air command line (<https://github.com/cosmtrek/air>)
+9. Redis
 
 ## Cara menjalankan
 
