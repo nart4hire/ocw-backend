@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/refresh"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
 )
@@ -12,7 +13,7 @@ func (auth AuthServiceImpl) Refresh(payload refresh.RefreshRequestPayload) (*ref
 	claim, err := auth.TokenUtil.Validate(payload.RefreshToken, token.Refresh)
 
 	if err != nil {
-		return nil, err
+		return nil, web.NewResponseErrorFromError(err, web.TokenError)
 	}
 
 	claim.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Duration(auth.TokenAccessExpired) * time.Millisecond))

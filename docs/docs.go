@@ -61,7 +61,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Login Success",
                         "schema": {
                             "allOf": [
                                 {
@@ -78,8 +78,47 @@ const docTemplate = `{
                             ]
                         }
                     },
+                    "400": {
+                        "description": "Bad Input",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
                     "403": {
-                        "description": "Forbidden",
+                        "description": "Login Credential Error",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "415": {
+                        "description": "Not a json request",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid JSON input",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Unknown Internal Error",
                         "schema": {
                             "$ref": "#/definitions/web.BaseResponse"
                         }
@@ -128,8 +167,20 @@ const docTemplate = `{
                             ]
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/web.BaseResponse"
                         }

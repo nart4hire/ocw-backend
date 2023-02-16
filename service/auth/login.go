@@ -2,10 +2,10 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/login"
 	tokenModel "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
 	"gorm.io/gorm"
@@ -19,7 +19,7 @@ func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.Log
 
 		switch {
 		case errors.Is(err, gorm.ErrRecordNotFound):
-			errorObj = fmt.Errorf("username and password combination not found")
+			errorObj = web.NewResponseError("username and password combination not found", web.InvalidLogin)
 		default:
 			errorObj = err
 		}
@@ -28,11 +28,11 @@ func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.Log
 	}
 
 	if err := auth.Check(payload.Password, user.Password); err != nil {
-		return nil, fmt.Errorf("username and password combination not found")
+		return nil, web.NewResponseError("username and password combination not found", web.InvalidLogin)
 	}
 
 	if !user.IsActivated {
-		return nil, fmt.Errorf("user is not activated yet")
+		return nil, web.NewResponseError("user is not activated yet", web.InactiveUser)
 	}
 
 	refreshClaim := tokenModel.UserClaim{
