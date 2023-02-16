@@ -9,7 +9,7 @@ import (
 )
 
 type PasswordUtilImpl struct {
-	env.Environment
+	*env.Environment
 	base64.Base64Util
 }
 

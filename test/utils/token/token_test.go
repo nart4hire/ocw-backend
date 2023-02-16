@@ -14,7 +14,7 @@ import (
 
 func TestToken(t *testing.T) {
 	tokenObj := token.TokenUtilImpl{
-		Environment: env.Environment{
+		Environment: &env.Environment{
 			TokenSecret: "secret",
 			TokenMethod: "hs512",
 		},

@@ -9,7 +9,7 @@ import (
 )
 
 type TokenUtilImpl struct {
-	env.Environment
+	*env.Environment
 }
 
 func (t TokenUtilImpl) DefaultMethod() jwt.SigningMethod {

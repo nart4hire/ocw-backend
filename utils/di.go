@@ -53,12 +53,12 @@ var UtilSetTest = wire.NewSet(
 )
 
 var UtilSet = wire.NewSet(
+	// env
+	env.New,
+
 	UtilSetTest,
 
 	// Database utility
 	wire.Bind(new(db.Database), new(*db.DatabaseImpl)),
 	db.NewPostgresEnv,
-
-	// env
-	env.New,
 )

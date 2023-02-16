@@ -12,7 +12,7 @@ import (
 )
 
 func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.LoginResponsePayload, error) {
-	user, err := auth.Get(payload.Email)
+	user, err := auth.UserRepository.Get(payload.Email)
 
 	if err != nil {
 		var errorObj error

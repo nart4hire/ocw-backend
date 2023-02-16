@@ -10,6 +10,6 @@ import (
 type AuthServiceImpl struct {
 	user.UserRepository
 	password.PasswordUtil
-	env.Environment
+	*env.Environment
 	token.TokenUtil
 }

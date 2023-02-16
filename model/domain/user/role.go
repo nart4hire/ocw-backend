@@ -22,7 +22,7 @@ var roleMapping = map[UserRole]string{
 }
 
 func (ur *UserRole) Scan(value interface{}) error {
-	val := string(value.([]byte))
+	val := value.(string)
 
 	for key, label := range roleMapping {
 		if label == val {
