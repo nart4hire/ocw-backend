@@ -18,7 +18,7 @@ func (auth AuthServiceImpl) Refresh(payload refresh.RefreshRequestPayload) (*ref
 	claim.ExpiresAt = jwt.NewNumericDate(time.Now().Add(time.Duration(auth.TokenAccessExpired) * time.Millisecond))
 	claim.Type = token.Access
 
-	newToken, err := auth.TokenUtil.Generate(*claim)
+	newToken, err := auth.TokenUtil.Generate(*claim, auth.TokenUtil.DefaultMethod())
 
 	if err != nil {
 		return nil, err

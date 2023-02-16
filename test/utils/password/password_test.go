@@ -16,9 +16,18 @@ func TestPasswordHash(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
+	t.Run("PasswordHashMustBeDifferOnSamePass", func(t *testing.T) {
+		hash1, err := obj.Hash("admin")
+		assert.Nil(t, err)
+
+		hash2, err := obj.Hash("admin")
+		assert.Nil(t, err)
+
+		assert.NotEqual(t, hash1, hash2)
+	})
+
 	t.Run("PasswordCanBeHashAndValidateCorrectly", func(t *testing.T) {
 		hash, err := obj.Hash("admin")
-
 		assert.Nil(t, err)
 
 		err = obj.Check("admin", hash)

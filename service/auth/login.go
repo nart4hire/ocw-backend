@@ -59,14 +59,12 @@ func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.Log
 		},
 	}
 
-	refreshToken, err := auth.TokenUtil.Generate(refreshClaim)
-
+	refreshToken, err := auth.TokenUtil.Generate(refreshClaim, auth.TokenUtil.DefaultMethod())
 	if err != nil {
 		return nil, err
 	}
 
-	accessToken, err := auth.TokenUtil.Generate(accessClaim)
-
+	accessToken, err := auth.TokenUtil.Generate(accessClaim, auth.TokenUtil.DefaultMethod())
 	if err != nil {
 		return nil, err
 	}

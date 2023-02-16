@@ -2,7 +2,9 @@ package token_test
 
 import (
 	"testing"
+	"time"
 
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/stretchr/testify/assert"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	tokenData "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
@@ -26,7 +28,7 @@ func TestToken(t *testing.T) {
 			Type:  tokenData.Refresh,
 		}
 
-		token, err := tokenObj.Generate(claim)
+		token, err := tokenObj.Generate(claim, tokenObj.DefaultMethod())
 		assert.Nil(t, err)
 
 		extractedToken, err := tokenObj.Validate(token, tokenData.Refresh)
@@ -36,4 +38,40 @@ func TestToken(t *testing.T) {
 		assert.Equal(t, claim, *extractedToken)
 	})
 
+	t.Run("UserTokenInvalidType", func(t *testing.T) {
+		claim := tokenData.UserClaim{
+			Name:  "Someone",
+			Email: "someone@example.com",
+			Role:  user.Member,
+			Type:  tokenData.Refresh,
+		}
+
+		token, err := tokenObj.Generate(claim, tokenObj.DefaultMethod())
+		assert.Nil(t, err)
+
+		extractedToken, err := tokenObj.Validate(token, tokenData.Access)
+		assert.NotNil(t, err)
+		assert.Nil(t, extractedToken)
+		assert.Equal(t, err.Error(), "token type is not valid")
+	})
+
+	t.Run("UserTokenExpired", func(t *testing.T) {
+		claim := tokenData.UserClaim{
+			Name:  "Someone",
+			Email: "someone@example.com",
+			Role:  user.Member,
+			Type:  tokenData.Refresh,
+			RegisteredClaims: jwt.RegisteredClaims{
+				ExpiresAt: jwt.NewNumericDate(time.Now()),
+			},
+		}
+
+		token, err := tokenObj.Generate(claim, tokenObj.DefaultMethod())
+		assert.Nil(t, err)
+
+		extractedToken, err := tokenObj.Validate(token, tokenData.Refresh)
+		assert.NotNil(t, err)
+		assert.Nil(t, extractedToken)
+		assert.Contains(t, err.Error(), "expired")
+	})
 }
