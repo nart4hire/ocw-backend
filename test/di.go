@@ -15,12 +15,13 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/test/db"
 	"gitlab.informatika.org/ocw/ocw-backend/utils"
 
-	"gitlab.informatika.org/ocw/ocw-backend/utils/app"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 )
 
-func CreateServer(logger logger.Logger, envTest *env.Environment) (app.Server, error) {
+func CreateServer(logger logger.Logger, envTest *env.Environment) (*ApiTestPack, error) {
 	wire.Build(
+		wire.Struct(new(ApiTestPack), "*"),
+
 		utils.UtilSetTest,
 		repository.RepositoryBasicSet,
 		handler.HandlerSet,
