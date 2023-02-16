@@ -4,11 +4,16 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/password"
 )
 
 func TestPasswordHash(t *testing.T) {
-	obj := password.PasswordUtilImpl{}
+	obj := password.PasswordUtilImpl{
+		Environment: &env.Environment{
+			PasswordCost: 10,
+		},
+	}
 
 	t.Run("PasswordCanBeHashed", func(t *testing.T) {
 		_, err := obj.Hash("admin")

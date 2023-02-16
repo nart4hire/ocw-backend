@@ -173,8 +173,8 @@ const docTemplate = `{
                             "$ref": "#/definitions/web.BaseResponse"
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/web.BaseResponse"
                         }

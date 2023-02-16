@@ -12,6 +12,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/routes"
 	"gitlab.informatika.org/ocw/ocw-backend/service"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
+	"gitlab.informatika.org/ocw/ocw-backend/test/db"
 	"gitlab.informatika.org/ocw/ocw-backend/utils"
 
 	"gitlab.informatika.org/ocw/ocw-backend/utils/app"
@@ -26,6 +27,7 @@ func CreateServer(logger logger.Logger, envTest *env.Environment) (app.Server, e
 		middleware.MiddlewareSet,
 		routes.RoutesSet,
 		service.ServiceTestSet,
+		db.DbTestSet,
 	)
 
 	return nil, nil

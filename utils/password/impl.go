@@ -3,14 +3,12 @@ package password
 import (
 	"fmt"
 
-	"gitlab.informatika.org/ocw/ocw-backend/utils/base64"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type PasswordUtilImpl struct {
 	*env.Environment
-	base64.Base64Util
 }
 
 func (e PasswordUtilImpl) Hash(password string) (string, error) {

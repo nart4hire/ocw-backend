@@ -1,7 +1,6 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 	"runtime/debug"
@@ -32,23 +31,6 @@ func resolver(log logger.Logger) {
 
 		os.Exit(-1)
 	}
-}
-
-func NewPostgresConn(
-	conn *sql.Conn,
-	log logger.Logger,
-) (*DatabaseImpl, error) {
-	defer resolver(log)
-
-	res, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: conn,
-	}), &gorm.Config{})
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &DatabaseImpl{res}, nil
 }
 
 func NewPostgresEnv(
