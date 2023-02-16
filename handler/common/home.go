@@ -6,6 +6,7 @@ import (
 
 // Index godoc
 //
+//	@Tags					common
 //	@Summary			Index page
 //	@Description	Give server index page response
 //	@Produce			json

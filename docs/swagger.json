@@ -13,6 +13,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "common"
+                ],
                 "summary": "Index page",
                 "responses": {
                     "200": {
@@ -23,9 +26,155 @@
                     }
                 }
             }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "Login and generate new pair of token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Login payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/login.LoginRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/login.LoginResponsePayload"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "description": "Generate new access token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Refresh token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/refresh.RefreshResponsePayload"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "login.LoginRequestPayload": {
+            "description": "Information that should be available when do a login process",
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                },
+                "password": {
+                    "description": "User Password",
+                    "type": "string",
+                    "example": "secret"
+                }
+            }
+        },
+        "login.LoginResponsePayload": {
+            "description": "Login response when process success",
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "Token that used to access the resources",
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "description": "Token that used to generate new access token",
+                    "type": "string"
+                }
+            }
+        },
+        "refresh.RefreshResponsePayload": {
+            "description": "Refresh endpoint response when process success",
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "Token that used to access the resources",
+                    "type": "string"
+                }
+            }
+        },
         "web.BaseResponse": {
             "type": "object",
             "properties": {

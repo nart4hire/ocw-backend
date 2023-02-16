@@ -1,4 +1,36 @@
 definitions:
+  login.LoginRequestPayload:
+    description: Information that should be available when do a login process
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+      password:
+        description: User Password
+        example: secret
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  login.LoginResponsePayload:
+    description: Login response when process success
+    properties:
+      access_token:
+        description: Token that used to access the resources
+        type: string
+      refresh_token:
+        description: Token that used to generate new access token
+        type: string
+    type: object
+  refresh.RefreshResponsePayload:
+    description: Refresh endpoint response when process success
+    properties:
+      access_token:
+        description: Token that used to access the resources
+        type: string
+    type: object
   web.BaseResponse:
     properties:
       data: {}
@@ -27,4 +59,67 @@ paths:
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Index page
+      tags:
+      - common
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login and generate new pair of token
+      parameters:
+      - description: Login payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/login.LoginRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/login.LoginResponsePayload'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Login
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Generate new access token
+      parameters:
+      - description: Refresh token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/refresh.RefreshResponsePayload'
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Refresh Token
+      tags:
+      - auth
 swagger: "2.0"
