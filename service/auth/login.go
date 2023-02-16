@@ -19,7 +19,7 @@ func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.Log
 
 		switch {
 		case errors.Is(err, gorm.ErrRecordNotFound):
-			errorObj = fmt.Errorf("username or password combination not found")
+			errorObj = fmt.Errorf("username and password combination not found")
 		default:
 			errorObj = err
 		}
@@ -28,7 +28,11 @@ func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.Log
 	}
 
 	if err := auth.Check(payload.Password, user.Password); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("username and password combination not found")
+	}
+
+	if !user.IsActivated {
+		return nil, fmt.Errorf("user is not activated yet")
 	}
 
 	refreshClaim := tokenModel.UserClaim{

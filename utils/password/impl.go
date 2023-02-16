@@ -15,20 +15,14 @@ type PasswordUtilImpl struct {
 
 func (e PasswordUtilImpl) Hash(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), e.Environment.PasswordCost)
-	return e.Base64Util.Encode(hash), err
+	return string(hash), err
 }
 
 func (e PasswordUtilImpl) Check(password string, hashedPassword string) error {
-	hash, err := e.Base64Util.Decode(hashedPassword)
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 
 	if err != nil {
-		return err
-	}
-
-	err = bcrypt.CompareHashAndPassword(hash, []byte(password))
-
-	if err != nil {
-		return fmt.Errorf("username or password combination is not found")
+		return fmt.Errorf("password mismatch")
 	}
 
 	return nil
