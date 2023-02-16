@@ -2,28 +2,70 @@ package user
 
 import (
 	"database/sql/driver"
+	"encoding/json"
 	"errors"
+	"fmt"
 )
 
-type UserRole string
+type UserRole int
 
 const (
-	Admin       UserRole = "admin"
-	Student     UserRole = "student"
-	Contributor UserRole = "contributor"
+	Admin UserRole = iota
+	Member
+	Contributor
 )
 
-func (ur *UserRole) Scan(value interface{}) error {
-	val := UserRole(value.([]byte))
-
-	if val != Contributor && val != Student && val != Admin {
-		return errors.New("invalid role")
-	}
-
-	*ur = val
-	return nil
+var roleMapping = map[UserRole]string{
+	Admin:       "admin",
+	Member:      "member",
+	Contributor: "contributor",
 }
 
-func (ur UserRole) Value() (driver.Value, error) {
-	return string(ur), nil
+func (ur *UserRole) Scan(value interface{}) error {
+	val := string(value.([]byte))
+
+	for key, label := range roleMapping {
+		if label == val {
+			*ur = key
+			return nil
+		}
+	}
+
+	return fmt.Errorf("invalid user role")
+}
+
+func (u UserRole) Value() (driver.Value, error) {
+	value, ok := roleMapping[u]
+
+	if !ok {
+		return nil, fmt.Errorf("invalid user role")
+	}
+
+	return value, nil
+}
+
+func (u *UserRole) UnmarshalJSON(b []byte) error {
+	var s string
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
+
+	for key, label := range roleMapping {
+		if label == s {
+			*u = key
+			return nil
+		}
+	}
+
+	return fmt.Errorf("unkown role, given %s", s)
+}
+
+func (u UserRole) MarshalJSON() ([]byte, error) {
+	s, ok := roleMapping[u]
+
+	if !ok {
+		return nil, errors.New("unkown user role")
+	}
+
+	return json.Marshal(s)
 }

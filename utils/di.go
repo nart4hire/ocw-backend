@@ -3,11 +3,19 @@ package utils
 import (
 	"github.com/google/wire"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/app"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/base64"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/db"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/httputil"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/log"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/password"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/res"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/token"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/wrapper"
+)
+
+var DatabaseTestingSet = wire.NewSet(
+	db.NewPostgresConn,
 )
 
 var UtilSetTest = wire.NewSet(
@@ -27,6 +35,18 @@ var UtilSetTest = wire.NewSet(
 	wire.Struct(new(wrapper.WrapperUtilImpl), "*"),
 	wire.Bind(new(wrapper.WrapperUtil), new(*wrapper.WrapperUtilImpl)),
 
+	// Base64 Utility
+	wire.Struct(new(base64.Base64UtilImpl), "*"),
+	wire.Bind(new(base64.Base64Util), new(*base64.Base64UtilImpl)),
+
+	// Password utility
+	wire.Struct(new(password.PasswordUtilImpl), "*"),
+	wire.Bind(new(password.PasswordUtil), new(*password.PasswordUtilImpl)),
+
+	// Token utility
+	wire.Struct(new(token.TokenUtilImpl), "*"),
+	wire.Bind(new(token.TokenUtil), new(*token.TokenUtilImpl)),
+
 	// app
 	app.New,
 	wire.Bind(new(app.Server), new(*app.HttpServer)),
@@ -34,6 +54,10 @@ var UtilSetTest = wire.NewSet(
 
 var UtilSet = wire.NewSet(
 	UtilSetTest,
+
+	// Database utility
+	wire.Bind(new(db.Database), new(*db.DatabaseImpl)),
+	db.NewPostgresEnv,
 
 	// env
 	env.New,
