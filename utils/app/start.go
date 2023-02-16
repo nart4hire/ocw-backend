@@ -23,6 +23,7 @@ func (l *HttpServer) Start() {
 
 	serverCtx, cancelServer := context.WithCancel(context.Background())
 	l.reporter.Start(serverCtx)
+	l.mail.Start(serverCtx)
 
 	sig := make(chan os.Signal, 3)
 	signal.Notify(sig, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

@@ -134,7 +134,16 @@ func (l *LogtailReporter) Start(ctx context.Context) {
 
 	go func() {
 		l.isStarted = true
-		defer func() { l.isStarted = false }()
+		defer func() {
+			l.isStarted = false
+
+			l.logUtil.PrintFormattedOutput(
+				"Reporter has been stopped.",
+				"Report",
+				"info",
+				log.ForeGreen,
+			)
+		}()
 		defer l.Flush()
 
 		interval := time.Duration(l.env.LogFlushInterval)
@@ -148,10 +157,12 @@ func (l *LogtailReporter) Start(ctx context.Context) {
 			log.ForeGreen,
 		)
 
-		for {
+		isLoop := true
+
+		for isLoop {
 			select {
 			case <-ctx.Done():
-				break
+				isLoop = false
 			case <-timer.C:
 				l.Flush()
 			}
