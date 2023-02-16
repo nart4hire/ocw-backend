@@ -11,13 +11,13 @@ type UserRole int
 
 const (
 	Admin UserRole = iota
-	Member
+	Student
 	Contributor
 )
 
 var roleMapping = map[UserRole]string{
 	Admin:       "admin",
-	Member:      "member",
+	Student:     "student",
 	Contributor: "contributor",
 }
 

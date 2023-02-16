@@ -1,6 +1,8 @@
 package user
 
 import (
+	"errors"
+
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/db"
 	"gorm.io/gorm"
@@ -16,8 +18,22 @@ func New(
 	return &UserRepositoryImpl{db.Connect()}
 }
 
+func (repo UserRepositoryImpl) IsExist(email string) (bool, error) {
+	_, err := repo.Get(email)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return true, nil
+		}
+
+		return true, err
+	}
+
+	return false, nil
+}
+
 func (repo UserRepositoryImpl) Add(user user.User) error {
-	return repo.db.Create(user).Error
+	return repo.db.Create(&user).Error
 }
 
 func (repo UserRepositoryImpl) Get(email string) (*user.User, error) {
@@ -35,6 +51,6 @@ func (repo UserRepositoryImpl) Update(user user.User) error {
 	return repo.db.Save(user).Error
 }
 
-func (repo UserRepositoryImpl) Delete(username string) error {
-	return repo.db.Where("username = ?", username).Delete(&user.User{}).Error
+func (repo UserRepositoryImpl) Delete(email string) error {
+	return repo.db.Where("email = ?", email).Delete(&user.User{}).Error
 }

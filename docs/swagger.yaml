@@ -31,6 +31,31 @@ definitions:
         description: Token that used to access the resources
         type: string
     type: object
+  register.RegisterRequestPayload:
+    description: Information that should be available when do a registration process
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+      name:
+        description: User name
+        example: someone
+        type: string
+      password:
+        description: User Password
+        example: secret
+        type: string
+      password_validation:
+        description: User Password Validation, must be same as user
+        example: secret
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - password_validation
+    type: object
   web.BaseResponse:
     properties:
       data: {}
@@ -151,6 +176,36 @@ paths:
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Refresh Token
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Generate New Account as Member
+      parameters:
+      - description: Register Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/register.RegisterRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Register New Account
       tags:
       - auth
 swagger: "2.0"

@@ -10,7 +10,7 @@ type RegisterRequestPayload struct {
 	Password string `json:"password" validate:"required" example:"secret"`
 
 	// User Password Validation, must be same as user
-	PasswordValidation string `json:"password_validation" validate:"required" example:"secret"`
+	PasswordValidation string `json:"password_validation" validate:"required,eqfield=Password" example:"secret"`
 
 	// User name
 	Name string `json:"name" validate:"required" example:"someone"`
