@@ -24,7 +24,7 @@ func TestToken(t *testing.T) {
 		claim := tokenData.UserClaim{
 			Name:  "Someone",
 			Email: "someone@example.com",
-			Role:  user.Member,
+			Role:  user.Student,
 			Type:  tokenData.Refresh,
 		}
 
@@ -42,7 +42,7 @@ func TestToken(t *testing.T) {
 		claim := tokenData.UserClaim{
 			Name:  "Someone",
 			Email: "someone@example.com",
-			Role:  user.Member,
+			Role:  user.Student,
 			Type:  tokenData.Refresh,
 		}
 
@@ -59,7 +59,7 @@ func TestToken(t *testing.T) {
 		claim := tokenData.UserClaim{
 			Name:  "Someone",
 			Email: "someone@example.com",
-			Role:  user.Member,
+			Role:  user.Student,
 			Type:  tokenData.Refresh,
 			RegisteredClaims: jwt.RegisteredClaims{
 				ExpiresAt: jwt.NewNumericDate(time.Now()),

@@ -187,6 +187,52 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Generate New Account as Member",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register New Account",
+                "parameters": [
+                    {
+                        "description": "Register Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/register.RegisterRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -231,6 +277,38 @@ const docTemplate = `{
                 "access_token": {
                     "description": "Token that used to access the resources",
                     "type": "string"
+                }
+            }
+        },
+        "register.RegisterRequestPayload": {
+            "description": "Information that should be available when do a registration process",
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "password_validation"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                },
+                "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "someone"
+                },
+                "password": {
+                    "description": "User Password",
+                    "type": "string",
+                    "example": "secret"
+                },
+                "password_validation": {
+                    "description": "User Password Validation, must be same as user",
+                    "type": "string",
+                    "example": "secret"
                 }
             }
         },

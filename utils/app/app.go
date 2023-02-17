@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/go-chi/chi/v5"
 	"gitlab.informatika.org/ocw/ocw-backend/middleware"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/mail"
 	"gitlab.informatika.org/ocw/ocw-backend/routes"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reporter"
@@ -18,6 +19,7 @@ type HttpServer struct {
 	res             res.Resource
 	env             *env.Environment
 	reporter        reporter.Reporter
+	mail            mail.MailQueue
 	middlewaresName []string
 }
 
@@ -29,6 +31,7 @@ func New(
 	logUtil log.LogUtils,
 	res res.Resource,
 	reporter reporter.Reporter,
+	mailqueue mail.MailQueue,
 ) *HttpServer {
 	r := chi.NewRouter()
 
@@ -49,5 +52,6 @@ func New(
 		env:             env,
 		reporter:        reporter,
 		middlewaresName: middlewareName,
+		mail:            mailqueue,
 	}
 }

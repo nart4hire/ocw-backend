@@ -9,4 +9,5 @@ type UserRepository interface {
 	Get(username string) (*user.User, error)
 	Update(user user.User) error
 	Delete(username string) error
+	IsExist(user string) (bool, error)
 }

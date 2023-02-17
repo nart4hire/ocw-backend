@@ -8,6 +8,7 @@ import (
 
 	"gitlab.informatika.org/ocw/ocw-backend/handler"
 	"gitlab.informatika.org/ocw/ocw-backend/middleware"
+	"gitlab.informatika.org/ocw/ocw-backend/provider"
 	"gitlab.informatika.org/ocw/ocw-backend/repository"
 	"gitlab.informatika.org/ocw/ocw-backend/routes"
 	"gitlab.informatika.org/ocw/ocw-backend/service"
@@ -24,6 +25,7 @@ func CreateServer() (app.Server, error) {
 		middleware.MiddlewareSet,
 		routes.RoutesSet,
 		service.ServiceSet,
+		provider.ProviderSet,
 	)
 
 	return nil, nil
