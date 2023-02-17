@@ -7,6 +7,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger/hooks"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reporter"
+	"gitlab.informatika.org/ocw/ocw-backend/service/verification"
 )
 
 var ServiceTestSet = wire.NewSet(
@@ -26,6 +27,12 @@ var ServiceTestSet = wire.NewSet(
 	wire.NewSet(
 		wire.Struct(new(auth.AuthServiceImpl), "*"),
 		wire.Bind(new(auth.AuthService), new(*auth.AuthServiceImpl)),
+	),
+
+	// verification service
+	wire.NewSet(
+		wire.Struct(new(verification.VerificationServiceImpl), "*"),
+		wire.Bind(new(verification.VerificationService), new(*verification.VerificationServiceImpl)),
 	),
 )
 

@@ -6,11 +6,17 @@ import (
 )
 
 func (auth AuthServiceImpl) Register(payload register.RegisterRequestPayload) error {
-	return auth.UserRepository.Add(user.User{
+	err := auth.UserRepository.Add(user.User{
 		Email:       payload.Email,
 		Password:    payload.Password,
 		Name:        payload.Name,
 		Role:        user.Student,
 		IsActivated: false,
 	})
+
+	if err == nil {
+		auth.SendVerifyMail(payload.Email)
+	}
+
+	return err
 }
