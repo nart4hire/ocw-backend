@@ -1,9 +1,11 @@
 package auth
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
+	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/refresh"
 )
 
@@ -16,7 +18,9 @@ import (
 //		@Accept				json
 //		@Param				Authorization header string true "Refresh token"
 //		@Success			200	{object}	web.BaseResponse{data=refresh.RefreshResponsePayload}
-//	  @Failure			403 {object}  web.BaseResponse
+//	  @Failure			400 {object}  web.BaseResponse
+//	  @Failure			401 {object}  web.BaseResponse
+//	  @Failure			500 {object}  web.BaseResponse
 //		@Router				/auth/refresh [post]
 func (a AuthHandlerImpl) Refresh(w http.ResponseWriter, r *http.Request) {
 	payload := refresh.RefreshRequestPayload{}
@@ -47,8 +51,17 @@ func (a AuthHandlerImpl) Refresh(w http.ResponseWriter, r *http.Request) {
 	response, err := a.AuthService.Refresh(payload)
 
 	if err != nil {
-		payload := a.WrapperUtil.ErrorResponseWrap(err.Error(), nil)
-		a.HttpUtil.WriteJson(w, http.StatusBadRequest, payload)
+		if errData, ok := err.(web.ResponseError); ok {
+			payload := a.WrapperUtil.ErrorResponseWrap(errData.Error(), errData)
+			a.HttpUtil.WriteJson(w, http.StatusUnauthorized, payload)
+			return
+		}
+
+		a.Logger.Error(
+			fmt.Sprintf("[AUTH] some error happened when do refresh: %s", err.Error()),
+		)
+		payload := a.WrapperUtil.ErrorResponseWrap("internal server error", nil)
+		a.HttpUtil.WriteJson(w, http.StatusInternalServerError, payload)
 		return
 	}
 

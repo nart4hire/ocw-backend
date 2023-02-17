@@ -9,10 +9,10 @@ import (
 )
 
 type TokenUtilImpl struct {
-	env.Environment
+	*env.Environment
 }
 
-func (t TokenUtilImpl) Method() jwt.SigningMethod {
+func (t TokenUtilImpl) DefaultMethod() jwt.SigningMethod {
 	switch t.TokenMethod {
 	case "hs256":
 		return jwt.SigningMethodHS256
@@ -22,32 +22,36 @@ func (t TokenUtilImpl) Method() jwt.SigningMethod {
 }
 
 func (tu TokenUtilImpl) Validate(tokenString string, tokenType token.TokenType) (*token.UserClaim, error) {
-	jwtData, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
+	jwtData, err := jwt.ParseWithClaims(tokenString, &token.UserClaim{}, func(t *jwt.Token) (interface{}, error) {
 		if method, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("invalid signing method")
-		} else if method != tu.Method() {
+		} else if method != tu.DefaultMethod() {
 			return nil, fmt.Errorf("invalid signing method")
 		}
 
-		return tu.Method(), nil
+		return []byte(tu.Environment.TokenSecret), nil
 	})
 
 	if err != nil {
 		return nil, err
 	}
 
-	claims := jwtData.Claims.(*token.UserClaim)
+	claims, ok := jwtData.Claims.(*token.UserClaim)
+
+	if !ok {
+		return nil, fmt.Errorf("invalid claim")
+	}
 
 	if claims.Type != tokenType {
-		return claims, fmt.Errorf("token type is not valid")
+		return nil, fmt.Errorf("token type is not valid")
 	}
 
 	return claims, nil
 }
 
-func (t TokenUtilImpl) Generate(claim token.UserClaim) (string, error) {
+func (t TokenUtilImpl) Generate(claim token.UserClaim, method jwt.SigningMethod) (string, error) {
 	token := jwt.NewWithClaims(
-		jwt.SigningMethodHS512,
+		method,
 		claim,
 	)
 

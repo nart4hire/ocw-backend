@@ -77,7 +77,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Login Success
           schema:
             allOf:
             - $ref: '#/definitions/web.BaseResponse'
@@ -85,8 +85,31 @@ paths:
                 data:
                   $ref: '#/definitions/login.LoginResponsePayload'
               type: object
+        "400":
+          description: Bad Input
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
         "403":
-          description: Forbidden
+          description: Login Credential Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "415":
+          description: Not a json request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Invalid JSON input
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Unknown Internal Error
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Login
@@ -115,8 +138,16 @@ paths:
                 data:
                   $ref: '#/definitions/refresh.RefreshResponsePayload'
               type: object
-        "403":
-          description: Forbidden
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Refresh Token

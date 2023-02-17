@@ -14,10 +14,6 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/utils/wrapper"
 )
 
-var DatabaseTestingSet = wire.NewSet(
-	db.NewPostgresConn,
-)
-
 var UtilSetTest = wire.NewSet(
 	// httputil utility
 	wire.Struct(new(httputil.HttpUtilImpl), "*"),
@@ -53,12 +49,12 @@ var UtilSetTest = wire.NewSet(
 )
 
 var UtilSet = wire.NewSet(
+	// env
+	env.New,
+
 	UtilSetTest,
 
 	// Database utility
 	wire.Bind(new(db.Database), new(*db.DatabaseImpl)),
 	db.NewPostgresEnv,
-
-	// env
-	env.New,
 )

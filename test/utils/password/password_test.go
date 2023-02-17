@@ -4,11 +4,16 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/password"
 )
 
 func TestPasswordHash(t *testing.T) {
-	obj := password.PasswordUtilImpl{}
+	obj := password.PasswordUtilImpl{
+		Environment: &env.Environment{
+			PasswordCost: 10,
+		},
+	}
 
 	t.Run("PasswordCanBeHashed", func(t *testing.T) {
 		_, err := obj.Hash("admin")
@@ -16,9 +21,18 @@ func TestPasswordHash(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
+	t.Run("PasswordHashMustBeDifferOnSamePass", func(t *testing.T) {
+		hash1, err := obj.Hash("admin")
+		assert.Nil(t, err)
+
+		hash2, err := obj.Hash("admin")
+		assert.Nil(t, err)
+
+		assert.NotEqual(t, hash1, hash2)
+	})
+
 	t.Run("PasswordCanBeHashAndValidateCorrectly", func(t *testing.T) {
 		hash, err := obj.Hash("admin")
-
 		assert.Nil(t, err)
 
 		err = obj.Check("admin", hash)

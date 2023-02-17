@@ -24,7 +24,7 @@ var ServiceTestSet = wire.NewSet(
 
 	// auth service
 	wire.NewSet(
-		wire.Struct(new(auth.AuthServiceImpl)),
+		wire.Struct(new(auth.AuthServiceImpl), "*"),
 		wire.Bind(new(auth.AuthService), new(*auth.AuthServiceImpl)),
 	),
 )

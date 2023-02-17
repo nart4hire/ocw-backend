@@ -20,9 +20,9 @@ func (repo UserRepositoryImpl) Add(user user.User) error {
 	return repo.db.Create(user).Error
 }
 
-func (repo UserRepositoryImpl) Get(username string) (*user.User, error) {
+func (repo UserRepositoryImpl) Get(email string) (*user.User, error) {
 	result := &user.User{}
-	err := repo.db.Where("username = ?", username).First(result).Error
+	err := repo.db.Where("email = ?", email).First(result).Error
 
 	if err != nil {
 		return nil, err
