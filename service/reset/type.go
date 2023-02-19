@@ -10,5 +10,4 @@ type ResetService interface {
 	Request(payload request.RequestRequestPayload) error
 	Confirm(payload confirm.ConfirmRequestPayload) error
 	Validate(payload validate.ValidateRequestPayload) error
-
 }
