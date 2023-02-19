@@ -47,10 +47,21 @@ func (repo UserRepositoryImpl) Get(email string) (*user.User, error) {
 	return result, nil
 }
 
+func (repo UserRepositoryImpl) GetAll() ([]user.User, error) {
+	var result []user.User
+	err := repo.db.Find(&result).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func (repo UserRepositoryImpl) Update(user user.User) error {
 	return repo.db.Save(user).Error
 }
 
-func (repo UserRepositoryImpl) Delete(email string) error {
-	return repo.db.Where("email = ?", email).Delete(&user.User{}).Error
+func (repo UserRepositoryImpl) Delete(username string) error {
+	return repo.db.Where("username = ?", username).Delete(&user.User{}).Error
 }
