@@ -8,6 +8,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger/hooks"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reporter"
+	"gitlab.informatika.org/ocw/ocw-backend/service/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/service/verification"
 )
 
@@ -34,6 +35,12 @@ var ServiceTestSet = wire.NewSet(
 	wire.NewSet(
 		wire.Struct(new(admin.AdminServiceImpl), "*"),
 		wire.Bind(new(admin.AdminService), new(*admin.AdminServiceImpl)),
+	),
+
+	// reset service
+	wire.NewSet(
+		wire.Struct(new(reset.ResetServiceImpl), "*"),
+		wire.Bind(new(reset.ResetService), new(*reset.ResetServiceImpl)),
 	),
 
 	// verification service
