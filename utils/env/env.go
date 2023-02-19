@@ -27,6 +27,15 @@ type Environment struct {
 	TokenRefreshExpired int64  `env:"TOKEN_REFRESH_EXPIRED_MS" envDefault:"86400000"`
 	TokenAccessExpired  int64  `env:"TOKEN_ACCESS_EXPIRED_MS" envDefault:"300000"`
 	TokenIssuer         string `env:"TOKEN_ISSUER" envDefault:"ocw"`
+
+	MailingProvider string `env:"MAIL_PROVIDER" envDefault:"smtp"`
+	MailingInterval int64  `env:"MAIL_INTERVAL_MS" envDefault:"1000"`
+
+	SmtpIdentity string `env:"SMTP_IDENTITY"`
+	SmtpUsername string `env:"SMTP_USERNAME"`
+	SmtpPassword string `env:"SMTP_PASSWORD"`
+	SmtpServer   string `env:"SMTP_SERVER"`
+	SmtpPort     int    `env:"SMTP_PORT" envDefault:"25"`
 }
 
 func New() (*Environment, error) {

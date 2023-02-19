@@ -31,6 +31,31 @@ definitions:
         description: Token that used to access the resources
         type: string
     type: object
+  register.RegisterRequestPayload:
+    description: Information that should be available when do a registration process
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+      name:
+        description: User name
+        example: someone
+        type: string
+      password:
+        description: User Password
+        example: secret
+        type: string
+      password_validation:
+        description: User Password Validation, must be same as user
+        example: secret
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - password_validation
+    type: object
   web.BaseResponse:
     properties:
       data: {}
@@ -61,6 +86,68 @@ paths:
       summary: Index page
       tags:
       - common
+  /admin/user:
+    delete:
+      description: Delete a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete User By Id
+      tags:
+      - admin
+    get:
+      description: Get all users from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get All User
+      tags:
+      - admin
+    patch:
+      description: Update a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update User By Id
+      tags:
+      - admin
+    post:
+      description: Add a user to database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add User
+      tags:
+      - admin
+  /admin/user/{id}:
+    get:
+      description: Get a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get User By Email
+      tags:
+      - admin
   /auth/login:
     post:
       consumes:
@@ -77,7 +164,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: Login Success
           schema:
             allOf:
             - $ref: '#/definitions/web.BaseResponse'
@@ -85,8 +172,31 @@ paths:
                 data:
                   $ref: '#/definitions/login.LoginResponsePayload'
               type: object
+        "400":
+          description: Bad Input
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
         "403":
-          description: Forbidden
+          description: Login Credential Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "415":
+          description: Not a json request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Invalid JSON input
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Unknown Internal Error
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Login
@@ -115,11 +225,49 @@ paths:
                 data:
                   $ref: '#/definitions/refresh.RefreshResponsePayload'
               type: object
-        "403":
-          description: Forbidden
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Refresh Token
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Generate New Account as Member
+      parameters:
+      - description: Register Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/register.RegisterRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Register New Account
       tags:
       - auth
 swagger: "2.0"

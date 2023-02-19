@@ -15,7 +15,7 @@ type RequestData struct {
 }
 
 func ExecuteJSON(reqData RequestData) (*http.Response, *MockLogger, error) {
-	r, log, err := NewTestHandler()
+	r, log, _, err := NewTestHandler()
 
 	if err != nil {
 		return nil, nil, err
@@ -49,4 +49,33 @@ func ExecuteJSON(reqData RequestData) (*http.Response, *MockLogger, error) {
 	res := rec.Result()
 
 	return res, log, nil
+}
+
+func ExecuteJSONWithHandler(r http.Handler, reqData RequestData) (*http.Response, error) {
+	var req *http.Request
+
+	if reqData.Data == nil {
+		req = httptest.NewRequest(reqData.Method, reqData.Endpoint, nil)
+	} else {
+		byteData, err := json.Marshal(reqData.Data)
+
+		if err != nil {
+			return nil, err
+		}
+
+		reader := bytes.NewReader(byteData)
+		req = httptest.NewRequest(reqData.Method, reqData.Endpoint, reader)
+	}
+
+	if reqData.Headers != nil {
+		for key, value := range reqData.Headers {
+			req.Header.Add(key, value)
+		}
+	}
+
+	rec := httptest.NewRecorder()
+
+	r.ServeHTTP(rec, req)
+
+	return rec.Result(), nil
 }

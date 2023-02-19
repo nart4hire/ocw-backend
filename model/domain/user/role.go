@@ -11,18 +11,18 @@ type UserRole int
 
 const (
 	Admin UserRole = iota
-	Member
+	Student
 	Contributor
 )
 
 var roleMapping = map[UserRole]string{
 	Admin:       "admin",
-	Member:      "member",
+	Student:     "student",
 	Contributor: "contributor",
 }
 
 func (ur *UserRole) Scan(value interface{}) error {
-	val := string(value.([]byte))
+	val := value.(string)
 
 	for key, label := range roleMapping {
 		if label == val {

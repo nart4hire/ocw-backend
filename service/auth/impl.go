@@ -2,6 +2,7 @@ package auth
 
 import (
 	"gitlab.informatika.org/ocw/ocw-backend/repository/user"
+	"gitlab.informatika.org/ocw/ocw-backend/service/verification"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/password"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/token"
@@ -10,6 +11,7 @@ import (
 type AuthServiceImpl struct {
 	user.UserRepository
 	password.PasswordUtil
-	env.Environment
+	*env.Environment
 	token.TokenUtil
+	verification.VerificationService
 }
