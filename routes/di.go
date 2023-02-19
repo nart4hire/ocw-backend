@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/google/wire"
+	"gitlab.informatika.org/ocw/ocw-backend/routes/admin"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/common"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/swagger"
@@ -11,6 +12,7 @@ var routesCollectionSet = wire.NewSet(
 	wire.Struct(new(common.CommonRoutes), "*"),
 	wire.Struct(new(swagger.SwaggerRoutes), "*"),
 	wire.Struct(new(auth.AuthRoutes), "*"),
+	wire.Struct(new(admin.AdminRoutes), "*"),
 )
 
 var RoutesSet = wire.NewSet(

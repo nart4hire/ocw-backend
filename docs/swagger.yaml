@@ -86,6 +86,68 @@ paths:
       summary: Index page
       tags:
       - common
+  /admin/user:
+    delete:
+      description: Delete a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete User By Id
+      tags:
+      - admin
+    get:
+      description: Get all users from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get All User
+      tags:
+      - admin
+    patch:
+      description: Update a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update User By Id
+      tags:
+      - admin
+    post:
+      description: Add a user to database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add User
+      tags:
+      - admin
+  /admin/user/{id}:
+    get:
+      description: Get a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get User By Email
+      tags:
+      - admin
   /auth/login:
     post:
       consumes:

@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/google/wire"
 	"gitlab.informatika.org/ocw/ocw-backend/service/auth"
+	"gitlab.informatika.org/ocw/ocw-backend/service/admin"
 	"gitlab.informatika.org/ocw/ocw-backend/service/common"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger/hooks"
@@ -27,6 +28,12 @@ var ServiceTestSet = wire.NewSet(
 	wire.NewSet(
 		wire.Struct(new(auth.AuthServiceImpl), "*"),
 		wire.Bind(new(auth.AuthService), new(*auth.AuthServiceImpl)),
+	),
+
+	// admin service
+	wire.NewSet(
+		wire.Struct(new(admin.AdminServiceImpl), "*"),
+		wire.Bind(new(admin.AdminService), new(*admin.AdminServiceImpl)),
 	),
 
 	// verification service
