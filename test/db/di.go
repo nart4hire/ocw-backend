@@ -2,7 +2,7 @@ package db
 
 import (
 	"github.com/google/wire"
-	"gitlab.informatika.org/ocw/ocw-backend/utils/db"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
 )
 
 var DbTestSet = wire.NewSet(

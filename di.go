@@ -6,6 +6,7 @@ package main
 import (
 	"github.com/google/wire"
 
+	"gitlab.informatika.org/ocw/ocw-backend/app"
 	"gitlab.informatika.org/ocw/ocw-backend/handler"
 	"gitlab.informatika.org/ocw/ocw-backend/middleware"
 	"gitlab.informatika.org/ocw/ocw-backend/provider"
@@ -13,8 +14,6 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/routes"
 	"gitlab.informatika.org/ocw/ocw-backend/service"
 	"gitlab.informatika.org/ocw/ocw-backend/utils"
-
-	"gitlab.informatika.org/ocw/ocw-backend/utils/app"
 )
 
 func CreateServer() (app.Server, error) {
@@ -26,6 +25,7 @@ func CreateServer() (app.Server, error) {
 		routes.RoutesSet,
 		service.ServiceSet,
 		provider.ProviderSet,
+		app.AppSet,
 	)
 
 	return nil, nil
