@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
-	"gitlab.informatika.org/ocw/ocw-backend/utils/db"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
 	"gorm.io/gorm"
 )
 

@@ -30,7 +30,7 @@ func CreateServer(logger logger.Logger, envTest *env.Environment) (*ApiTestPack,
 		routes.RoutesSet,
 		service.ServiceTestSet,
 		db.DbTestSet,
-		provider.ProviderSet,
+		provider.ProviderTestSet,
 	)
 
 	return nil, nil
