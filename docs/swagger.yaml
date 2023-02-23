@@ -56,6 +56,16 @@ definitions:
     - password
     - password_validation
     type: object
+  verification.VerificationRequestPayload:
+    description: Information that should be passed when request verify
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+    required:
+    - email
+    type: object
   web.BaseResponse:
     properties:
       data: {}
@@ -244,14 +254,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: Generate New Account as Member
+      description: Do Email Verification
       parameters:
       - description: Register Payload
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/register.RegisterRequestPayload'
+          $ref: '#/definitions/verification.VerificationRequestPayload'
       produces:
       - application/json
       responses:
@@ -267,7 +277,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/web.BaseResponse'
-      summary: Register New Account
+      summary: Email Verification
       tags:
       - auth
 swagger: "2.0"

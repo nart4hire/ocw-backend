@@ -284,7 +284,7 @@ const docTemplate = `{
         },
         "/auth/register": {
             "post": {
-                "description": "Generate New Account as Member",
+                "description": "Do Email Verification",
                 "consumes": [
                     "application/json"
                 ],
@@ -294,7 +294,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Register New Account",
+                "summary": "Email Verification",
                 "parameters": [
                     {
                         "description": "Register Payload",
@@ -302,7 +302,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/register.RegisterRequestPayload"
+                            "$ref": "#/definitions/verification.VerificationRequestPayload"
                         }
                     }
                 ],
@@ -403,6 +403,20 @@ const docTemplate = `{
                     "description": "User Password Validation, must be same as user",
                     "type": "string",
                     "example": "secret"
+                }
+            }
+        },
+        "verification.VerificationRequestPayload": {
+            "description": "Information that should be passed when request verify",
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
                 }
             }
         },
