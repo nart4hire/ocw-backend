@@ -6,6 +6,7 @@ package test
 import (
 	"github.com/google/wire"
 
+	"gitlab.informatika.org/ocw/ocw-backend/app"
 	"gitlab.informatika.org/ocw/ocw-backend/handler"
 	"gitlab.informatika.org/ocw/ocw-backend/middleware"
 	"gitlab.informatika.org/ocw/ocw-backend/provider"
@@ -31,6 +32,7 @@ func CreateServer(logger logger.Logger, envTest *env.Environment) (*ApiTestPack,
 		service.ServiceTestSet,
 		db.DbTestSet,
 		provider.ProviderTestSet,
+		app.AppSet,
 	)
 
 	return nil, nil
