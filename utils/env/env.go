@@ -40,6 +40,9 @@ type Environment struct {
 	FrontendBaseURL       string `env:"FE_BASE_URL"`
 	ResetPasswordPath     string `env:"RESET_PASSWORD_PATH" envDefault:""`
 	EmailVerificationPath string `env:"EMAIL_VERIFICATION_PATH" envDefault:""`
+
+	RedisConnection string `env:"REDIS_STRING"`
+	RedisPort string `env:"REDIS_PORT" envDefault:"6379"`
 }
 
 func New() (*Environment, error) {

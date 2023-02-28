@@ -3,6 +3,7 @@ package provider
 import (
 	"github.com/google/wire"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/redis"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/mail"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/mail/smtp"
 )
@@ -22,4 +23,8 @@ var ProviderSet = wire.NewSet(
 	// Database utility
 	wire.Bind(new(db.Database), new(*db.DatabaseImpl)),
 	db.NewPostgresEnv,
+	
+	// Redis utility
+	wire.Bind(new(redis.Redis), new(*redis.RedisImpl)),
+	redis.NewRedisEnv,
 )
