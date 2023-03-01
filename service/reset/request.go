@@ -6,15 +6,15 @@ import (
 )
 
 func (rs ResetServiceImpl) Request(payload request.RequestRequestPayload) error {
-	c := cache.NewCache(*cache.NewKey("Test", "123"), *cache.NewValue("Test", "123"), 30)
+	c := cache.NewHash(*cache.NewKey("Test", "123"), *cache.NewValue("Test", "123"), 30)
 	c.AppendValue(*cache.NewValue("Hello", "World"))
 
-	err := rs.CacheRepository.Set(*c)
+	err := rs.CacheRepository.HSet(*c)
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = rs.CacheRepository.Get(*c, "Test")
+	_, err = rs.CacheRepository.HGet(*c, "Test")
 	if err != nil {
 		panic(err)
 	}

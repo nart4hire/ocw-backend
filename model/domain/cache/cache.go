@@ -2,7 +2,13 @@ package cache
 
 import "fmt"
 
-type Cache struct {
+type String struct {
+	Key             Key
+	Value           string
+	ExpiryInMinutes int
+}
+
+type Hash struct {
 	Key             Key
 	Values          []Value
 	ExpiryInMinutes int
@@ -18,7 +24,7 @@ type Value struct {
 	Store string
 }
 
-func (c *Cache) AppendValue(value Value) *Cache {
+func (c *Hash) AppendValue(value Value) *Hash {
 	c.Values = append(c.Values, value)
 	return c
 }
@@ -35,16 +41,20 @@ func NewValue(field string, store string) *Value {
 	return &Value{field, store}
 }
 
-func NewCache(key Key, initValue Value, expiryInMinutes int) *Cache {
-	return &Cache{key, []Value{initValue}, expiryInMinutes}
+func NewString(key Key, value string, expiryInMinutes int) *String {
+	return &String{key, value, expiryInMinutes}
 }
 
-func (c *Cache) Slice() ([]interface{}) {
-	slice := make([]interface{}, len(c.Values) * 2 + 1)
+func NewHash(key Key, initValue Value, expiryInMinutes int) *Hash {
+	return &Hash{key, []Value{initValue}, expiryInMinutes}
+}
+
+func (c *Hash) Slice() []interface{} {
+	slice := make([]interface{}, len(c.Values)*2+1)
 	slice[0] = c.Key.String()
 	for i := range make([]int, len(c.Values)) {
-		slice[i * 2 + 1] = c.Values[i].Field
-		slice[i * 2 + 2] = c.Values[i].Store
+		slice[i*2+1] = c.Values[i].Field
+		slice[i*2+2] = c.Values[i].Store
 	}
 	return slice
 }

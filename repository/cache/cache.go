@@ -16,7 +16,41 @@ func New(
 	return &CacheRepositoryImpl{cache.Pool()}
 }
 
-func (c CacheRepositoryImpl) Get(cache cache.Cache, field string) (string, error) {
+func (c CacheRepositoryImpl) Get(key cache.Key) (string, error) {
+	conn := c.pool.Get()
+	defer conn.Close()
+
+	value, err := redis.String(conn.Do("GET", key))
+
+	if err != nil {
+		return "", err
+	}
+
+	return value, nil
+}
+
+func (c CacheRepositoryImpl) Set(str cache.String) error {
+	conn := c.pool.Get()
+	defer conn.Close()
+
+	_, err := conn.Do("SET", str.Key, str.Value)
+
+	if err != nil {
+		return err
+	}
+
+	if str.ExpiryInMinutes > 0 {
+		_, err = conn.Do("EXPIRE", str.Key, str.ExpiryInMinutes * 60)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (c CacheRepositoryImpl) HGet(cache cache.Hash, field string) (string, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 
@@ -29,12 +63,12 @@ func (c CacheRepositoryImpl) Get(cache cache.Cache, field string) (string, error
 	return value, nil
 }
 
-func (c CacheRepositoryImpl) GetAll(cache cache.Cache) (map[string]string, error) {
+func (c CacheRepositoryImpl) HGetAll(cache cache.Hash) (map[string]string, error) {
 	conn := c.pool.Get()
 	defer conn.Close()
 
 	value, err := redis.StringMap(conn.Do("HGETALL", cache.Key.String()))
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +76,7 @@ func (c CacheRepositoryImpl) GetAll(cache cache.Cache) (map[string]string, error
 	return value, nil
 }
 
-func (c CacheRepositoryImpl) Set(cache cache.Cache) error {
+func (c CacheRepositoryImpl) HSet(cache cache.Hash) error {
 	conn := c.pool.Get()
 	defer conn.Close()
 
@@ -51,6 +85,14 @@ func (c CacheRepositoryImpl) Set(cache cache.Cache) error {
 
 	if err != nil {
 		return err
+	}
+
+	if cache.ExpiryInMinutes > 0 {
+		_, err = conn.Do("EXPIRE", cache.Key, cache.ExpiryInMinutes * 60)
+
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

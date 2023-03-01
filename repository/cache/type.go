@@ -5,7 +5,9 @@ import (
 )
 
 type CacheRepository interface {
-	Get(cache cache.Cache, field string) (string, error)
-	GetAll(cache cache.Cache) (map[string]string, error)
-	Set(cache cache.Cache) error
+	Get(key cache.Key) (string, error)
+	Set(str cache.String) error
+	HGet(cache cache.Hash, field string) (string, error)
+	HGetAll(cache cache.Hash) (map[string]string, error)
+	HSet(cache cache.Hash) error
 }
