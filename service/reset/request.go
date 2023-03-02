@@ -41,7 +41,7 @@ func (rs ResetServiceImpl) Request(payload request.RequestRequestPayload) error 
 		Role:  user.Role,
 		Type:  tokenModel.Access,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(rs.TokenAccessExpired * 6) * time.Millisecond)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(rs.TokenAccessExpired*6) * time.Millisecond)),
 			Issuer:    rs.TokenIssuer,
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
@@ -54,7 +54,7 @@ func (rs ResetServiceImpl) Request(payload request.RequestRequestPayload) error 
 
 	// Cache Website on Redis, TTL 30 mins
 	rs.CacheRepository.Set(*cache.NewString(*cache.NewKey("resetPassword", resetToken), payload.Email, 30))
-	
+
 	// TODO: Send Reset Email
 
 	return nil

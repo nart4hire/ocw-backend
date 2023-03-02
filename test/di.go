@@ -18,6 +18,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/utils"
 
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/template"
 )
 
 func CreateServer(logger logger.Logger, envTest *env.Environment) (*ApiTestPack, error) {
@@ -36,4 +37,12 @@ func CreateServer(logger logger.Logger, envTest *env.Environment) (*ApiTestPack,
 	)
 
 	return nil, nil
+}
+
+func CreateTemplateBuilder() template.TemplateWritterBuilder {
+	wire.Build(
+		utils.UtilSetTest,
+	)
+
+	return nil
 }
