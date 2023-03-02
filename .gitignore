@@ -1,3 +1,4 @@
 bin/
 tmp/
 wire_gen.go
+__debug_bin*
