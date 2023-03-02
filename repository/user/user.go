@@ -62,6 +62,6 @@ func (repo UserRepositoryImpl) Update(user user.User) error {
 	return repo.db.Save(user).Error
 }
 
-func (repo UserRepositoryImpl) Delete(username string) error {
-	return repo.db.Where("username = ?", username).Delete(&user.User{}).Error
+func (repo UserRepositoryImpl) Delete(email string) error {
+	return repo.db.Where("email = ?", email).Delete(&user.User{}).Error
 }

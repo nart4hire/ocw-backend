@@ -1,16 +1,11 @@
 package admin
 
-// import (
-	// "errors"
-	// "time"
+import (
+	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
+)
 
-	// "github.com/golang-jwt/jwt/v4"
-	// "gitlab.informatika.org/ocw/ocw-backend/model/web"
-	// "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/login"
-	// tokenModel "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
-	// "gorm.io/gorm"
-// )
-
-func (AdminServiceImpl) GetUserByEmail() string {
-	return "get user by email"
+func (as AdminServiceImpl) GetUserByEmail(email string) (*user.User, error) {
+	var users *user.User
+	users, nil := as.UserRepository.Get(email)
+	return users, nil
 }

@@ -1,4 +1,42 @@
 definitions:
+  admin.AdminAddUserPayload:
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+      name:
+        description: User name
+        example: someone
+        type: string
+      role:
+        description: User Role
+        example: admin
+        type: string
+    required:
+    - email
+    - name
+    - role
+    type: object
+  admin.AdminUpdateUserPayload:
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+      name:
+        description: User name
+        example: someone
+        type: string
+      role:
+        description: User Role
+        example: admin
+        type: string
+    required:
+    - email
+    - name
+    - role
+    type: object
   confirm.ConfirmRequestPayload:
     description: Information that should be available when you confirm a password
       reset
@@ -126,18 +164,6 @@ paths:
       tags:
       - common
   /admin/user:
-    delete:
-      description: Delete a user from database
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/web.BaseResponse'
-      summary: Delete User By Id
-      tags:
-      - admin
     get:
       description: Get all users from database
       produces:
@@ -150,20 +176,17 @@ paths:
       summary: Get All User
       tags:
       - admin
-    patch:
-      description: Update a user from database
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/web.BaseResponse'
-      summary: Update User By Id
-      tags:
-      - admin
     post:
+      consumes:
+      - application/json
       description: Add a user to database
+      parameters:
+      - description: Admin Add User Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminAddUserPayload'
       produces:
       - application/json
       responses:
@@ -174,7 +197,21 @@ paths:
       summary: Add User
       tags:
       - admin
-  /admin/user/{id}:
+  /admin/user/{email}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete User By Id
+      tags:
+      - admin
     get:
       description: Get a user from database
       produces:
@@ -185,6 +222,27 @@ paths:
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Get User By Email
+      tags:
+      - admin
+    patch:
+      consumes:
+      - application/json
+      description: Update a user from database
+      parameters:
+      - description: Admin Update User Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminUpdateUserPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update User By Id
       tags:
       - admin
   /auth/login:

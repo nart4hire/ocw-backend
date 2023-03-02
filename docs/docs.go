@@ -56,6 +56,9 @@ const docTemplate = `{
             },
             "post": {
                 "description": "Add a user to database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -63,6 +66,37 @@ const docTemplate = `{
                     "admin"
                 ],
                 "summary": "Add User",
+                "parameters": [
+                    {
+                        "description": "Admin Add User Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminAddUserPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/{email}": {
+            "get": {
+                "description": "Get a user from database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Get User By Email",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -74,6 +108,9 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "Delete a user from database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -92,6 +129,9 @@ const docTemplate = `{
             },
             "patch": {
                 "description": "Update a user from database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -99,26 +139,17 @@ const docTemplate = `{
                     "admin"
                 ],
                 "summary": "Update User By Id",
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                "parameters": [
+                    {
+                        "description": "Admin Update User Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "$ref": "#/definitions/web.BaseResponse"
+                            "$ref": "#/definitions/admin.AdminUpdateUserPayload"
                         }
                     }
-                }
-            }
-        },
-        "/admin/user/{id}": {
-            "get": {
-                "description": "Get a user from database",
-                "produces": [
-                    "application/json"
                 ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "Get User By Email",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -428,6 +459,56 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "admin.AdminAddUserPayload": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "role"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                },
+                "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "someone"
+                },
+                "role": {
+                    "description": "User Role",
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "admin.AdminUpdateUserPayload": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "role"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                },
+                "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "someone"
+                },
+                "role": {
+                    "description": "User Role",
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
         "confirm.ConfirmRequestPayload": {
             "description": "Information that should be available when you confirm a password reset",
             "type": "object",
