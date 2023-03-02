@@ -36,6 +36,17 @@ type Environment struct {
 	SmtpPassword string `env:"SMTP_PASSWORD"`
 	SmtpServer   string `env:"SMTP_SERVER"`
 	SmtpPort     int    `env:"SMTP_PORT" envDefault:"25"`
+
+	FrontendBaseURL       string `env:"FE_BASE_URL"`
+	ResetPasswordPath     string `env:"RESET_PASSWORD_PATH" envDefault:"/reset"`
+	EmailVerificationPath string `env:"EMAIL_VERIFICATION_PATH" envDefault:"/verification"`
+
+	RedisConnection string `env:"REDIS_STRING"`
+	RedisPort       string `env:"REDIS_PORT" envDefault:"6379"`
+	RedisUsername   string `env:"REDIS_USERNAME"`
+	RedisPassword   string `env:"REDIS_PASSWORD"`
+	RedisUseAuth    bool   `env:"REDIS_USE_AUTH" envDefault:"false"`
+	RedisPrefixKey  string `env:"REDIS_PREFIX_KEY" envDefault:"app:"`
 }
 
 func New() (*Environment, error) {

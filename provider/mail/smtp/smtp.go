@@ -30,6 +30,7 @@ func (s SmtpMailProvider) Send(to []string, subject string, message string) erro
 	payload := fmt.Sprintf(
 		"To: %s\r\n"+
 			"Subject: %s\r\n"+
+			"Content-Type: text/html; charset=UTF-8\r\n"+
 			"\r\n%s\r\n",
 		to, subject, message,
 	)

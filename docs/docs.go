@@ -284,7 +284,7 @@ const docTemplate = `{
         },
         "/auth/register": {
             "post": {
-                "description": "Generate New Account as Member",
+                "description": "Do Email Verification",
                 "consumes": [
                     "application/json"
                 ],
@@ -294,7 +294,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Register New Account",
+                "summary": "Email Verification",
                 "parameters": [
                     {
                         "description": "Register Payload",
@@ -302,7 +302,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/register.RegisterRequestPayload"
+                            "$ref": "#/definitions/verification.VerificationRequestPayload"
                         }
                     }
                 ],
@@ -327,9 +327,131 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/reset/confirm": {
+            "post": {
+                "description": "Do confirmation to reset password",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset"
+                ],
+                "summary": "Confirm Reset Password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email validation token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/confirm.ConfirmRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset/request": {
+            "post": {
+                "description": "Send Reset password token to email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset"
+                ],
+                "summary": "Request Reset Password Token",
+                "parameters": [
+                    {
+                        "description": "payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset/validate": {
+            "get": {
+                "description": "Send Reset password token to email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset"
+                ],
+                "summary": "Request Reset Password Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email validation token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "confirm.ConfirmRequestPayload": {
+            "description": "Information that should be available when you confirm a password reset",
+            "type": "object",
+            "required": [
+                "password",
+                "password_validation"
+            ],
+            "properties": {
+                "confirmToken": {
+                    "description": "Web Token that was appended to the link",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "User Password",
+                    "type": "string",
+                    "example": "secret"
+                },
+                "password_validation": {
+                    "description": "User Password Validation, must be same as user",
+                    "type": "string",
+                    "example": "secret"
+                }
+            }
+        },
         "login.LoginRequestPayload": {
             "description": "Information that should be available when do a login process",
             "type": "object",
@@ -403,6 +525,34 @@ const docTemplate = `{
                     "description": "User Password Validation, must be same as user",
                     "type": "string",
                     "example": "secret"
+                }
+            }
+        },
+        "request.RequestRequestPayload": {
+            "description": "Information that should be available when password reset is requested",
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                }
+            }
+        },
+        "verification.VerificationRequestPayload": {
+            "description": "Information that should be passed when request verify",
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
                 }
             }
         },

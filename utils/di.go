@@ -8,6 +8,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/utils/log"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/password"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/res"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/template"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/token"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/wrapper"
 )
@@ -40,6 +41,10 @@ var UtilSetTest = wire.NewSet(
 	// Token utility
 	wire.Struct(new(token.TokenUtilImpl), "*"),
 	wire.Bind(new(token.TokenUtil), new(*token.TokenUtilImpl)),
+
+	// Template Writter
+	template.NewBuilder,
+	wire.Bind(new(template.TemplateWritterBuilder), new(*template.TemplateWritterBuilderImpl)),
 )
 
 var UtilSet = wire.NewSet(
