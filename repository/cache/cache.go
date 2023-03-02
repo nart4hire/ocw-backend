@@ -29,6 +29,40 @@ func (c CacheRepositoryImpl) Get(key cache.Key) (string, error) {
 	return value, nil
 }
 
+func (c CacheRepositoryImpl) GetInteger(key cache.Key) (int64, error) {
+	conn := c.pool.Get()
+	defer conn.Close()
+
+	value, err := redis.Int64(conn.Do("GET", key))
+
+	if err != nil {
+		return 0, err
+	}
+
+	return value, err
+}
+
+func (c CacheRepositoryImpl) Incr(key string, expr int64) error {
+	conn := c.pool.Get()
+	defer conn.Close()
+
+	value, err := redis.Int64(conn.Do("INCR", key))
+
+	if err != nil {
+		return err
+	}
+
+	if value == 1 && expr > 0 {
+		_, err := conn.Do("EXPIRE", key, expr)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (c CacheRepositoryImpl) Delete(key string) error {
 	conn := c.pool.Get()
 	defer conn.Close()
