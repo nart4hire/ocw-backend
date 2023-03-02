@@ -17,7 +17,7 @@ func (rs ResetServiceImpl) Confirm(payload confirm.ConfirmRequestPayload) error 
 	}
 
 	// Check if Token is Cached
-	email, err := rs.CacheRepository.Get(*cache.NewKey("resetPassword", payload.ConfirmToken))
+	email, err := rs.CacheRepository.Get(*cache.NewKey(rs.RedisPrefixKey+"resetPassword", payload.ConfirmToken))
 
 	if err != nil {
 		return web.NewResponseErrorFromError(err, web.LinkNotAvailable)
@@ -42,6 +42,6 @@ func (rs ResetServiceImpl) Confirm(payload confirm.ConfirmRequestPayload) error 
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }

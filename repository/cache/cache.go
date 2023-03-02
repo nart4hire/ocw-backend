@@ -29,6 +29,14 @@ func (c CacheRepositoryImpl) Get(key cache.Key) (string, error) {
 	return value, nil
 }
 
+func (c CacheRepositoryImpl) Delete(key string) error {
+	conn := c.pool.Get()
+	defer conn.Close()
+
+	_, err := conn.Do("DEL", key)
+	return err
+}
+
 func (c CacheRepositoryImpl) Set(str cache.String) error {
 	conn := c.pool.Get()
 	defer conn.Close()
@@ -40,7 +48,7 @@ func (c CacheRepositoryImpl) Set(str cache.String) error {
 	}
 
 	if str.ExpiryInMinutes > 0 {
-		_, err = conn.Do("EXPIRE", str.Key, str.ExpiryInMinutes * 60)
+		_, err = conn.Do("EXPIRE", str.Key, str.ExpiryInMinutes*60)
 
 		if err != nil {
 			return err
@@ -88,7 +96,7 @@ func (c CacheRepositoryImpl) HSet(cache cache.Hash) error {
 	}
 
 	if cache.ExpiryInMinutes > 0 {
-		_, err = conn.Do("EXPIRE", cache.Key, cache.ExpiryInMinutes * 60)
+		_, err = conn.Do("EXPIRE", cache.Key, cache.ExpiryInMinutes*60)
 
 		if err != nil {
 			return err

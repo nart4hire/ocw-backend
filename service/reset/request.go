@@ -7,6 +7,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	tokenModel "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/mail"
 	"gorm.io/gorm"
 
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/cache"
@@ -53,9 +54,30 @@ func (rs ResetServiceImpl) Request(payload request.RequestRequestPayload) error 
 	}
 
 	// Cache Website on Redis, TTL 30 mins
-	rs.CacheRepository.Set(*cache.NewString(*cache.NewKey("resetPassword", resetToken), payload.Email, 30))
+	rs.CacheRepository.Set(*cache.NewString(*cache.NewKey(rs.RedisPrefixKey+"resetPassword", resetToken), payload.Email, 30))
 
 	// TODO: Send Reset Email
+	mailBuilder, err := rs.TemplateWritterBuilder.Get("reset-password.format.html")
+
+	if err != nil {
+		return err
+	}
+
+	mailData, err := mailBuilder.Write(&mailPayload{
+		BaseUrl: rs.FrontendBaseURL + rs.ResetPasswordPath,
+		Email:   user.Email,
+		Token:   resetToken,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	rs.MailQueue.Send(mail.Mail{
+		To:      []string{user.Email},
+		Subject: "Reset Password",
+		Message: mailData,
+	})
 
 	return nil
 }

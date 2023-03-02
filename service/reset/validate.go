@@ -17,7 +17,7 @@ func (rs ResetServiceImpl) Validate(payload validate.ValidateRequestPayload) err
 	}
 
 	// Check if Token is Cached
-	_, err = rs.CacheRepository.Get(*cache.NewKey("resetPassword", payload.ValidateToken))
+	_, err = rs.CacheRepository.Get(*cache.NewKey(rs.RedisPrefixKey+"resetPassword", payload.ValidateToken))
 
 	if err != nil {
 		return web.NewResponseErrorFromError(err, web.LinkNotAvailable)

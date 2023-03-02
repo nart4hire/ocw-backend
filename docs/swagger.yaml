@@ -1,4 +1,23 @@
 definitions:
+  confirm.ConfirmRequestPayload:
+    description: Information that should be available when you confirm a password
+      reset
+    properties:
+      confirmToken:
+        description: Web Token that was appended to the link
+        type: string
+      password:
+        description: User Password
+        example: secret
+        type: string
+      password_validation:
+        description: User Password Validation, must be same as user
+        example: secret
+        type: string
+    required:
+    - password
+    - password_validation
+    type: object
   login.LoginRequestPayload:
     description: Information that should be available when do a login process
     properties:
@@ -55,6 +74,16 @@ definitions:
     - name
     - password
     - password_validation
+    type: object
+  request.RequestRequestPayload:
+    description: Information that should be available when password reset is requested
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+    required:
+    - email
     type: object
   verification.VerificationRequestPayload:
     description: Information that should be passed when request verify
@@ -280,4 +309,68 @@ paths:
       summary: Email Verification
       tags:
       - auth
+  /reset/confirm:
+    post:
+      description: Do confirmation to reset password
+      parameters:
+      - description: Email validation token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/confirm.ConfirmRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Confirm Reset Password
+      tags:
+      - reset
+  /reset/request:
+    post:
+      description: Send Reset password token to email
+      parameters:
+      - description: payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Request Reset Password Token
+      tags:
+      - reset
+  /reset/validate:
+    get:
+      description: Send Reset password token to email
+      parameters:
+      - description: Email validation token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Request Reset Password Token
+      tags:
+      - reset
 swagger: "2.0"
