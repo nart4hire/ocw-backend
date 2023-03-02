@@ -37,9 +37,13 @@ type Environment struct {
 	SmtpServer   string `env:"SMTP_SERVER"`
 	SmtpPort     int    `env:"SMTP_PORT" envDefault:"25"`
 
-	FrontendBaseURL       string `env:"FE_BASE_URL"`
-	ResetPasswordPath     string `env:"RESET_PASSWORD_PATH" envDefault:"/reset"`
-	EmailVerificationPath string `env:"EMAIL_VERIFICATION_PATH" envDefault:"/verification"`
+	FrontendBaseURL   string `env:"FE_BASE_URL"`
+	ResetPasswordPath string `env:"RESET_PASSWORD_PATH" envDefault:"/reset"`
+
+	EmailVerificationPath          string `env:"EMAIL_VERIFICATION_PATH" envDefault:"/verification"`
+	EmailVerificationMaxRetry      int64  `env:"EMAIL_VERIFICATION_MAX_RETRY" envDefault:"5"`
+	EmailVerificationRetryInterval int64  `env:"EMAIL_VERIFICATION_RESET_RETRY_INTERVAL_M" envDefault:"5"`
+	EmailVerificationExpire        int64  `env:"EMAIL_VERIFICATION_EXPIRE_S" envDefault:"300"`
 
 	RedisConnection string `env:"REDIS_STRING"`
 	RedisPort       string `env:"REDIS_PORT" envDefault:"6379"`

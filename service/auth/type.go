@@ -11,5 +11,5 @@ type AuthService interface {
 	Login(payload login.LoginRequestPayload) (*login.LoginResponsePayload, error)
 	Refresh(payload refresh.RefreshRequestPayload) (*refresh.RefreshResponsePayload, error)
 	Register(payload register.RegisterRequestPayload) error
-	VerifyEmail(payload verification.VerificationRequestPayload) error
+	SendVerifyEmail(payload verification.VerificationSendRequestPayload) error
 }

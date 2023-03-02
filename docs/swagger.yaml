@@ -124,6 +124,14 @@ definitions:
     - email
     type: object
   verification.VerificationRequestPayload:
+    properties:
+      id:
+        example: 6ba7b812-9dad-11d1-80b4-00c04fd430c8
+        type: string
+    required:
+    - id
+    type: object
+  verification.VerificationSendRequestPayload:
     description: Information that should be passed when request verify
     properties:
       email:
@@ -341,7 +349,37 @@ paths:
     post:
       consumes:
       - application/json
-      description: Do Email Verification
+      description: Generate New Account as Member
+      parameters:
+      - description: Register Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/register.RegisterRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Register New Account
+      tags:
+      - auth
+  /auth/verify:
+    post:
+      consumes:
+      - application/json
+      description: Do Email Verification to user
       parameters:
       - description: Register Payload
         in: body
@@ -364,7 +402,37 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/web.BaseResponse'
-      summary: Email Verification
+      summary: Do Email Verification
+      tags:
+      - auth
+  /auth/verify/resend:
+    post:
+      consumes:
+      - application/json
+      description: Send Email Verification to user
+      parameters:
+      - description: Register Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/verification.VerificationSendRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Send Email Verification
       tags:
       - auth
   /reset/confirm:

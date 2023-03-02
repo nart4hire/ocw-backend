@@ -12,17 +12,17 @@ import (
 // Index godoc
 //
 //		@Tags					auth
-//		@Summary			Do Email Verification
-//		@Description	Do Email Verification to user
+//		@Summary			Send Email Verification
+//		@Description	Send Email Verification to user
 //		@Produce			json
 //		@Accept				json
-//		@Param				data body verification.VerificationRequestPayload true "Register Payload"
+//		@Param				data body verification.VerificationSendRequestPayload true "Register Payload"
 //		@Success			200	{object}	web.BaseResponse
 //	  @Failure			400 {object}  web.BaseResponse
 //	  @Failure			500 {object}  web.BaseResponse
-//		@Router				/auth/verify  [post]
-func (a AuthHandlerImpl) EmailVerify(w http.ResponseWriter, r *http.Request) {
-	payload := verification.VerificationRequestPayload{}
+//		@Router				/auth/verify/resend  [post]
+func (a AuthHandlerImpl) SendEmailVerify(w http.ResponseWriter, r *http.Request) {
+	payload := verification.VerificationSendRequestPayload{}
 	validate := validator.New()
 
 	if r.Header.Get("Content-Type") != "application/json" {
@@ -50,7 +50,7 @@ func (a AuthHandlerImpl) EmailVerify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := a.VerificationService.DoVerification(payload.Id)
+	err := a.AuthService.SendVerifyEmail(payload)
 
 	if err != nil {
 		respErr, ok := err.(web.ResponseError)

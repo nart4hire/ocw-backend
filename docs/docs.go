@@ -315,7 +315,7 @@ const docTemplate = `{
         },
         "/auth/register": {
             "post": {
-                "description": "Do Email Verification",
+                "description": "Generate New Account as Member",
                 "consumes": [
                     "application/json"
                 ],
@@ -325,7 +325,53 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Email Verification",
+                "summary": "Register New Account",
+                "parameters": [
+                    {
+                        "description": "Register Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/register.RegisterRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify": {
+            "post": {
+                "description": "Do Email Verification to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Do Email Verification",
                 "parameters": [
                     {
                         "description": "Register Payload",
@@ -334,6 +380,52 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/verification.VerificationRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify/resend": {
+            "post": {
+                "description": "Send Email Verification to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Send Email Verification",
+                "parameters": [
+                    {
+                        "description": "Register Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/verification.VerificationSendRequestPayload"
                         }
                     }
                 ],
@@ -624,6 +716,18 @@ const docTemplate = `{
             }
         },
         "verification.VerificationRequestPayload": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "6ba7b812-9dad-11d1-80b4-00c04fd430c8"
+                }
+            }
+        },
+        "verification.VerificationSendRequestPayload": {
             "description": "Information that should be passed when request verify",
             "type": "object",
             "required": [
