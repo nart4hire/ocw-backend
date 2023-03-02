@@ -359,9 +359,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/send-verify": {
+        "/auth/verify": {
             "post": {
-                "description": "Send Email Verification to user",
+                "description": "Do Email Verification to user",
                 "consumes": [
                     "application/json"
                 ],
@@ -371,7 +371,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Send Email Verification",
+                "summary": "Do Email Verification",
                 "parameters": [
                     {
                         "description": "Register Payload",
@@ -379,7 +379,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/verification.VerificationSendRequestPayload"
+                            "$ref": "#/definitions/verification.VerificationRequestPayload"
                         }
                     }
                 ],
@@ -405,9 +405,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/verify": {
+        "/auth/verify/resend": {
             "post": {
-                "description": "Do Email Verification to user",
+                "description": "Send Email Verification to user",
                 "consumes": [
                     "application/json"
                 ],
@@ -417,7 +417,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Do Email Verification",
+                "summary": "Send Email Verification",
                 "parameters": [
                     {
                         "description": "Register Payload",
@@ -712,6 +712,18 @@ const docTemplate = `{
                     "description": "User Email",
                     "type": "string",
                     "example": "someone@example.com"
+                }
+            }
+        },
+        "verification.VerificationRequestPayload": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "6ba7b812-9dad-11d1-80b4-00c04fd430c8"
                 }
             }
         },

@@ -2,7 +2,6 @@ package verification
 
 import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/cache"
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 )
 
@@ -20,10 +19,15 @@ func (v VerificationServiceImpl) DoVerification(id string) error {
 		return web.NewResponseErrorf("VERIFY", "id '%s' is not valid", id)
 	}
 
-	v.UserRepository.Update(user.User{
-		Email:       email,
-		IsActivated: true,
-	})
+	data, err := v.UserRepository.Get(email)
+
+	if err != nil {
+		return web.NewResponseErrorf("VERIFY", "username '%s' is not found", email)
+	}
+
+	data.IsActivated = true
+
+	v.UserRepository.Update(*data)
 
 	return nil
 }

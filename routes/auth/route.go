@@ -14,7 +14,7 @@ func (ar AuthRoutes) Register(r chi.Router) {
 		r.Post("/login", ar.AuthHandler.Login)
 		r.Post("/refresh", ar.AuthHandler.Refresh)
 		r.Post("/register", ar.AuthHandler.Register)
-		r.Post("/send-verify", ar.AuthHandler.SendEmailVerify)
-		r.Get("/verify", ar.AuthHandler.EmailVerify)
+		r.Post("/verify/resend", ar.AuthHandler.SendEmailVerify)
+		r.Post("/verify", ar.AuthHandler.EmailVerify)
 	})
 }

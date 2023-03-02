@@ -16,7 +16,7 @@ import (
 //		@Description	Do Email Verification to user
 //		@Produce			json
 //		@Accept				json
-//		@Param				data body verification.VerificationSendRequestPayload true "Register Payload"
+//		@Param				data body verification.VerificationRequestPayload true "Register Payload"
 //		@Success			200	{object}	web.BaseResponse
 //	  @Failure			400 {object}  web.BaseResponse
 //	  @Failure			500 {object}  web.BaseResponse

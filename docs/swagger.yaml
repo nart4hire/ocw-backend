@@ -123,6 +123,14 @@ definitions:
     required:
     - email
     type: object
+  verification.VerificationRequestPayload:
+    properties:
+      id:
+        example: 6ba7b812-9dad-11d1-80b4-00c04fd430c8
+        type: string
+    required:
+    - id
+    type: object
   verification.VerificationSendRequestPayload:
     description: Information that should be passed when request verify
     properties:
@@ -367,7 +375,37 @@ paths:
       summary: Register New Account
       tags:
       - auth
-  /auth/send-verify:
+  /auth/verify:
+    post:
+      consumes:
+      - application/json
+      description: Do Email Verification to user
+      parameters:
+      - description: Register Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/verification.VerificationRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Do Email Verification
+      tags:
+      - auth
+  /auth/verify/resend:
     post:
       consumes:
       - application/json
@@ -395,36 +433,6 @@ paths:
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Send Email Verification
-      tags:
-      - auth
-  /auth/verify:
-    post:
-      consumes:
-      - application/json
-      description: Do Email Verification to user
-      parameters:
-      - description: Register Payload
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/verification.VerificationSendRequestPayload'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/web.BaseResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/web.BaseResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/web.BaseResponse'
-      summary: Do Email Verification
       tags:
       - auth
   /reset/confirm:

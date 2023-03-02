@@ -20,7 +20,7 @@ import (
 //		@Success			200	{object}	web.BaseResponse
 //	  @Failure			400 {object}  web.BaseResponse
 //	  @Failure			500 {object}  web.BaseResponse
-//		@Router				/auth/send-verify  [post]
+//		@Router				/auth/verify/resend  [post]
 func (a AuthHandlerImpl) SendEmailVerify(w http.ResponseWriter, r *http.Request) {
 	payload := verification.VerificationSendRequestPayload{}
 	validate := validator.New()
