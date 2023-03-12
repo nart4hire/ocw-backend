@@ -1,6 +1,7 @@
 package guard
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -18,6 +19,10 @@ type GuardMiddleware struct {
 	Logger logger.Logger
 	wrapper.WrapperUtil
 }
+
+type ContextKey string
+
+const UserContext ContextKey = "user_claim"
 
 func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -66,6 +71,10 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 				parser.Encode(payload)
 				return
 			}
+
+			ctx := context.WithValue(r.Context(), UserContext, claim)
+			next.ServeHTTP(w, r.WithContext(ctx))
+			return
 		}
 
 		next.ServeHTTP(w, r)
