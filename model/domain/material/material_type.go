@@ -12,11 +12,13 @@ type MaterialType int
 const (
 	Video MaterialType = iota
 	Handout
+	External
 )
 
 var roleMapping = map[MaterialType]string{
-	Video:   "video",
-	Handout: "handout",
+	Video:    "video",
+	Handout:  "handout",
+	External: "external",
 }
 
 func (ur *MaterialType) Scan(value interface{}) error {
