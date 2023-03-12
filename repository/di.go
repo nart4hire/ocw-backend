@@ -5,6 +5,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/repository/cache"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/content"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/material"
+	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/user"
 )
 
@@ -26,6 +27,11 @@ var RepositoryBasicSet = wire.NewSet(
 	wire.Bind(new(material.MaterialRepository), new(*material.MaterialRepositoryImpl)),
 
 	wire.Bind(new(content.ContentRepository), new(*content.ContentRepositoryImpl)),
+
+	transaction.New,
+	transaction.NewBuilder,
+	wire.Bind(new(transaction.Transaction), new(*transaction.TransactionRepositoryImpl)),
+	wire.Bind(new(transaction.TransactionBuilder), new(*transaction.TransactionBuilderImpl)),
 )
 
 var RepositorySet = wire.NewSet(

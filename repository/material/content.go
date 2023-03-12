@@ -3,21 +3,34 @@ package material
 import (
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/material"
-	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
-	"gorm.io/gorm"
+	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
 )
 
 type MaterialContentRepositoryImpl struct {
-	db *gorm.DB
+	builder transaction.TransactionBuilder
 }
 
 func NewMaterialContent(
-	db db.Database,
+	builder transaction.TransactionBuilder,
 ) *MaterialContentRepositoryImpl {
-	return &MaterialContentRepositoryImpl{db.Connect()}
+	return &MaterialContentRepositoryImpl{builder}
 }
 
 func (m MaterialContentRepositoryImpl) New(
+	materialId uuid.UUID,
+	materialType material.MaterialType,
+	link string,
+) (uuid.UUID, error) {
+	return m.NewWithTransaction(
+		m.builder.Build(),
+		materialId,
+		materialType,
+		link,
+	)
+}
+
+func (m MaterialContentRepositoryImpl) NewWithTransaction(
+	tx transaction.Transaction,
 	materialId uuid.UUID,
 	materialType material.MaterialType,
 	link string) (uuid.UUID, error) {
@@ -27,7 +40,7 @@ func (m MaterialContentRepositoryImpl) New(
 		Link:       link,
 	}
 
-	if err := m.db.Create(&contentData).Error; err != nil {
+	if err := tx.GetTransaction().Create(&contentData).Error; err != nil {
 		return uuid.Nil, err
 	}
 
@@ -35,16 +48,27 @@ func (m MaterialContentRepositoryImpl) New(
 }
 
 func (m MaterialContentRepositoryImpl) GetAll(materialId uuid.UUID) ([]material.Content, error) {
+	return m.GetAllWithTransaction(m.builder.Build(), materialId)
+}
+func (m MaterialContentRepositoryImpl) GetAllWithTransaction(tx transaction.Transaction, materialId uuid.UUID) ([]material.Content, error) {
 	result := []material.Content{}
-	err := m.db.Where("material_id = ?", materialId).Find(&result).Error
+	err := tx.GetTransaction().Where("material_id = ?", materialId).Find(&result).Error
 
 	return result, err
 }
 
 func (m MaterialContentRepositoryImpl) Delete(contentId uuid.UUID) error {
-	return m.db.Where("id = ?", contentId).Delete(&material.Content{}).Error
+	return m.DeleteWithTransaction(m.builder.Build(), contentId)
+}
+
+func (m MaterialContentRepositoryImpl) DeleteWithTransaction(tx transaction.Transaction, contentId uuid.UUID) error {
+	return tx.GetTransaction().Where("id = ?", contentId).Delete(&material.Content{}).Error
 }
 
 func (m MaterialContentRepositoryImpl) UpdateLink(contentId uuid.UUID, link string) error {
-	return m.db.Where("id = ?", contentId).Update("link", link).Error
+	return m.UpdateLinkWithTransaction(m.builder.Build(), contentId, link)
+}
+
+func (m MaterialContentRepositoryImpl) UpdateLinkWithTransaction(tx transaction.Transaction, contentId uuid.UUID, link string) error {
+	return tx.GetTransaction().Where("id = ?", contentId).Update("link", link).Error
 }
