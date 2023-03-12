@@ -7,6 +7,7 @@ type Transaction interface {
 	GetTransaction() *gorm.DB
 	Commit()
 	Rollback()
+	Auto(*bool)
 }
 
 type TransactionBuilder interface {

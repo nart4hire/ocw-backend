@@ -2,11 +2,12 @@ package service
 
 import (
 	"github.com/google/wire"
-	"gitlab.informatika.org/ocw/ocw-backend/service/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/service/admin"
+	"gitlab.informatika.org/ocw/ocw-backend/service/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/service/common"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger/hooks"
+	"gitlab.informatika.org/ocw/ocw-backend/service/material"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reporter"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/service/verification"
@@ -47,6 +48,13 @@ var ServiceTestSet = wire.NewSet(
 	wire.NewSet(
 		wire.Struct(new(verification.VerificationServiceImpl), "*"),
 		wire.Bind(new(verification.VerificationService), new(*verification.VerificationServiceImpl)),
+	),
+
+	wire.NewSet(
+		wire.Struct(new(material.MaterialContentServiceImpl), "*"),
+		wire.Struct(new(material.MaterialServiceImpl), "*"),
+		wire.Bind(new(material.MaterialContentService), new(*material.MaterialContentServiceImpl)),
+		wire.Bind(new(material.MaterialService), new(*material.MaterialServiceImpl)),
 	),
 )
 

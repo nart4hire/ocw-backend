@@ -25,3 +25,12 @@ func (t *TransactionRepositoryImpl) Commit() {
 func (t *TransactionRepositoryImpl) Rollback() {
 	t.db.Rollback()
 }
+
+func (t *TransactionRepositoryImpl) Auto(status *bool) {
+	if status != nil && *status {
+		t.Commit()
+		return
+	}
+
+	t.Rollback()
+}
