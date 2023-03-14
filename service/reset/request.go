@@ -56,7 +56,7 @@ func (rs ResetServiceImpl) Request(payload request.RequestRequestPayload) error 
 	// Cache Website on Redis, TTL 30 mins
 	rs.CacheRepository.Set(*cache.NewString(*cache.NewKey(rs.RedisPrefixKey+"resetPassword", resetToken), payload.Email, 30))
 
-	// TODO: Send Reset Email
+	// Send Reset Email
 	mailBuilder, err := rs.TemplateWritterBuilder.Get("reset-password.format.html")
 
 	if err != nil {
