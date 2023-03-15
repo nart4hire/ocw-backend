@@ -6,6 +6,9 @@ RUN go install github.com/google/wire/cmd/wire@latest
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 
 COPY . /app
+
+RUN git config --global --add safe.directory /app
+
 WORKDIR /app
 
 EXPOSE 8080

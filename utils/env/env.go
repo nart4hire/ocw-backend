@@ -38,7 +38,7 @@ type Environment struct {
 	SmtpPort     int    `env:"SMTP_PORT" envDefault:"25"`
 
 	FrontendBaseURL   string `env:"FE_BASE_URL"`
-	ResetPasswordPath string `env:"RESET_PASSWORD_PATH" envDefault:"/reset"`
+	ResetPasswordPath string `env:"RESET_PASSWORD_PATH" envDefault:"/resetPassword"`
 
 	EmailVerificationPath          string `env:"EMAIL_VERIFICATION_PATH" envDefault:"/verification"`
 	EmailVerificationMaxRetry      int64  `env:"EMAIL_VERIFICATION_MAX_RETRY" envDefault:"5"`
