@@ -5,7 +5,6 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/repository/cache"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/user"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
-	"gitlab.informatika.org/ocw/ocw-backend/service/verification"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/password"
 	"gitlab.informatika.org/ocw/ocw-backend/utils/template"
@@ -18,7 +17,6 @@ type ResetServiceImpl struct {
 	password.PasswordUtil
 	*env.Environment
 	token.TokenUtil
-	verification.VerificationService
 	logger.Logger
 	mail.MailQueue
 	template.TemplateWritterBuilder
