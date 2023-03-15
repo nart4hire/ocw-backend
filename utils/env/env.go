@@ -51,6 +51,18 @@ type Environment struct {
 	RedisPassword   string `env:"REDIS_PASSWORD"`
 	RedisUseAuth    bool   `env:"REDIS_USE_AUTH" envDefault:"false"`
 	RedisPrefixKey  string `env:"REDIS_PREFIX_KEY" envDefault:"app:"`
+
+	BucketEndpoint  string `env:"BUCKET_ENDPOINT"`
+	BucketSecretKey string `env:"BUCKET_SECRET_KEY"`
+	BucketAccessKey string `env:"BUCKET_ACCESS_KEY"`
+	BucketTokenKey  string `env:"BUCKET_TOKEN_KEY"`
+	BucketUseSSL    bool   `env:"BUCKET_USE_SSL" envDefault:"true"`
+	BucketName      string `env:"BUCKET_NAME"`
+
+	BucketSignedPutDuration int64 `env:"BUCKET_SIGNED_PUT_DURATION_S" envDefault:"36000"`
+	BucketSignedGetDuration int64 `env:"BUCKET_SIGNED_GET_DURATION_S" envDefault:"1800"`
+
+	BucketMaterialBasePath string `env:"BUCKET_MATERIAL_BASE_PATH" envDefault:"materials/"`
 }
 
 func New() (*Environment, error) {
@@ -72,7 +84,10 @@ func NewEnv() (*Environment, error) {
 }
 
 func NewDotEnv() (*Environment, error) {
-	err := godotenv.Load()
+	err := godotenv.Load(
+		".env",
+		".env.local",
+	)
 
 	if err != nil {
 		return nil, err
