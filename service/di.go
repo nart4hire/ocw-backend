@@ -10,6 +10,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/service/reporter"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/service/verification"
+	"gitlab.informatika.org/ocw/ocw-backend/service/course"
 )
 
 var ServiceTestSet = wire.NewSet(
@@ -47,6 +48,12 @@ var ServiceTestSet = wire.NewSet(
 	wire.NewSet(
 		wire.Struct(new(verification.VerificationServiceImpl), "*"),
 		wire.Bind(new(verification.VerificationService), new(*verification.VerificationServiceImpl)),
+	),
+
+	// course service
+	wire.NewSet(
+		wire.Struct(new(course.CourseServiceImpl), "*"),
+		wire.Bind(new(course.CourseService), new(*course.CourseServiceImpl)),
 	),
 )
 
