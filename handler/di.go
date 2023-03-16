@@ -5,6 +5,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/handler/admin"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/common"
+	"gitlab.informatika.org/ocw/ocw-backend/handler/course"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/swagger"
 )
@@ -29,4 +30,8 @@ var HandlerSet = wire.NewSet(
 	// Reset
 	wire.Struct(new(reset.ResetHandlerImpl), "*"),
 	wire.Bind(new(reset.ResetHandler), new(*reset.ResetHandlerImpl)),
+
+	// Course
+	wire.Struct(new(course.CourseHandlerImpl), "*"),
+	wire.Bind(new(course.CourseHandler), new(*course.CourseHandlerImpl)),
 )
