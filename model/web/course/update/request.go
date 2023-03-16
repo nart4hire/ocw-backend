@@ -25,4 +25,7 @@ type UpdateCourseRequestPayload struct {
 
 	// Course Name Abbreviation
 	Abbreviation string `json:"abbreviation" validate:"required"`
+
+	// Course Lecturer
+	Lecturer string `json:"lecturer" validate:"required"`
 }

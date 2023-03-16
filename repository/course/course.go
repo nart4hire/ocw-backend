@@ -24,13 +24,13 @@ func (repo CourseRepositoryImpl) IsCourseExist(id string) (bool, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return true, nil
+			return false, nil
 		}
 
-		return true, err
+		return false, err
 	}
 
-	return false, nil
+	return true, nil
 }
 
 func (repo CourseRepositoryImpl) IsMajorExist(id uuid.UUID) (bool, error) {
@@ -38,13 +38,13 @@ func (repo CourseRepositoryImpl) IsMajorExist(id uuid.UUID) (bool, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return true, nil
+			return false, nil
 		}
 
-		return true, err
+		return false, err
 	}
 
-	return false, nil
+	return true, nil
 }
 
 func (repo CourseRepositoryImpl) IsFacultyExist(id uuid.UUID) (bool, error) {
@@ -52,13 +52,13 @@ func (repo CourseRepositoryImpl) IsFacultyExist(id uuid.UUID) (bool, error) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return true, nil
+			return false, nil
 		}
 
-		return true, err
+		return false, err
 	}
 
-	return false, nil
+	return true, nil
 }
 
 func (repo CourseRepositoryImpl) AddCourse(course course.Course) error {

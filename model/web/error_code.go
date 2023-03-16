@@ -12,6 +12,7 @@ const (
 	FacultyNotExist    string = "FACULTY_NOT_EXIST"
 	MajorNotExist      string = "MAJOR_NOT_EXIST"
 	CourseNotExist     string = "COURSE_NOT_EXIST"
+	IDExists           string = "ID_ALREADY_EXISTS"
 
 	TokenError string = "TOKEN_ERROR"
 )

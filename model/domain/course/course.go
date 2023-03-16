@@ -2,6 +2,7 @@ package course
 
 import "github.com/google/uuid"
 
+// TODO: Abbreviations should be unique constrainted as identifiers
 type Faculty struct {
 	ID           uuid.UUID `gorm:"primaryKey"`
 	Name         string

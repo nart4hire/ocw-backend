@@ -8,7 +8,7 @@ import (
 type CourseRepository interface {
 	AddCourse(course course.Course) error
 	AddMajor(major course.Major) error
-	AddFaculty(faculty course.Course) error
+	AddFaculty(faculty course.Faculty) error
 	GetCourse(id string) (*course.Course, error)
 	GetMajor(id uuid.UUID) (*course.Major, error)
 	GetFaculty(id uuid.UUID) (*course.Faculty, error)
