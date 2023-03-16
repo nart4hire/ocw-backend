@@ -452,7 +452,7 @@ const docTemplate = `{
             }
         },
         "/reset/confirm": {
-            "post": {
+            "put": {
                 "description": "Do confirmation to reset password",
                 "produces": [
                     "application/json"
