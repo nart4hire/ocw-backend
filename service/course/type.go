@@ -2,7 +2,8 @@ package course
 
 import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
-	get "gitlab.informatika.org/ocw/ocw-backend/model/web/course/get"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/get"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/delete"
 	cadd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/add"
 	madd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/add"
 	fadd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/add"
@@ -28,5 +29,5 @@ type CourseService interface {
 	UpdateCourse(payload cupdate.UpdateCourseRequestPayload) error
 	UpdateMajor(payload mupdate.UpdateMajorRequestPayload) error
 	UpdateFaculty(payload fupdate.UpdateFacultyRequestPayload) error
-	DeleteCourse(payload get.GetByStringRequestPayload) error
+	DeleteCourse(payload delete.DeleteByStringRequestPayload) error
 }

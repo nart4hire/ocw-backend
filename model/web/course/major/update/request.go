@@ -5,6 +5,9 @@ import "github.com/google/uuid"
 // UpdateMajor Request Payload
 // @Description Information that should be available when you update a major
 type UpdateMajorRequestPayload struct {
+	// Web Token that was appended to the link
+	UpdateMajorToken string
+
 	// Major ID, provided by query
 	ID uuid.UUID
 

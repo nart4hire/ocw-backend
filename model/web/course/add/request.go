@@ -5,6 +5,9 @@ import "github.com/google/uuid"
 // AddCourse Request Payload
 // @Description Information that should be available when you add a course
 type AddCourseRequestPayload struct {
+	// Web Token that was appended to the link
+	AddCourseToken string
+
 	// Course ID
 	ID string `json:"id" validate:"required"`
 

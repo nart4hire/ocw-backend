@@ -5,6 +5,9 @@ import "github.com/google/uuid"
 // UpdateFaculty Request Payload
 // @Description Information that should be available when you update a faculty
 type UpdateFacultyRequestPayload struct {
+	// Web Token that was appended to the link
+	UpdateFacultyToken string
+
 	// Faculty ID, Provided by Query
 	ID uuid.UUID
 

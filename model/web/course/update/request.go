@@ -5,6 +5,9 @@ import "github.com/google/uuid"
 // UpdateCourse Request Payload
 // @Description Information that should be available when you add a course
 type UpdateCourseRequestPayload struct {
+	// Web Token that was appended to the link
+	UpdateCourseToken string
+
 	// Course ID, Provided by query
 	ID string
 
