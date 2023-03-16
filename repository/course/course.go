@@ -187,3 +187,25 @@ func (repo CourseRepositoryImpl) UpdateFaculty(faculty course.Faculty) error {
 func (repo CourseRepositoryImpl) DeleteCourse(id string) error {
 	return repo.db.Where("id = ?", id).Delete(&course.Course{}).Error
 }
+
+func (repo CourseRepositoryImpl) GetMajorByAbbr(abbr string) (*course.Major, error) {
+	result := &course.Major{}
+	err := repo.db.First(result, "abbreviation = ?", abbr).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (repo CourseRepositoryImpl) GetFacultyByAbbr(abbr string) (*course.Faculty, error) {
+	result := &course.Faculty{}
+	err := repo.db.First(result, "abbreviation = ?", abbr).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
