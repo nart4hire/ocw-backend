@@ -1,6 +1,7 @@
 package guard
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -19,16 +20,20 @@ type GuardMiddleware struct {
 	wrapper.WrapperUtil
 }
 
+type ContextKey string
+
+const UserContext ContextKey = "user_claim"
+
 func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		if len(g.Role) > 0 {
 			authorization := r.Header.Get("Authorization")
 
-			if authorization != "" {
+			if authorization == "" {
 				g.Logger.Info("Unauthorized access detected")
 
-				w.WriteHeader(http.StatusUnauthorized)
+				w.WriteHeader(http.StatusBadRequest)
 				payload := g.WrapperUtil.ErrorResponseWrap("authorization is required", nil)
 
 				parser := json.NewEncoder(w)
@@ -36,7 +41,18 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 				return
 			}
 
-			tokenString := strings.Split(authorization, " ")[1]
+			tokenSplit := strings.Split(authorization, " ")
+
+			if tokenSplit[0] != "Bearer" {
+				w.WriteHeader(http.StatusUnprocessableEntity)
+				payload := g.WrapperUtil.ErrorResponseWrap("authorization must be bearer token", nil)
+
+				parser := json.NewEncoder(w)
+				parser.Encode(payload)
+				return
+			}
+
+			tokenString := tokenSplit[1]
 			claim, err := g.Token.Validate(tokenString, authToken.Access)
 
 			if err != nil {
@@ -66,6 +82,10 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 				parser.Encode(payload)
 				return
 			}
+
+			ctx := context.WithValue(r.Context(), UserContext, claim)
+			next.ServeHTTP(w, r.WithContext(ctx))
+			return
 		}
 
 		next.ServeHTTP(w, r)
