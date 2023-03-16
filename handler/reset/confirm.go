@@ -19,7 +19,7 @@ import (
 //	@Param			  Authorization header string true "Email validation token"
 //	@Param				data body confirm.ConfirmRequestPayload true "payload"
 //	@Success			200	{object}	web.BaseResponse "Login Success"
-//	@Router				/reset/confirm [post]
+//	@Router				/reset/confirm [put]
 func (rs ResetHandlerImpl) Confirm(w http.ResponseWriter, r *http.Request) {
 	payload := confirm.ConfirmRequestPayload{}
 	validate := validator.New()
