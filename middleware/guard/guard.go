@@ -30,7 +30,7 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 		if len(g.Role) > 0 {
 			authorization := r.Header.Get("Authorization")
 
-			if authorization == "" {
+			if authorization != "" {
 				g.Logger.Info("Unauthorized access detected")
 
 				w.WriteHeader(http.StatusBadRequest)
