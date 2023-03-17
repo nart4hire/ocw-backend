@@ -32,7 +32,7 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 
 			tokenSplit := strings.Split(authorization, " ")
 
-			if len(tokenSplit) < 2 {
+			if len(tokenSplit) != 2 {
 				g.Logger.Info("Unauthorized access detected")
 
 				w.WriteHeader(http.StatusBadRequest)
