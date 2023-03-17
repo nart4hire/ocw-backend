@@ -1,17 +1,39 @@
 package course
 
-import (
-	"github.com/google/uuid"
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
-)
+import "github.com/google/uuid"
+
+// TODO: Abbreviations should be unique constrainted as identifiers
+type Faculty struct {
+	ID           uuid.UUID `gorm:"primaryKey"`
+	Name         string
+	Abbreviation string
+}
+
+type Major struct {
+	ID           uuid.UUID `gorm:"primaryKey;type:uuid"`
+	Name         string
+	Fac_id       uuid.UUID `gorm:"type:uuid"`
+	Faculty      Faculty   `gorm:"foreignKey:Fac_id"`
+	Abbreviation string
+}
 
 type Course struct {
-	Id           string `gorm:"primaryKey"`
+	ID           string `gorm:"primaryKey"`
 	Name         string
-	MajorId      uuid.UUID
+	Major_id     uuid.UUID `gorm:"type:uuid"`
+	Major        Major     `gorm:"foreignKey:Major_id"`
 	Description  string
-	Major        Major       `gorm:"foreignKey:MajorId;references:Id"`
-	Contributors []user.User `gorm:"many2many:course_contributor;foreignKey:Id;joinForeignKey:CourseId;references:Email;joinReferences:Email"`
+	Email        string
+	Abbreviation string
+	Lecturer     string
+}
+
+func (Faculty) TableName() string {
+	return "faculty"
+}
+
+func (Major) TableName() string {
+	return "major"
 }
 
 func (Course) TableName() string {

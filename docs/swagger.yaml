@@ -436,7 +436,7 @@ paths:
       tags:
       - auth
   /reset/confirm:
-    post:
+    put:
       description: Do confirmation to reset password
       parameters:
       - description: Email validation token
