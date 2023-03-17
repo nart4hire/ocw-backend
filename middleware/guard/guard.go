@@ -30,7 +30,9 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 		if len(g.Role) > 0 {
 			authorization := r.Header.Get("Authorization")
 
-			if authorization != "" {
+			tokenSplit := strings.Split(authorization, " ")
+
+			if len(tokenSplit) < 2 {
 				g.Logger.Info("Unauthorized access detected")
 
 				w.WriteHeader(http.StatusBadRequest)
@@ -40,8 +42,6 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 				parser.Encode(payload)
 				return
 			}
-
-			tokenSplit := strings.Split(authorization, " ")
 
 			if tokenSplit[0] != "Bearer" {
 				w.WriteHeader(http.StatusUnprocessableEntity)
