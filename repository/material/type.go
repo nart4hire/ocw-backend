@@ -11,12 +11,15 @@ type MaterialRepository interface {
 	Delete(id uuid.UUID) error
 	GetAll(courseId string) ([]material.Material, error)
 
+	IsUserContributor(id uuid.UUID, email string) (bool, error)
+
 	NewWithTransaction(tx transaction.Transaction, courseId string, creatorEmail string) (uuid.UUID, error)
 	DeleteWithTransaction(tx transaction.Transaction, id uuid.UUID) error
 	GetAllWithTransaction(tx transaction.Transaction, courseId string) ([]material.Material, error)
 }
 
 type MaterialContentRepository interface {
+	IsUserContributor(id uuid.UUID, email string) (bool, error)
 	New(materialId uuid.UUID, materialType material.MaterialType, link string) (uuid.UUID, error)
 	GetAll(materialId uuid.UUID) ([]material.Content, error)
 	Delete(contentId uuid.UUID) error

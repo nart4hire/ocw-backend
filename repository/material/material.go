@@ -3,17 +3,25 @@ package material
 import (
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/material"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
+	"gorm.io/gorm"
 )
 
 type MaterialRepositoryImpl struct {
 	builder transaction.TransactionBuilder
+	db      *gorm.DB
 }
 
 func NewMaterial(
 	builder transaction.TransactionBuilder,
+	db db.Database,
 ) *MaterialRepositoryImpl {
-	return &MaterialRepositoryImpl{builder}
+	return &MaterialRepositoryImpl{builder, db.Connect()}
+}
+
+func (m MaterialRepositoryImpl) IsUserContributor(id uuid.UUID, email string) (bool, error) {
+
 }
 
 func (m MaterialRepositoryImpl) New(courseId string, creatorEmail string) (uuid.UUID, error) {

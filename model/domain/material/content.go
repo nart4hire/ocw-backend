@@ -7,6 +7,7 @@ type Content struct {
 	Type       MaterialType
 	Link       string
 	MaterialId uuid.UUID
+	Material   `gorm:"foreignKey:MaterialId;references:Id"`
 }
 
 func (Content) TableName() string {

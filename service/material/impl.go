@@ -41,5 +41,7 @@ func (m MaterialServiceImpl) Create(courseId string, user user.User, contents []
 
 func (m MaterialServiceImpl) Delete(materialId uuid.UUID, user user.User) error {
 	// TODO: Pengecekan user apakah kontributor course bukan
+	m.get
+
 	return m.MaterialRepository.Delete(materialId)
 }
