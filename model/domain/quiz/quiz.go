@@ -7,13 +7,13 @@ import (
 )
 
 type Quiz struct {
-	Id           uuid.UUID `gorm:"primaryKey"`
-	Name         string
-	CourseId     string
-	CreatorEmail string
-	Creator      user.User     `gorm:"foreignKey:CreatorEmail;references:Email"`
-	Course       course.Course `gorm:"foreignKey:CourseId;references:Id"`
-	Problems     []QuizProblem `gorm:"foreignKey:QuizId;references:Id"`
+	Id           uuid.UUID     `gorm:"primaryKey" json:"id"`
+	Name         string        `json:"name"`
+	CourseId     string        `json:"course_id"`
+	CreatorEmail string        `json:"creator_email"`
+	Creator      user.User     `gorm:"foreignKey:CreatorEmail;references:Email" json:"creator"`
+	Course       course.Course `gorm:"foreignKey:CourseId;references:Id" json:"course"`
+	Problems     []QuizProblem `gorm:"foreignKey:QuizId;references:Id" json:"problems"`
 }
 
 func (Quiz) TableName() string {

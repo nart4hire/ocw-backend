@@ -3,16 +3,19 @@ package course
 import (
 	"github.com/go-chi/chi/v5"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/course"
+	"gitlab.informatika.org/ocw/ocw-backend/handler/material"
 )
 
 type CourseRoutes struct {
 	course.CourseHandler
+	material.MaterialHandler
 }
 
 func (c CourseRoutes) Register(r chi.Router) {
 	r.Route("/course", func(r chi.Router) {
 		// Get
 		r.Get("/", c.CourseHandler.GetCourses)
+		r.Get("/{id}/materials", c.MaterialHandler.GetMaterial)
 		r.Get("/{id}", c.CourseHandler.GetCourse)
 		r.Get("/faculty", c.CourseHandler.GetFaculties)
 		r.Get("/faculty/{id}", c.CourseHandler.GetFaculty)
@@ -26,6 +29,8 @@ func (c CourseRoutes) Register(r chi.Router) {
 		r.Put("/", c.CourseHandler.AddCourse)
 		r.Put("/faculty", c.CourseHandler.AddFaculty)
 		r.Put("/major", c.CourseHandler.AddMajor)
+
+		r.Post("/{id}/materials", c.MaterialHandler.CreateMaterial)
 
 		// Update
 		r.Patch("/{id}", c.CourseHandler.UpdateCourse)

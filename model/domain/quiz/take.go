@@ -8,15 +8,15 @@ import (
 )
 
 type QuizTake struct {
-	Id            uuid.UUID `gorm:"primaryKey"`
-	QuizId        uuid.UUID
-	Email         string
-	StartTime     time.Time
-	IsFinished    bool
-	Score         int
-	Quiz          `gorm:"foreignKey:QuizId;references:Id"`
-	user.User     `gorm:"foreignKey:Email;references:Email"`
-	ChoiceAnswers []TakeChoiceAnswer `gorm:"foreignKey:QuizTakeId;references:Id"`
+	Id            uuid.UUID `gorm:"primaryKey" json:"id"`
+	QuizId        uuid.UUID `json:"quiz_id"`
+	Email         string    `json:"email"`
+	StartTime     time.Time `json:"start"`
+	IsFinished    bool      `json:"finished"`
+	Score         int       `json:"score"`
+	Quiz          `gorm:"foreignKey:QuizId;references:Id" json:"quiz"`
+	user.User     `gorm:"foreignKey:Email;references:Email" json:"user"`
+	ChoiceAnswers []TakeChoiceAnswer `gorm:"foreignKey:QuizTakeId;references:Id" json:"-"`
 }
 
 func (QuizTake) TableName() string {

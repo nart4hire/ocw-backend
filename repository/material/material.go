@@ -21,7 +21,12 @@ func NewMaterial(
 }
 
 func (m MaterialRepositoryImpl) IsUserContributor(id uuid.UUID, email string) (bool, error) {
+	err := m.db.Where("email = ?").Find(&material.Material{}).Error
+	if err != nil {
+		return false, err
+	}
 
+	return true, nil
 }
 
 func (m MaterialRepositoryImpl) New(courseId string, creatorEmail string) (uuid.UUID, error) {
@@ -57,7 +62,7 @@ func (m MaterialRepositoryImpl) GetAll(courseId string) ([]material.Material, er
 
 func (m MaterialRepositoryImpl) GetAllWithTransaction(tx transaction.Transaction, courseId string) ([]material.Material, error) {
 	result := []material.Material{}
-	err := tx.GetTransaction().Joins("Contents").Where("CourseId = ?", courseId).Find(&result).Error
+	err := tx.GetTransaction().Joins("Contents").Where("CourseId = ?", courseId).Take(&result).Error
 
 	return result, err
 }
