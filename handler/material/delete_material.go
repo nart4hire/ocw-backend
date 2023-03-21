@@ -19,18 +19,18 @@ func (m MaterialHandlerImpl) DeleteMaterial(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	materialId, err := uuid.Parse(materialIdUnparsed)
+	if err != nil {
+		payload := m.WrapperUtil.ErrorResponseWrap("material id is invalid", nil)
+		m.HttpUtil.WriteJson(w, http.StatusBadRequest, payload)
+		return
+	}
+
 	user, ok := r.Context().Value(guard.UserContext).(authToken.UserClaim)
 
 	if !ok {
 		payload := m.WrapperUtil.ErrorResponseWrap("internal server error", nil)
 		m.HttpUtil.WriteJson(w, http.StatusInternalServerError, payload)
-		return
-	}
-
-	materialId, err := uuid.Parse(materialIdUnparsed)
-	if err != nil {
-		payload := m.WrapperUtil.ErrorResponseWrap("material id is invalid", nil)
-		m.HttpUtil.WriteJson(w, http.StatusBadRequest, payload)
 		return
 	}
 
