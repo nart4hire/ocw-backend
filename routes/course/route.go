@@ -4,18 +4,20 @@ import (
 	"github.com/go-chi/chi/v5"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/course"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/material"
+	"gitlab.informatika.org/ocw/ocw-backend/middleware/guard"
+	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 )
 
 type CourseRoutes struct {
 	course.CourseHandler
 	material.MaterialHandler
+	*guard.GuardBuilder
 }
 
 func (c CourseRoutes) Register(r chi.Router) {
 	r.Route("/course", func(r chi.Router) {
 		// Get
 		r.Get("/", c.CourseHandler.GetCourses)
-		r.Get("/{id}/materials", c.MaterialHandler.GetMaterial)
 		r.Get("/{id}", c.CourseHandler.GetCourse)
 		r.Get("/faculty", c.CourseHandler.GetFaculties)
 		r.Get("/faculty/{id}", c.CourseHandler.GetFaculty)
@@ -30,8 +32,6 @@ func (c CourseRoutes) Register(r chi.Router) {
 		r.Put("/faculty", c.CourseHandler.AddFaculty)
 		r.Put("/major", c.CourseHandler.AddMajor)
 
-		r.Post("/{id}/materials", c.MaterialHandler.CreateMaterial)
-
 		// Update
 		r.Patch("/{id}", c.CourseHandler.UpdateCourse)
 		r.Patch("/faculty/{id}", c.CourseHandler.UpdateFaculty)
@@ -39,5 +39,11 @@ func (c CourseRoutes) Register(r chi.Router) {
 
 		// Delete
 		r.Delete("/{id}", c.CourseHandler.DeleteCourse)
+
+		r.Route("/", func(r chi.Router) {
+			r.Use(c.BuildSimple(user.Contributor))
+			r.Get("/{id}/materials", c.MaterialHandler.GetMaterial)
+			r.Post("/{id}/materials", c.MaterialHandler.CreateMaterial)
+		})
 	})
 }
