@@ -14,6 +14,10 @@ type S3Storage struct {
 func NewS3(
 	env *env.Environment,
 ) (*S3Storage, error) {
+	if !env.UseBucket {
+		return nil, nil
+	}
+
 	client, err := minio.New(env.BucketEndpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(env.BucketAccessKey, env.BucketSecretKey, env.BucketTokenKey),
 		Secure: env.BucketUseSSL,
