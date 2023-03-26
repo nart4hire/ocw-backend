@@ -4,21 +4,25 @@ import (
 	"errors"
 
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
-	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
+	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
 	"gorm.io/gorm"
 )
 
 type UserRepositoryImpl struct {
-	db *gorm.DB
+	builder transaction.TransactionBuilder
 }
 
 func New(
-	db db.Database,
+	builder transaction.TransactionBuilder,
 ) *UserRepositoryImpl {
-	return &UserRepositoryImpl{db.Connect()}
+	return &UserRepositoryImpl{builder}
 }
 
 func (repo UserRepositoryImpl) IsExist(email string) (bool, error) {
+	return repo.IsExistWithTransaction(repo.builder.Build(), email)
+}
+
+func (repo UserRepositoryImpl) IsExistWithTransaction(tx transaction.Transaction, email string) (bool, error) {
 	_, err := repo.Get(email)
 
 	if err != nil {
@@ -33,12 +37,20 @@ func (repo UserRepositoryImpl) IsExist(email string) (bool, error) {
 }
 
 func (repo UserRepositoryImpl) Add(user user.User) error {
-	return repo.db.Create(&user).Error
+	return repo.AddWithTransaction(repo.builder.Build(), user)
+}
+
+func (repo UserRepositoryImpl) AddWithTransaction(tx transaction.Transaction, user user.User) error {
+	return tx.GetTransaction().Create(&user).Error
 }
 
 func (repo UserRepositoryImpl) Get(email string) (*user.User, error) {
+	return repo.GetWithTransaction(repo.builder.Build(), email)
+}
+
+func (repo UserRepositoryImpl) GetWithTransaction(tx transaction.Transaction, email string) (*user.User, error) {
 	result := &user.User{}
-	err := repo.db.Where("email = ?", email).First(result).Error
+	err := tx.GetTransaction().Where("email = ?", email).First(result).Error
 
 	if err != nil {
 		return nil, err
@@ -48,8 +60,11 @@ func (repo UserRepositoryImpl) Get(email string) (*user.User, error) {
 }
 
 func (repo UserRepositoryImpl) GetAll() ([]user.User, error) {
+	return repo.GetAllWithTransaction(repo.builder.Build())
+}
+func (repo UserRepositoryImpl) GetAllWithTransaction(tx transaction.Transaction) ([]user.User, error) {
 	var result []user.User
-	err := repo.db.Find(&result).Error
+	err := tx.GetTransaction().Find(&result).Error
 
 	if err != nil {
 		return nil, err
@@ -59,9 +74,17 @@ func (repo UserRepositoryImpl) GetAll() ([]user.User, error) {
 }
 
 func (repo UserRepositoryImpl) Update(user user.User) error {
-	return repo.db.Save(user).Error
+	return repo.UpdateWithTransaction(repo.builder.Build(), user)
 }
 
-func (repo UserRepositoryImpl) Delete(username string) error {
-	return repo.db.Where("username = ?", username).Delete(&user.User{}).Error
+func (repo UserRepositoryImpl) UpdateWithTransaction(tx transaction.Transaction, user user.User) error {
+	return tx.GetTransaction().Save(user).Error
+}
+
+func (repo UserRepositoryImpl) Delete(email string) error {
+	return repo.DeleteWithTransaction(repo.builder.Build(), email)
+}
+
+func (repo UserRepositoryImpl) DeleteWithTransaction(tx transaction.Transaction, email string) error {
+	return tx.GetTransaction().Where("email = ?", email).Delete(&user.User{}).Error
 }

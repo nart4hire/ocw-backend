@@ -1,4 +1,61 @@
 definitions:
+  admin.AdminAddUserPayload:
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+      name:
+        description: User name
+        example: someone
+        type: string
+      role:
+        description: User Role
+        example: admin
+        type: string
+    required:
+    - email
+    - name
+    - role
+    type: object
+  admin.AdminUpdateUserPayload:
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+      name:
+        description: User name
+        example: someone
+        type: string
+      role:
+        description: User Role
+        example: admin
+        type: string
+    required:
+    - email
+    - name
+    - role
+    type: object
+  confirm.ConfirmRequestPayload:
+    description: Information that should be available when you confirm a password
+      reset
+    properties:
+      confirmToken:
+        description: Web Token that was appended to the link
+        type: string
+      password:
+        description: User Password
+        example: secret
+        type: string
+      password_validation:
+        description: User Password Validation, must be same as user
+        example: secret
+        type: string
+    required:
+    - password
+    - password_validation
+    type: object
   login.LoginRequestPayload:
     description: Information that should be available when do a login process
     properties:
@@ -56,6 +113,34 @@ definitions:
     - password
     - password_validation
     type: object
+  request.RequestRequestPayload:
+    description: Information that should be available when password reset is requested
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+    required:
+    - email
+    type: object
+  verification.VerificationRequestPayload:
+    properties:
+      id:
+        example: 6ba7b812-9dad-11d1-80b4-00c04fd430c8
+        type: string
+    required:
+    - id
+    type: object
+  verification.VerificationSendRequestPayload:
+    description: Information that should be passed when request verify
+    properties:
+      email:
+        description: User Email
+        example: someone@example.com
+        type: string
+    required:
+    - email
+    type: object
   web.BaseResponse:
     properties:
       data: {}
@@ -87,18 +172,6 @@ paths:
       tags:
       - common
   /admin/user:
-    delete:
-      description: Delete a user from database
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/web.BaseResponse'
-      summary: Delete User By Id
-      tags:
-      - admin
     get:
       description: Get all users from database
       produces:
@@ -111,20 +184,17 @@ paths:
       summary: Get All User
       tags:
       - admin
-    patch:
-      description: Update a user from database
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/web.BaseResponse'
-      summary: Update User By Id
-      tags:
-      - admin
     post:
+      consumes:
+      - application/json
       description: Add a user to database
+      parameters:
+      - description: Admin Add User Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminAddUserPayload'
       produces:
       - application/json
       responses:
@@ -135,7 +205,21 @@ paths:
       summary: Add User
       tags:
       - admin
-  /admin/user/{id}:
+  /admin/user/{email}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete User By Id
+      tags:
+      - admin
     get:
       description: Get a user from database
       produces:
@@ -146,6 +230,27 @@ paths:
           schema:
             $ref: '#/definitions/web.BaseResponse'
       summary: Get User By Email
+      tags:
+      - admin
+    patch:
+      consumes:
+      - application/json
+      description: Update a user from database
+      parameters:
+      - description: Admin Update User Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/admin.AdminUpdateUserPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update User By Id
       tags:
       - admin
   /auth/login:
@@ -270,4 +375,128 @@ paths:
       summary: Register New Account
       tags:
       - auth
+  /auth/verify:
+    post:
+      consumes:
+      - application/json
+      description: Do Email Verification to user
+      parameters:
+      - description: Register Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/verification.VerificationRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Do Email Verification
+      tags:
+      - auth
+  /auth/verify/resend:
+    post:
+      consumes:
+      - application/json
+      description: Send Email Verification to user
+      parameters:
+      - description: Register Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/verification.VerificationSendRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Send Email Verification
+      tags:
+      - auth
+  /reset/confirm:
+    put:
+      description: Do confirmation to reset password
+      parameters:
+      - description: Email validation token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/confirm.ConfirmRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Confirm Reset Password
+      tags:
+      - reset
+  /reset/request:
+    post:
+      description: Send Reset password token to email
+      parameters:
+      - description: payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RequestRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Request Reset Password Token
+      tags:
+      - reset
+  /reset/validate:
+    get:
+      description: Send Reset password token to email
+      parameters:
+      - description: Email validation token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Request Reset Password Token
+      tags:
+      - reset
 swagger: "2.0"

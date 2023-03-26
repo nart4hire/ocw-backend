@@ -36,6 +36,33 @@ type Environment struct {
 	SmtpPassword string `env:"SMTP_PASSWORD"`
 	SmtpServer   string `env:"SMTP_SERVER"`
 	SmtpPort     int    `env:"SMTP_PORT" envDefault:"25"`
+
+	FrontendBaseURL   string `env:"FE_BASE_URL"`
+	ResetPasswordPath string `env:"RESET_PASSWORD_PATH" envDefault:"/resetPassword"`
+
+	EmailVerificationPath          string `env:"EMAIL_VERIFICATION_PATH" envDefault:"/verification"`
+	EmailVerificationMaxRetry      int64  `env:"EMAIL_VERIFICATION_MAX_RETRY" envDefault:"5"`
+	EmailVerificationRetryInterval int64  `env:"EMAIL_VERIFICATION_RESET_RETRY_INTERVAL_M" envDefault:"5"`
+	EmailVerificationExpire        int64  `env:"EMAIL_VERIFICATION_EXPIRE_S" envDefault:"300"`
+
+	RedisConnection string `env:"REDIS_STRING"`
+	RedisPort       string `env:"REDIS_PORT" envDefault:"6379"`
+	RedisUsername   string `env:"REDIS_USERNAME"`
+	RedisPassword   string `env:"REDIS_PASSWORD"`
+	RedisUseAuth    bool   `env:"REDIS_USE_AUTH" envDefault:"false"`
+	RedisPrefixKey  string `env:"REDIS_PREFIX_KEY" envDefault:"app:"`
+
+	BucketEndpoint  string `env:"BUCKET_ENDPOINT"`
+	BucketSecretKey string `env:"BUCKET_SECRET_KEY"`
+	BucketAccessKey string `env:"BUCKET_ACCESS_KEY"`
+	BucketTokenKey  string `env:"BUCKET_TOKEN_KEY"`
+	BucketUseSSL    bool   `env:"BUCKET_USE_SSL" envDefault:"true"`
+	BucketName      string `env:"BUCKET_NAME"`
+
+	BucketSignedPutDuration int64 `env:"BUCKET_SIGNED_PUT_DURATION_S" envDefault:"36000"`
+	BucketSignedGetDuration int64 `env:"BUCKET_SIGNED_GET_DURATION_S" envDefault:"1800"`
+
+	BucketMaterialBasePath string `env:"BUCKET_MATERIAL_BASE_PATH" envDefault:"materials/"`
 }
 
 func New() (*Environment, error) {
@@ -57,7 +84,10 @@ func NewEnv() (*Environment, error) {
 }
 
 func NewDotEnv() (*Environment, error) {
-	err := godotenv.Load()
+	err := godotenv.Load(
+		".env",
+		".env.local",
+	)
 
 	if err != nil {
 		return nil, err

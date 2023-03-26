@@ -10,7 +10,7 @@ type CorsMiddleware struct{}
 
 var corsHandler = cors.Handler(cors.Options{
 	AllowedOrigins:   []string{"http://*", "https://*"},
-	AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 	AllowedHeaders:   []string{"*"},
 	ExposedHeaders:   []string{"Link"},
 	AllowCredentials: false,

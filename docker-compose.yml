@@ -21,7 +21,7 @@ services:
       - .:/app
     ports:
       - 8888:8080
-    env_file: .env
+    env_file: .env.docker
     depends_on:
       - database
       - minio

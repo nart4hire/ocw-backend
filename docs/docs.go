@@ -56,6 +56,9 @@ const docTemplate = `{
             },
             "post": {
                 "description": "Add a user to database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -63,6 +66,37 @@ const docTemplate = `{
                     "admin"
                 ],
                 "summary": "Add User",
+                "parameters": [
+                    {
+                        "description": "Admin Add User Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/admin.AdminAddUserPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/user/{email}": {
+            "get": {
+                "description": "Get a user from database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Get User By Email",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -74,6 +108,9 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "Delete a user from database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -92,6 +129,9 @@ const docTemplate = `{
             },
             "patch": {
                 "description": "Update a user from database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -99,26 +139,17 @@ const docTemplate = `{
                     "admin"
                 ],
                 "summary": "Update User By Id",
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                "parameters": [
+                    {
+                        "description": "Admin Update User Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "$ref": "#/definitions/web.BaseResponse"
+                            "$ref": "#/definitions/admin.AdminUpdateUserPayload"
                         }
                     }
-                }
-            }
-        },
-        "/admin/user/{id}": {
-            "get": {
-                "description": "Get a user from database",
-                "produces": [
-                    "application/json"
                 ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "Get User By Email",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -327,9 +358,273 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/auth/verify": {
+            "post": {
+                "description": "Do Email Verification to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Do Email Verification",
+                "parameters": [
+                    {
+                        "description": "Register Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/verification.VerificationRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify/resend": {
+            "post": {
+                "description": "Send Email Verification to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Send Email Verification",
+                "parameters": [
+                    {
+                        "description": "Register Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/verification.VerificationSendRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset/confirm": {
+            "put": {
+                "description": "Do confirmation to reset password",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset"
+                ],
+                "summary": "Confirm Reset Password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email validation token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/confirm.ConfirmRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset/request": {
+            "post": {
+                "description": "Send Reset password token to email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset"
+                ],
+                "summary": "Request Reset Password Token",
+                "parameters": [
+                    {
+                        "description": "payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RequestRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset/validate": {
+            "get": {
+                "description": "Send Reset password token to email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reset"
+                ],
+                "summary": "Request Reset Password Token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Email validation token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login Success",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "admin.AdminAddUserPayload": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "role"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                },
+                "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "someone"
+                },
+                "role": {
+                    "description": "User Role",
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "admin.AdminUpdateUserPayload": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "role"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                },
+                "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "someone"
+                },
+                "role": {
+                    "description": "User Role",
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "confirm.ConfirmRequestPayload": {
+            "description": "Information that should be available when you confirm a password reset",
+            "type": "object",
+            "required": [
+                "password",
+                "password_validation"
+            ],
+            "properties": {
+                "confirmToken": {
+                    "description": "Web Token that was appended to the link",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "User Password",
+                    "type": "string",
+                    "example": "secret"
+                },
+                "password_validation": {
+                    "description": "User Password Validation, must be same as user",
+                    "type": "string",
+                    "example": "secret"
+                }
+            }
+        },
         "login.LoginRequestPayload": {
             "description": "Information that should be available when do a login process",
             "type": "object",
@@ -403,6 +698,46 @@ const docTemplate = `{
                     "description": "User Password Validation, must be same as user",
                     "type": "string",
                     "example": "secret"
+                }
+            }
+        },
+        "request.RequestRequestPayload": {
+            "description": "Information that should be available when password reset is requested",
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                }
+            }
+        },
+        "verification.VerificationRequestPayload": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "6ba7b812-9dad-11d1-80b4-00c04fd430c8"
+                }
+            }
+        },
+        "verification.VerificationSendRequestPayload": {
+            "description": "Information that should be passed when request verify",
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "description": "User Email",
+                    "type": "string",
+                    "example": "someone@example.com"
                 }
             }
         },

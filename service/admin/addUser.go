@@ -1,16 +1,29 @@
 package admin
 
-// import (
-	// "errors"
-	// "time"
+import (
+	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
+	req "gitlab.informatika.org/ocw/ocw-backend/model/web/admin/addUser"
+)
 
-	// "github.com/golang-jwt/jwt/v4"
-	// "gitlab.informatika.org/ocw/ocw-backend/model/web"
-	// "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/login"
-	// tokenModel "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
-	// "gorm.io/gorm"
-// )
+func (as AdminServiceImpl) AddUser(payload req.AdminAddUserPayload) error {
+	// change role payload from string to user.UserRole
+	var role user.UserRole
 
-func (AdminServiceImpl) AddUser() string {
-	return "add user"
+	// TODO: move this
+	if (payload.Role == "admin") {
+		role = user.Admin
+	} else if (payload.Role == "contributor") {
+		role = user.Contributor
+	} else if (payload.Role == "member") {
+		role = user.Student
+	}
+
+	err := as.UserRepository.Add(user.User{
+		Email:       payload.Email,
+		Name:        payload.Name,
+		Role:        role,
+		IsActivated: false,
+	})
+
+	return err
 }

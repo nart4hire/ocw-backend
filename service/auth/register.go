@@ -6,9 +6,15 @@ import (
 )
 
 func (auth AuthServiceImpl) Register(payload register.RegisterRequestPayload) error {
-	err := auth.UserRepository.Add(user.User{
+	hashedPassword, err := auth.Hash(payload.Password)
+
+	if err != nil {
+		return err
+	}
+
+	err = auth.UserRepository.Add(user.User{
 		Email:       payload.Email,
-		Password:    payload.Password,
+		Password:    hashedPassword,
 		Name:        payload.Name,
 		Role:        user.Student,
 		IsActivated: false,

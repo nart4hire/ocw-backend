@@ -5,6 +5,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/routes/admin"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/common"
+	"gitlab.informatika.org/ocw/ocw-backend/routes/course"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/swagger"
 )
@@ -15,6 +16,7 @@ var routesCollectionSet = wire.NewSet(
 	wire.Struct(new(auth.AuthRoutes), "*"),
 	wire.Struct(new(admin.AdminRoutes), "*"),
 	wire.Struct(new(reset.ResetRoutes), "*"),
+	wire.Struct(new(course.CourseRoutes), "*"),
 )
 
 var RoutesSet = wire.NewSet(

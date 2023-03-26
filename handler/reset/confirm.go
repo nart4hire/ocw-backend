@@ -10,6 +10,16 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/reset/confirm"
 )
 
+// Index godoc
+//
+//	@Tags					reset
+//	@Summary			Confirm Reset Password
+//	@Description	Do confirmation to reset password
+//	@Produce			json
+//	@Param			  Authorization header string true "Email validation token"
+//	@Param				data body confirm.ConfirmRequestPayload true "payload"
+//	@Success			200	{object}	web.BaseResponse "Login Success"
+//	@Router				/reset/confirm [put]
 func (rs ResetHandlerImpl) Confirm(w http.ResponseWriter, r *http.Request) {
 	payload := confirm.ConfirmRequestPayload{}
 	validate := validator.New()

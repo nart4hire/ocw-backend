@@ -9,6 +9,15 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/reset/validate"
 )
 
+// Index godoc
+//
+//	@Tags					reset
+//	@Summary			Request Reset Password Token
+//	@Description	Send Reset password token to email
+//	@Produce			json
+//	@Param			  Authorization header string true "Email validation token"
+//	@Success			200	{object}	web.BaseResponse "Login Success"
+//	@Router				/reset/validate [get]
 func (rs ResetHandlerImpl) Validate(w http.ResponseWriter, r *http.Request) {
 	payload := validate.ValidateRequestPayload{}
 	validateTokenHeader := r.Header.Get("Authorization")

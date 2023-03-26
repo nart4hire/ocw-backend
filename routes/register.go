@@ -21,7 +21,7 @@ func (app *AppRouter) Register() []RouteGroup {
 		}
 
 		collections = append(collections, handler)
-	}
+  }
 
 	return collections
 }
