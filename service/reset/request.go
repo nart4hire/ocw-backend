@@ -41,6 +41,8 @@ func (rs ResetServiceImpl) Request(payload request.RequestRequestPayload) error 
 		Email: user.Email,
 		Role:  user.Role,
 		Type:  tokenModel.Access,
+		IsVerified: user.IsActivated,
+
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(rs.TokenAccessExpired*6) * time.Millisecond)),
 			Issuer:    rs.TokenIssuer,
