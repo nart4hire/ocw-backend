@@ -7,12 +7,12 @@ import (
 )
 
 type Material struct {
-	Id           uuid.UUID `gorm:"primaryKey"`
-	CourseId     string
-	CreatorEmail string
-	Creator      user.User     `gorm:"foreignKey:CreatorEmail;references:Email"`
-	Course       course.Course `gorm:"foreignKey:CourseId;references:Id"`
-	Contents     []Content     `gorm:"foreignKey:MaterialId;references:Id"`
+	Id           uuid.UUID      `json:"id" gorm:"primaryKey"`
+	CourseId     string         `json:"course_id"`
+	CreatorEmail string         `json:"creator_email"`
+	Creator      *user.User     `json:"creator" gorm:"foreignKey:CreatorEmail;references:Email"`
+	Course       *course.Course `json:"course" gorm:"foreignKey:CourseId;references:Id"`
+	Contents     []Content      `json:"contents" gorm:"foreignKey:MaterialId;references:Id"`
 }
 
 func (Material) TableName() string {

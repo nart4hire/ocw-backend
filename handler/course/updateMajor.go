@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/update"
 )
@@ -63,8 +65,17 @@ func (c CourseHandlerImpl) UpdateMajor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+
+	if err != nil {
+		payload := c.WrapperUtil.ErrorResponseWrap("invalid id", nil)
+		c.HttpUtil.WriteJson(w, http.StatusBadRequest, payload)
+		return
+	}
+
 	payload.UpdateMajorToken = token[1]
-	err := c.CourseService.UpdateMajor(payload)
+	payload.ID = id
+	err = c.CourseService.UpdateMajor(payload)
 
 	if err != nil {
 		if errData, ok := err.(web.ResponseError); ok {

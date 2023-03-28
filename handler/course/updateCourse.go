@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/update"
@@ -64,6 +65,7 @@ func (c CourseHandlerImpl) UpdateCourse(w http.ResponseWriter, r *http.Request) 
 	}
 
 	payload.UpdateCourseToken = token[1]
+	payload.ID = chi.URLParam(r, "id")
 	err := c.CourseService.UpdateCourse(payload)
 
 	if err != nil {

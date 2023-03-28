@@ -9,7 +9,7 @@ type UpdateCourseRequestPayload struct {
 	UpdateCourseToken string
 
 	// Course ID, Provided by query
-	ID string
+	ID string `json:"id"`
 
 	// Course Name
 	Name string `json:"name" validate:"required"`
