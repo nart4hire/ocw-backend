@@ -4,7 +4,7 @@ package add
 // @Description Information that should be available when you add a faculty
 type AddFacultyRequestPayload struct {
 	// Web Token that was appended to the link
-	AddFacultyToken string
+	AddFacultyToken string `json:"faculty_token"`
 
 	// Faculty Name
 	Name string `json:"name" validate:"required"`

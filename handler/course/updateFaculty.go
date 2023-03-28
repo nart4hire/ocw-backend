@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/update"
 )
@@ -63,8 +65,17 @@ func (c CourseHandlerImpl) UpdateFaculty(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+
+	if err != nil {
+		payload := c.WrapperUtil.ErrorResponseWrap("invalid id", nil)
+		c.HttpUtil.WriteJson(w, http.StatusBadRequest, payload)
+		return
+	}
+
 	payload.UpdateFacultyToken = token[1]
-	err := c.CourseService.UpdateFaculty(payload)
+	payload.ID = id
+	err = c.CourseService.UpdateFaculty(payload)
 
 	if err != nil {
 		if errData, ok := err.(web.ResponseError); ok {
