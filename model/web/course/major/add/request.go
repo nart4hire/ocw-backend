@@ -6,7 +6,7 @@ import "github.com/google/uuid"
 // @Description Information that should be available when you add a major
 type AddMajorRequestPayload struct {
 	// Web Token that was appended to the link
-	AddMajorToken string
+	AddMajorToken string `json:"major_token"`
 
 	// Major Name
 	Name string `json:"name" validate:"required"`

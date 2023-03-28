@@ -33,6 +33,35 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "put": {
+                "description": "Add new course",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "course"
+                ],
+                "summary": "Add new course",
+                "parameters": [
+                    {
+                        "description": "Payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/add.AddCourseRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
             }
         },
         "/admin/user": {
@@ -551,6 +580,51 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "add.AddCourseRequestPayload": {
+            "description": "Information that should be available when you add a course",
+            "type": "object",
+            "required": [
+                "abbreviation",
+                "email",
+                "id",
+                "name"
+            ],
+            "properties": {
+                "abbreviation": {
+                    "description": "Course Name Abbreviation",
+                    "type": "string"
+                },
+                "addCourseToken": {
+                    "description": "Web Token that was appended to the link",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "Course Description (Can be left empty)",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Contributor Email",
+                    "type": "string",
+                    "example": "someone@example.com"
+                },
+                "id": {
+                    "description": "Course ID",
+                    "type": "string"
+                },
+                "majabbr": {
+                    "description": "Course Major Abbreviation",
+                    "type": "string"
+                },
+                "major_id": {
+                    "description": "Major Id, will be set by the server",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Course Name",
+                    "type": "string"
+                }
+            }
+        },
         "admin.AdminAddUserPayload": {
             "type": "object",
             "required": [

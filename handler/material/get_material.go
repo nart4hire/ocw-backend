@@ -8,13 +8,7 @@ import (
 )
 
 func (m MaterialHandlerImpl) GetMaterial(w http.ResponseWriter, r *http.Request) {
-	courseId := chi.URLParam(r, "course-id")
-
-	if r.Header.Get("Content-Type") != "application/json" {
-		payload := m.WrapperUtil.ErrorResponseWrap("this service only receive json input", nil)
-		m.HttpUtil.WriteJson(w, http.StatusUnsupportedMediaType, payload)
-		return
-	}
+	courseId := chi.URLParam(r, "id")
 
 	if courseId == "" {
 		payload := m.WrapperUtil.ErrorResponseWrap("course id is required", nil)

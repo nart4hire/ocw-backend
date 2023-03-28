@@ -10,6 +10,15 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/add"
 )
 
+// Index godoc
+//
+//	@Tags					course
+//	@Summary			Add new course
+//	@Description	Add new course
+//	@Produce			json
+//	@Param				data body add.AddCourseRequestPayload true "Payload"
+//	@Success			200	{object}	web.BaseResponse
+//	@Router				/ [put]
 func (c CourseHandlerImpl) AddCourse(w http.ResponseWriter, r *http.Request) {
 	payload := add.AddCourseRequestPayload{}
 	validate := validator.New()

@@ -3,6 +3,7 @@ package course
 import (
 	"errors"
 
+	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
@@ -99,7 +100,14 @@ func (c CourseServiceImpl) AddMajor(payload madd.AddMajorRequestPayload) error {
 		payload.FacultyID = faculty.ID
 	}
 
+	id, err := uuid.NewUUID()
+
+	if err != nil {
+		return err
+	}
+
 	err = c.CourseRepository.AddMajor(course.Major{
+		ID:           id,
 		Name:         payload.Name,
 		Fac_id:       payload.FacultyID,
 		Abbreviation: payload.Abbreviation,
@@ -126,8 +134,15 @@ func (c CourseServiceImpl) AddFaculty(payload fadd.AddFacultyRequestPayload) err
 	if claim.Role != user.Admin {
 		return web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
 	}
-	
+
+	id, err := uuid.NewUUID()
+
+	if err != nil {
+		return err
+	}
+
 	err = c.CourseRepository.AddFaculty(course.Faculty{
+		ID:           id,
 		Name:         payload.Name,
 		Abbreviation: payload.Abbreviation,
 	})
