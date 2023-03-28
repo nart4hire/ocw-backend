@@ -7,8 +7,9 @@ import (
 
 type UserClaim struct {
 	jwt.RegisteredClaims
-	Name  string        `json:"name"`
-	Email string        `json:"email"`
-	Role  user.UserRole `json:"role"`
-	Type  TokenType     `json:"type"`
+	Name       string        `json:"name"`
+	Email      string        `json:"email"`
+	Role       user.UserRole `json:"role"`
+	Type       TokenType     `json:"type"`
+	IsVerified bool          `json:"is_verified"`
 }

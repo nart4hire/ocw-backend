@@ -45,7 +45,7 @@ func TestPreflight(t *testing.T) {
 		assert.Contains(t, res.Header.Get("Access-Control-Allow-Methods"), "GET")
 	})
 
-	t.Run("PreflightNotAllowedPatchMethod", func(t *testing.T) {
+	t.Run("PreflightAllowedPatchMethod", func(t *testing.T) {
 		res, _, err := test.ExecuteJSON(test.RequestData{
 			Method:   "OPTIONS",
 			Endpoint: "/ping",
@@ -59,7 +59,7 @@ func TestPreflight(t *testing.T) {
 		assert.Nil(t, err)
 
 		assert.Equal(t, res.StatusCode, http.StatusOK)
-		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "")
-		assert.Equal(t, res.Header.Get("Access-Control-Allow-Methods"), "")
+		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "https://inkubatorit.com")
+		assert.Equal(t, res.Header.Get("Access-Control-Allow-Methods"), "PATCH")
 	})
 }
