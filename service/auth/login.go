@@ -31,15 +31,16 @@ func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.Log
 		return nil, web.NewResponseError("username and password combination not found", web.InvalidLogin)
 	}
 
-	if !user.IsActivated {
-		return nil, web.NewResponseError("user is not activated yet", web.InactiveUser)
-	}
+	// if !user.IsActivated {
+	// 	return nil, web.NewResponseError("user is not activated yet", web.InactiveUser)
+	// }
 
 	refreshClaim := tokenModel.UserClaim{
-		Name:  user.Name,
-		Email: user.Email,
-		Role:  user.Role,
-		Type:  tokenModel.Refresh,
+		Name:       user.Name,
+		Email:      user.Email,
+		Role:       user.Role,
+		Type:       tokenModel.Refresh,
+		IsVerified: user.IsActivated,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(auth.TokenRefreshExpired) * time.Millisecond)),
 			Issuer:    auth.TokenIssuer,
@@ -48,10 +49,11 @@ func (auth AuthServiceImpl) Login(payload login.LoginRequestPayload) (*login.Log
 	}
 
 	accessClaim := tokenModel.UserClaim{
-		Name:  user.Name,
-		Email: user.Email,
-		Role:  user.Role,
-		Type:  tokenModel.Access,
+		Name:       user.Name,
+		Email:      user.Email,
+		Role:       user.Role,
+		Type:       tokenModel.Access,
+		IsVerified: user.IsActivated,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(auth.TokenAccessExpired) * time.Millisecond)),
 			Issuer:    auth.TokenIssuer,
