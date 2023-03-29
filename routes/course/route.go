@@ -40,10 +40,10 @@ func (c CourseRoutes) Register(r chi.Router) {
 		// Delete
 		r.Delete("/{id}", c.CourseHandler.DeleteCourse)
 		r.Get("/{id}/materials", c.MaterialHandler.GetMaterial)
+	})
 
-		r.Route("/", func(r chi.Router) {
-			r.Use(c.BuildSimple(user.Contributor))
-			r.Post("/{id}/materials", c.MaterialHandler.CreateMaterial)
-		})
+	r.Route("/course/{id}/material", func(r chi.Router) {
+		r.Use(c.BuildSimple(user.Contributor))
+		r.Post("/", c.MaterialHandler.CreateMaterial)
 	})
 }

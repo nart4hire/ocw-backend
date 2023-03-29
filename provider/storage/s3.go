@@ -18,10 +18,11 @@ func NewS3(
 		return nil, nil
 	}
 
-	client, err := minio.New(env.BucketEndpoint, &minio.Options{
+	settings := &minio.Options{
 		Creds:  credentials.NewStaticV4(env.BucketAccessKey, env.BucketSecretKey, env.BucketTokenKey),
 		Secure: env.BucketUseSSL,
-	})
+	}
+	client, err := minio.New(env.BucketEndpoint, settings)
 
 	if err != nil {
 		return nil, err

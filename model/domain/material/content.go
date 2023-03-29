@@ -6,8 +6,7 @@ type Content struct {
 	Id         uuid.UUID    `gorm:"primaryKey" json:"id"`
 	Type       MaterialType `json:"type"`
 	Link       string       `json:"link"`
-	MaterialId uuid.UUID    `json:"material_id"`
-	Material   `gorm:"foreignKey:MaterialId;references:Id" json:"material"`
+	MaterialID uuid.UUID    `json:"material_id"`
 }
 
 func (Content) TableName() string {

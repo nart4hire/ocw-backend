@@ -64,6 +64,12 @@ func (m MaterialHandlerImpl) AddContent(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	if payload.Type != materialDomain.Handout && payload.Link == "" {
+		payload := m.WrapperUtil.ErrorResponseWrap("link is required", nil)
+		m.HttpUtil.WriteJson(w, http.StatusUnprocessableEntity, payload)
+		return
+	}
+
 	uploadLink, err := m.MaterialContentService.AddContent(payload.MaterialId, user.Email, materialDomain.Content{
 		Type: payload.Type,
 		Link: payload.Link,

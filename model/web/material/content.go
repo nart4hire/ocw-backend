@@ -6,7 +6,7 @@ import (
 )
 
 type NewContentRequest struct {
-	Type       material.MaterialType `json:"type"`
+	Type       material.MaterialType `json:"type" validate:"required"`
 	Link       string                `json:"link"`
 	MaterialId uuid.UUID             `json:"-"`
 }

@@ -62,7 +62,7 @@ type Environment struct {
 	BucketSignedPutDuration int64 `env:"BUCKET_SIGNED_PUT_DURATION_S" envDefault:"36000"`
 	BucketSignedGetDuration int64 `env:"BUCKET_SIGNED_GET_DURATION_S" envDefault:"1800"`
 
-	BucketMaterialBasePath string `env:"BUCKET_MATERIAL_BASE_PATH" envDefault:"materials/"`
+	BucketMaterialBasePath string `env:"BUCKET_MATERIAL_BASE_PATH" envDefault:"materials"`
 
 	UseBucket bool `env:"USE_BUCKET" envDefault:"true"`
 }

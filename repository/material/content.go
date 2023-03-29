@@ -12,6 +12,7 @@ import (
 type MaterialContentRepositoryImpl struct {
 	builder transaction.TransactionBuilder
 	course.CourseRepository
+	MaterialRepository
 	db *gorm.DB
 }
 
@@ -19,21 +20,18 @@ func NewMaterialContent(
 	builder transaction.TransactionBuilder,
 	course course.CourseRepository,
 	database db.Database,
+	material MaterialRepository,
 ) *MaterialContentRepositoryImpl {
-	return &MaterialContentRepositoryImpl{builder, course, database.Connect()}
+	return &MaterialContentRepositoryImpl{builder, course, material, database.Connect()}
 }
 
 func (m MaterialContentRepositoryImpl) IsUserContributor(id uuid.UUID, email string) (bool, error) {
 	result := &material.Content{}
-	if err := m.db.Where("id = ?", id).Joins("Material").Find(result).Error; err != nil {
+	if err := m.db.Where("id = ?", id).Find(result).Error; err != nil {
 		return false, err
 	}
 
-	if result.CreatorEmail == email {
-		return true, nil
-	}
-
-	return false, nil
+	return m.MaterialRepository.IsUserContributor(result.MaterialID, email)
 }
 
 func (m MaterialContentRepositoryImpl) New(
@@ -55,7 +53,8 @@ func (m MaterialContentRepositoryImpl) NewWithTransaction(
 	materialType material.MaterialType,
 	link string) (uuid.UUID, error) {
 	contentData := material.Content{
-		MaterialId: materialId,
+		Id:         uuid.New(),
+		MaterialID: materialId,
 		Type:       materialType,
 		Link:       link,
 	}
