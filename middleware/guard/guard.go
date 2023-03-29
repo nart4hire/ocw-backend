@@ -83,7 +83,7 @@ func (g GuardMiddleware) Handle(next http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), UserContext, claim)
+			ctx := context.WithValue(r.Context(), UserContext, *claim)
 			next.ServeHTTP(w, r.WithContext(ctx))
 			return
 		}

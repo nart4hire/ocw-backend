@@ -1,4 +1,38 @@
 definitions:
+  add.AddCourseRequestPayload:
+    description: Information that should be available when you add a course
+    properties:
+      abbreviation:
+        description: Course Name Abbreviation
+        type: string
+      addCourseToken:
+        description: Web Token that was appended to the link
+        type: string
+      description:
+        description: Course Description (Can be left empty)
+        type: string
+      email:
+        description: Contributor Email
+        example: someone@example.com
+        type: string
+      id:
+        description: Course ID
+        type: string
+      majabbr:
+        description: Course Major Abbreviation
+        type: string
+      major_id:
+        description: Major Id, will be set by the server
+        type: string
+      name:
+        description: Course Name
+        type: string
+    required:
+    - abbreviation
+    - email
+    - id
+    - name
+    type: object
   admin.AdminAddUserPayload:
     properties:
       email:
@@ -171,6 +205,25 @@ paths:
       summary: Index page
       tags:
       - common
+    put:
+      description: Add new course
+      parameters:
+      - description: Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/add.AddCourseRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add new course
+      tags:
+      - course
   /admin/user:
     get:
       description: Get all users from database

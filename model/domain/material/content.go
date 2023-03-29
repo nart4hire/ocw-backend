@@ -3,10 +3,10 @@ package material
 import "github.com/google/uuid"
 
 type Content struct {
-	Id         uuid.UUID    `json:"id" gorm:"primaryKey"`
+	Id         uuid.UUID    `gorm:"primaryKey" json:"id"`
 	Type       MaterialType `json:"type"`
 	Link       string       `json:"link"`
-	MaterialId uuid.UUID    `json:"material_id"`
+	MaterialID uuid.UUID    `json:"material_id"`
 }
 
 func (Content) TableName() string {

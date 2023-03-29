@@ -21,7 +21,6 @@ import (
 //	@Router				/ [put]
 func (c CourseHandlerImpl) AddCourse(w http.ResponseWriter, r *http.Request) {
 	payload := add.AddCourseRequestPayload{}
-	validate := validator.New()
 
 	// Validate payload
 	if r.Header.Get("Content-Type") != "application/json" {
@@ -36,6 +35,7 @@ func (c CourseHandlerImpl) AddCourse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	validate := validator.New()
 	if err := validate.Struct(payload); err != nil {
 		if _, ok := err.(*validator.InvalidValidationError); ok {
 			payload := c.WrapperUtil.ErrorResponseWrap(err.Error(), nil)

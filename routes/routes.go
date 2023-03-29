@@ -5,6 +5,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/routes/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/common"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/course"
+	"gitlab.informatika.org/ocw/ocw-backend/routes/material"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/swagger"
 
@@ -19,6 +20,7 @@ type AppRouter struct {
 	auth.AuthRoutes
 	reset.ResetRoutes
 	course.CourseRoutes
+	material.MaterialRoutes
 
 	// Utility
 	Logger logger.Logger

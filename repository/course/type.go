@@ -25,9 +25,10 @@ type CourseRepository interface {
 	IsCourseExist(id string) (bool, error)
 	IsMajorExist(id uuid.UUID) (bool, error)
 	IsFacultyExist(id uuid.UUID) (bool, error)
+	IsUserCourseContributor(id string, email string) (bool, error)
 
 	// Internal Method Only
-	
+
 	GetMajorByAbbr(abbr string) (*course.Major, error)
 	GetFacultyByAbbr(abbr string) (*course.Faculty, error)
 }

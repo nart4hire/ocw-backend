@@ -3,17 +3,35 @@ package material
 import (
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/material"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
+	"gitlab.informatika.org/ocw/ocw-backend/repository/course"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
+	"gorm.io/gorm"
 )
 
 type MaterialContentRepositoryImpl struct {
 	builder transaction.TransactionBuilder
+	course.CourseRepository
+	MaterialRepository
+	db *gorm.DB
 }
 
 func NewMaterialContent(
 	builder transaction.TransactionBuilder,
+	course course.CourseRepository,
+	database db.Database,
+	material MaterialRepository,
 ) *MaterialContentRepositoryImpl {
-	return &MaterialContentRepositoryImpl{builder}
+	return &MaterialContentRepositoryImpl{builder, course, material, database.Connect()}
+}
+
+func (m MaterialContentRepositoryImpl) IsUserContributor(id uuid.UUID, email string) (bool, error) {
+	result := &material.Content{}
+	if err := m.db.Where("id = ?", id).Find(result).Error; err != nil {
+		return false, err
+	}
+
+	return m.MaterialRepository.IsUserContributor(result.MaterialID, email)
 }
 
 func (m MaterialContentRepositoryImpl) New(
@@ -35,7 +53,8 @@ func (m MaterialContentRepositoryImpl) NewWithTransaction(
 	materialType material.MaterialType,
 	link string) (uuid.UUID, error) {
 	contentData := material.Content{
-		MaterialId: materialId,
+		Id:         uuid.New(),
+		MaterialID: materialId,
 		Type:       materialType,
 		Link:       link,
 	}

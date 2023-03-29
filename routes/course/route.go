@@ -3,10 +3,15 @@ package course
 import (
 	"github.com/go-chi/chi/v5"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/course"
+	"gitlab.informatika.org/ocw/ocw-backend/handler/material"
+	"gitlab.informatika.org/ocw/ocw-backend/middleware/guard"
+	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 )
 
 type CourseRoutes struct {
 	course.CourseHandler
+	material.MaterialHandler
+	*guard.GuardBuilder
 }
 
 func (c CourseRoutes) Register(r chi.Router) {
@@ -34,5 +39,11 @@ func (c CourseRoutes) Register(r chi.Router) {
 
 		// Delete
 		r.Delete("/{id}", c.CourseHandler.DeleteCourse)
+		r.Get("/{id}/materials", c.MaterialHandler.GetMaterial)
+	})
+
+	r.Route("/course/{id}/material", func(r chi.Router) {
+		r.Use(c.BuildSimple(user.Contributor))
+		r.Post("/", c.MaterialHandler.CreateMaterial)
 	})
 }

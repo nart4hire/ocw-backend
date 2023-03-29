@@ -33,6 +33,20 @@ func (repo CourseRepositoryImpl) IsCourseExist(id string) (bool, error) {
 	return true, nil
 }
 
+func (repo CourseRepositoryImpl) IsUserCourseContributor(id string, email string) (bool, error) {
+	err := repo.db.Where("course_id = ? AND email = ?").Find(&course.Course{}).Error
+
+	if err == nil {
+		return true, nil
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
+
+	return false, err
+}
+
 func (repo CourseRepositoryImpl) IsMajorExist(id uuid.UUID) (bool, error) {
 	_, err := repo.GetMajor(id)
 
