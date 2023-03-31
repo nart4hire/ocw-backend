@@ -10,6 +10,18 @@ import (
 	authToken "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
 )
 
+// Index godoc
+//
+//	@Tags					content
+//	@Summary			Delete Content
+//	@Description	Delete content of material
+//	@Produce			json
+//	@Accept				json
+//	@Param				Authorization header string true "Access token"
+//	@Param				id path string true "Material id" Format(uuid)
+//	@Param				content-id path string true "Content id" Format(uuid)
+//	@Success			200	{object}	web.BaseResponse
+//	@Router				/material/{id}/content/{content-id} [delete]
 func (m MaterialHandlerImpl) DeleteContent(w http.ResponseWriter, r *http.Request) {
 	materialIdUnparsed := chi.URLParam(r, "material-id")
 
