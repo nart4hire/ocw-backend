@@ -7,6 +7,16 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 )
 
+// Index godoc
+//
+//	@Summary		Get all majors
+//	@Description	Get a list of all majors
+//	@Tags			course
+//	@Produce		json
+//	@Success		200	{object}	web.BaseResponse	"OK"
+//	@Failure		401	{object}	web.BaseResponse	"Unauthorized"
+//	@Failure		500	{object}	web.BaseResponse	"Internal Server Error"
+//	@Router			/course/major [get]
 func (c CourseHandlerImpl) GetMajors(w http.ResponseWriter, r *http.Request) {
 	packet, err := c.CourseService.GetAllMajor()
 

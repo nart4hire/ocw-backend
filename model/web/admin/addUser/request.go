@@ -1,7 +1,7 @@
 package admin
 
 // AdminAddUserPayload Request Payload
-// @Description Information that should be available when admin add user
+//	@Description	Information that should be available when admin add user
 
 // TODO: find a way to make default password for new user
 

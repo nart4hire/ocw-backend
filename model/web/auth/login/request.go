@@ -1,7 +1,7 @@
 package login
 
 // Login Request Payload
-// @Description Information that should be available when do a login process
+//	@Description	Information that should be available when do a login process
 type LoginRequestPayload struct {
 	// User Email
 	Email string `json:"email" validate:"required,email" example:"someone@example.com"`

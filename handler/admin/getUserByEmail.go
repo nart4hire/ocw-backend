@@ -7,12 +7,12 @@ import (
 
 // Index godoc
 //
-//	@Tags					admin
-//	@Summary			Get User By Email
+//	@Tags			admin
+//	@Summary		Get User By Email
 //	@Description	Get a user from database
-//	@Produce			json
-//	@Success			200	{object}	web.BaseResponse
-//	@Router				/admin/user/{email} [get]
+//	@Produce		json
+//	@Success		200	{object}	web.BaseResponse
+//	@Router			/admin/user/{email} [get]
 func (route AdminHandlerImpl) GetUserByEmail(w http.ResponseWriter, r *http.Request) {
 	// email := r.URL.Query().Get("email")
 	email := path.Base(r.URL.Path)

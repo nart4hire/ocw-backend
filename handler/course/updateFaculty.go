@@ -9,11 +9,26 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/update"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty"
 )
 
+// Index godoc
+//
+//	@Summary		Update a faculty 
+//	@Description	Update a faculty with the given ID
+//	@Tags			course
+//	@Param			id				path		string								true	"Faculty ID (UUID)"
+//	@Param			payload			body		faculty.UpdateFacultyRequestPayload	true	"Update Faculty Payload"
+//	@Param			Authorization	header		string								true	"UpdateFacultyToken"
+//	@Success		200				{object}	web.BaseResponse					"Success"
+//	@Failure		400				{object}	web.BaseResponse					"Bad Request"
+//	@Failure		401				{object}	web.BaseResponse					"Unauthorized"
+//	@Failure		403				{object}	web.BaseResponse					"Forbidden"
+//	@Failure		422				{object}	web.BaseResponse					"Unprocessable Entity"
+//	@Failure		500				{object}	web.BaseResponse					"Internal Server Error"
+//	@Router			/course/faculty/{id} [patch]
 func (c CourseHandlerImpl) UpdateFaculty(w http.ResponseWriter, r *http.Request) {
-	payload := update.UpdateFacultyRequestPayload{}
+	payload := faculty.UpdateFacultyRequestPayload{}
 	validate := validator.New()
 
 	// Validate payload

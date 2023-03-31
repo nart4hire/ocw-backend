@@ -6,12 +6,12 @@ import (
 
 // Index godoc
 //
-//	@Tags					admin
-//	@Summary			Get All User
+//	@Tags			admin
+//	@Summary		Get All User
 //	@Description	Get all users from database
-//	@Produce			json
-//	@Success			200	{object}	web.BaseResponse
-//	@Router				/admin/user [get]
+//	@Produce		json
+//	@Success		200	{object}	web.BaseResponse
+//	@Router			/admin/user [get]
 func (route AdminHandlerImpl) GetAllUser(w http.ResponseWriter, r *http.Request){
 	// get all user from service
 	users, err := route.AdminService.GetAllUser()

@@ -7,20 +7,27 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/add"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 )
 
 // Index godoc
 //
-//	@Tags					course
-//	@Summary			Add new course
-//	@Description	Add new course
-//	@Produce			json
-//	@Param				data body add.AddCourseRequestPayload true "Payload"
-//	@Success			200	{object}	web.BaseResponse
-//	@Router				/ [put]
+//	@Summary		Add a new course
+//	@Description	Add a new course with the given details
+//	@Tags			course
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string							true	"AddCourseToken"
+//	@Param			data			body		course.AddCourseRequestPayload	true	"Add Course payload"
+//	@Success		200				{object}	web.BaseResponse				"Success"
+//	@Failure		400				{object}	web.BaseResponse				"Bad Request"
+//	@Failure		401				{object}	web.BaseResponse				"Unauthorized"
+//	@Failure		403				{object}	web.BaseResponse				"Forbidden"
+//	@Failure		422				{object}	web.BaseResponse				"Unprocessable Entity"
+//	@Failure		500				{object}	web.BaseResponse				"Internal Server Error"
+//	@Router			/course [put]
 func (c CourseHandlerImpl) AddCourse(w http.ResponseWriter, r *http.Request) {
-	payload := add.AddCourseRequestPayload{}
+	payload := course.AddCourseRequestPayload{}
 
 	// Validate payload
 	if r.Header.Get("Content-Type") != "application/json" {

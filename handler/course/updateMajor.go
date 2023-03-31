@@ -9,11 +9,25 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/update"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major"
 )
-
+//	@Summary		Update a major
+//	@Description	Update a major with the given ID
+//	@Tags			course
+//	@Accept			json
+//	@Produce		json
+//	@Param			id				path		string								true	"Major ID (UUID)"
+//	@Param			Authorization	header		string								true	"UpdateMajorToken"
+//	@Param			payload			body		major.UpdateMajorRequestPayload	true	"Update Major payload"
+//	@Success		200				{object}	web.BaseResponse					"Success"
+//	@Failure		400				{object}	web.BaseResponse					"Bad Request"
+//	@Failure		401				{object}	web.BaseResponse					"Unauthorized"
+//	@Failure		403				{object}	web.BaseResponse					"Forbidden"
+//	@Failure		422				{object}	web.BaseResponse					"Unprocessable Entity"
+//	@Failure		500				{object}	web.BaseResponse					"Internal Server Error"
+//	@Router			/course/major/{id} [put]
 func (c CourseHandlerImpl) UpdateMajor(w http.ResponseWriter, r *http.Request) {
-	payload := update.UpdateMajorRequestPayload{}
+	payload := major.UpdateMajorRequestPayload{}
 	validate := validator.New()
 
 	// Validate payload

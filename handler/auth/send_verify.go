@@ -11,16 +11,16 @@ import (
 
 // Index godoc
 //
-//		@Tags					auth
-//		@Summary			Send Email Verification
-//		@Description	Send Email Verification to user
-//		@Produce			json
-//		@Accept				json
-//		@Param				data body verification.VerificationSendRequestPayload true "Register Payload"
-//		@Success			200	{object}	web.BaseResponse
-//	  @Failure			400 {object}  web.BaseResponse
-//	  @Failure			500 {object}  web.BaseResponse
-//		@Router				/auth/verify/resend  [post]
+//	@Tags			auth
+//	@Summary		Send Email Verification
+//	@Description	Send Email Verification to user
+//	@Produce		json
+//	@Accept			json
+//	@Param			data	body		verification.VerificationSendRequestPayload	true	"Register Payload"
+//	@Success		200		{object}	web.BaseResponse
+//	@Failure		400		{object}	web.BaseResponse
+//	@Failure		500		{object}	web.BaseResponse
+//	@Router			/auth/verify/resend  [post]
 func (a AuthHandlerImpl) SendEmailVerify(w http.ResponseWriter, r *http.Request) {
 	payload := verification.VerificationSendRequestPayload{}
 	validate := validator.New()

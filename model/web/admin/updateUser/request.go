@@ -1,7 +1,7 @@
 package admin
 
 // AdminUpdateUserPayload Request Payload
-// @Description Information that should be available when admin update user
+//	@Description	Information that should be available when admin update user
 
 type AdminUpdateUserPayload struct {
 	// User name

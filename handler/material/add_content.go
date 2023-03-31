@@ -15,18 +15,18 @@ import (
 
 // Index godoc
 //
-//	@Tags					content
-//	@Summary			Add Content
+//	@Tags			content
+//	@Summary		Add Content
 //	@Description	Add content of material
-//	@Produce			json
-//	@Accept				json
-//	@Param				Authorization header string true "Access token"
-//	@Param				data body material.NewContentRequest true "Add content request"
-//	@Param				id path string true "Material id" Format(uuid)
-//	@Success			200	{object}	web.BaseResponse{data=material.NewContentResponse}
-//	@Success			400	{object}	web.BaseResponse
-//	@Success			401	{object}	web.BaseResponse
-//	@Router				/material/{id} [post]
+//	@Produce		json
+//	@Accept			json
+//	@Param			Authorization	header		string						true	"Access token"
+//	@Param			data			body		material.NewContentRequest	true	"Add content request"
+//	@Param			id				path		string						true	"Material id"	Format(uuid)
+//	@Success		200				{object}	web.BaseResponse{data=material.NewContentResponse}
+//	@Success		400				{object}	web.BaseResponse
+//	@Success		401				{object}	web.BaseResponse
+//	@Router			/material/{id} [post]
 func (m MaterialHandlerImpl) AddContent(w http.ResponseWriter, r *http.Request) {
 	payload := material.NewContentRequest{}
 	user, ok := r.Context().Value(guard.UserContext).(authToken.UserClaim)

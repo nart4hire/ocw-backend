@@ -7,13 +7,13 @@ import (
 
 // Index godoc
 //
-//	@Tags					admin
-//	@Summary			Delete User By Id
+//	@Tags			admin
+//	@Summary		Delete User By Id
 //	@Description	Delete a user from database
-//	@Produce			json
-//	@Accept				json
-//	@Success			200	{object}	web.BaseResponse
-//	@Router				/admin/user/{email} [delete]
+//	@Produce		json
+//	@Accept			json
+//	@Success		200	{object}	web.BaseResponse
+//	@Router			/admin/user/{email} [delete]
 func (route AdminHandlerImpl) DeleteUser(w http.ResponseWriter, r *http.Request){
 	email := path.Base(r.URL.Path)
 
