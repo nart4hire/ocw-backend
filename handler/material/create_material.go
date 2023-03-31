@@ -11,6 +11,20 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/material"
 )
 
+// Index godoc
+//
+//	@Tags					content
+//	@Summary			Add Material
+//	@Description	Add new material
+//	@Produce			json
+//	@Accept				json
+//	@Param				Authorization header string true "Access token"
+//	@Param				data body material.CreateMaterialRequest true "Material Request"
+//	@Param				id path string true "Course id" example(IF3230)
+//	@Success			200	{object}	web.BaseResponse{data=material.CreateMaterialResponse}
+//	@Success			400	{object}	web.BaseResponse
+//	@Success			401	{object}	web.BaseResponse
+//	@Router				/course/{id}/material [post]
 func (m MaterialHandlerImpl) CreateMaterial(w http.ResponseWriter, r *http.Request) {
 	payload := material.CreateMaterialRequest{}
 	courseId := chi.URLParam(r, "id")
