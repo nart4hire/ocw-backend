@@ -28,6 +28,7 @@ import (
 //	@Router			/course/{id} [delete]
 func (c CourseHandlerImpl) DeleteCourse(w http.ResponseWriter, r *http.Request) {
 	payload := course.DeleteByStringRequestPayload{}
+	payload.ID = path.Base(r.URL.Path)
 	validateTokenHeader := r.Header.Get("Authorization")
 
 	if validateTokenHeader == "" {
