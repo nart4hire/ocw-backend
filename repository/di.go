@@ -2,12 +2,13 @@ package repository
 
 import (
 	"github.com/google/wire"
-	"gitlab.informatika.org/ocw/ocw-backend/repository/user"
-	"gitlab.informatika.org/ocw/ocw-backend/repository/course"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/cache"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/content"
+	"gitlab.informatika.org/ocw/ocw-backend/repository/course"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/material"
+	"gitlab.informatika.org/ocw/ocw-backend/repository/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
+	"gitlab.informatika.org/ocw/ocw-backend/repository/user"
 )
 
 var RepositoryBasicSet = wire.NewSet(
@@ -37,6 +38,9 @@ var RepositoryBasicSet = wire.NewSet(
 	transaction.NewBuilder,
 	wire.Bind(new(transaction.Transaction), new(*transaction.TransactionRepositoryImpl)),
 	wire.Bind(new(transaction.TransactionBuilder), new(*transaction.TransactionBuilderImpl)),
+
+	quiz.New,
+	wire.Bind(new(quiz.QuizRepository), new(*quiz.QuizRepositoryImpl)),
 )
 
 var RepositorySet = wire.NewSet(
