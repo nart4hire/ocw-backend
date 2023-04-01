@@ -9,14 +9,14 @@ import (
 
 // Index godoc
 //
-//	@Tags					content
-//	@Summary			Get materials
+//	@Tags			content
+//	@Summary		Get materials
 //	@Description	Get materials
-//	@Produce			json
-//	@Accept				json
-//	@Param				id path string true "Course id" example(IF3270)
-//	@Success			200	{object}	web.BaseResponse{data=[]material.Material}
-//	@Router				/course/{id}/materials [get]
+//	@Produce		json
+//	@Accept			json
+//	@Param			id	path		string	true	"Course id"	example(IF3270)
+//	@Success		200	{object}	web.BaseResponse{data=[]material.Material}
+//	@Router			/course/{id}/materials [get]
 func (m MaterialHandlerImpl) GetMaterial(w http.ResponseWriter, r *http.Request) {
 	courseId := chi.URLParam(r, "id")
 

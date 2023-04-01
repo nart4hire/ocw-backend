@@ -8,14 +8,14 @@ import (
 
 // Index godoc
 //
-//	@Tags					admin
-//	@Summary			Update User By Id
+//	@Tags			admin
+//	@Summary		Update User By Id
 //	@Description	Update a user from database
-//	@Produce			json
-//	@Accept				json
-//	@Param				data body req.AdminUpdateUserPayload true "Admin Update User Payload"
-//	@Success			200	{object}	web.BaseResponse
-//	@Router				/admin/user/{email} [patch]
+//	@Produce		json
+//	@Accept			json
+//	@Param			data	body		req.AdminUpdateUserPayload	true	"Admin Update User Payload"
+//	@Success		200		{object}	web.BaseResponse
+//	@Router			/admin/user/{email} [patch]
 func (route AdminHandlerImpl) UpdateUser(w http.ResponseWriter, r *http.Request){
 	email := path.Base(r.URL.Path)
 	// TODO: how to change email

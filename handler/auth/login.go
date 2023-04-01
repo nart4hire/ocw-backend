@@ -11,19 +11,19 @@ import (
 
 // Index godoc
 //
-//		@Tags					auth
-//		@Summary			Login
-//		@Description	Login and generate new pair of token
-//		@Produce			json
-//		@Accept				json
-//		@Param				data body login.LoginRequestPayload true "Login payload"
-//		@Success			200	{object}	web.BaseResponse{data=login.LoginResponsePayload} "Login Success"
-//	  @Failure			400 {object}  web.BaseResponse{data=[]string} "Bad Input"
-//	  @Failure			403 {object}  web.BaseResponse "Login Credential Error"
-//	  @Failure			415 {object}  web.BaseResponse "Not a json request"
-//	  @Failure			422 {object}  web.BaseResponse "Invalid JSON input"
-//	  @Failure			500 {object}  web.BaseResponse "Unknown Internal Error"
-//		@Router				/auth/login [post]
+//	@Tags			auth
+//	@Summary		Login
+//	@Description	Login and generate new pair of token
+//	@Produce		json
+//	@Accept			json
+//	@Param			data	body		login.LoginRequestPayload							true	"Login payload"
+//	@Success		200		{object}	web.BaseResponse{data=login.LoginResponsePayload}	"Login Success"
+//	@Failure		400		{object}	web.BaseResponse{data=[]string}						"Bad Input"
+//	@Failure		403		{object}	web.BaseResponse									"Login Credential Error"
+//	@Failure		415		{object}	web.BaseResponse									"Not a json request"
+//	@Failure		422		{object}	web.BaseResponse									"Invalid JSON input"
+//	@Failure		500		{object}	web.BaseResponse									"Unknown Internal Error"
+//	@Router			/auth/login [post]
 func (a AuthHandlerImpl) Login(w http.ResponseWriter, r *http.Request) {
 	payload := login.LoginRequestPayload{}
 	validate := validator.New()

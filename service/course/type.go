@@ -1,33 +1,28 @@
 package course
 
 import (
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/get"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/delete"
-	cadd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/add"
-	madd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/add"
-	fadd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/add"
-	cupdate "gitlab.informatika.org/ocw/ocw-backend/model/web/course/update"
-	mupdate "gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/update"
-	fupdate "gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/update"
+	domCourse "gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty"
 
 )
 
 type CourseService interface {
-	AddCourse(payload cadd.AddCourseRequestPayload) error
-	AddMajor(payload madd.AddMajorRequestPayload) error
-	AddFaculty(payload fadd.AddFacultyRequestPayload) error
-	GetCourse(payload get.GetByStringRequestPayload) (*course.Course, error)
-	GetMajor(payload get.GetByUUIDRequestPayload) (*course.Major, error)
-	GetFaculty(payload get.GetByUUIDRequestPayload) (*course.Faculty, error)
-	GetAllCourse() ([]course.Course, error)
-	GetAllMajor() ([]course.Major, error)
-	GetAllFaculty() ([]course.Faculty, error)
-	GetAllCourseByMajor(payload get.GetByUUIDRequestPayload) ([]course.Course, error)
-	GetAllCourseByFaculty(payload get.GetByUUIDRequestPayload) ([]course.Course, error)
-	GetAllMajorByFaculty(payload get.GetByUUIDRequestPayload) ([]course.Major, error)
-	UpdateCourse(payload cupdate.UpdateCourseRequestPayload) error
-	UpdateMajor(payload mupdate.UpdateMajorRequestPayload) error
-	UpdateFaculty(payload fupdate.UpdateFacultyRequestPayload) error
-	DeleteCourse(payload delete.DeleteByStringRequestPayload) error
+	AddCourse(payload course.AddCourseRequestPayload) error
+	AddMajor(payload major.AddMajorRequestPayload) error
+	AddFaculty(payload faculty.AddFacultyRequestPayload) error
+	GetCourse(payload course.GetByStringRequestPayload) (*domCourse.Course, error)
+	GetMajor(payload course.GetByUUIDRequestPayload) (*domCourse.Major, error)
+	GetFaculty(payload course.GetByUUIDRequestPayload) (*domCourse.Faculty, error)
+	GetAllCourse() ([]domCourse.Course, error)
+	GetAllMajor() ([]domCourse.Major, error)
+	GetAllFaculty() ([]domCourse.Faculty, error)
+	GetAllCourseByMajor(payload course.GetByUUIDRequestPayload) ([]domCourse.Course, error)
+	GetAllCourseByFaculty(payload course.GetByUUIDRequestPayload) ([]domCourse.Course, error)
+	GetAllMajorByFaculty(payload course.GetByUUIDRequestPayload) ([]domCourse.Major, error)
+	UpdateCourse(payload course.UpdateCourseRequestPayload) error
+	UpdateMajor(payload major.UpdateMajorRequestPayload) error
+	UpdateFaculty(payload faculty.UpdateFacultyRequestPayload) error
+	DeleteCourse(payload course.DeleteByStringRequestPayload) error
 }

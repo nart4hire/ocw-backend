@@ -7,14 +7,14 @@ import (
 
 // Index godoc
 //
-//	@Tags					admin
-//	@Summary			Add User
+//	@Tags			admin
+//	@Summary		Add User
 //	@Description	Add a user to database
-//	@Produce			json
-//	@Accept				json
-//	@Param				data body req.AdminAddUserPayload true "Admin Add User Payload"
-//	@Success			200	{object}	web.BaseResponse
-//	@Router				/admin/user [post]
+//	@Produce		json
+//	@Accept			json
+//	@Param			data	body		req.AdminAddUserPayload	true	"Admin Add User Payload"
+//	@Success		200		{object}	web.BaseResponse
+//	@Router			/admin/user [post]
 func (route AdminHandlerImpl) AddUser(w http.ResponseWriter, r *http.Request){
 	payload := req.AdminAddUserPayload{}
 

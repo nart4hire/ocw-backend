@@ -12,13 +12,13 @@ import (
 
 // Index godoc
 //
-//	@Tags					reset
-//	@Summary			Request Reset Password Token
+//	@Tags			reset
+//	@Summary		Request Reset Password Token
 //	@Description	Send Reset password token to email
-//	@Produce			json
-//	@Param				data body request.RequestRequestPayload true "payload"
-//	@Success			200	{object}	web.BaseResponse "Login Success"
-//	@Router				/reset/request [post]
+//	@Produce		json
+//	@Param			data	body		request.RequestRequestPayload	true	"payload"
+//	@Success		200		{object}	web.BaseResponse				"Login Success"
+//	@Router			/reset/request [post]
 func (rs ResetHandlerImpl) Request(w http.ResponseWriter, r *http.Request) {
 	payload := request.RequestRequestPayload{}
 	validate := validator.New()
