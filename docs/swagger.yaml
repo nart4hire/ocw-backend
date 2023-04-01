@@ -152,6 +152,8 @@ definitions:
         type: string
       name:
         type: string
+      week:
+        type: integer
     type: object
   material.MaterialType:
     enum:

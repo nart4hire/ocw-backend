@@ -1069,6 +1069,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "week": {
+                    "type": "integer"
                 }
             }
         },
