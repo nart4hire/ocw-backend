@@ -12,16 +12,16 @@ import (
 
 // Index godoc
 //
-//		@Tags					auth
-//		@Summary			Register New Account
-//		@Description	Generate New Account as Member
-//		@Produce			json
-//		@Accept				json
-//		@Param				data body register.RegisterRequestPayload true "Register Payload"
-//		@Success			200	{object}	web.BaseResponse
-//	  @Failure			400 {object}  web.BaseResponse
-//	  @Failure			500 {object}  web.BaseResponse
-//		@Router				/auth/register [post]
+//	@Tags			auth
+//	@Summary		Register New Account
+//	@Description	Generate New Account as Member
+//	@Produce		json
+//	@Accept			json
+//	@Param			data	body		register.RegisterRequestPayload	true	"Register Payload"
+//	@Success		200		{object}	web.BaseResponse
+//	@Failure		400		{object}	web.BaseResponse
+//	@Failure		500		{object}	web.BaseResponse
+//	@Router			/auth/register [post]
 func (a AuthHandlerImpl) Register(w http.ResponseWriter, r *http.Request) {
 	payload := register.RegisterRequestPayload{}
 	validate := validator.New()

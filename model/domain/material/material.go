@@ -9,6 +9,7 @@ type Material struct {
 	CourseId     string    `json:"course_id"`
 	CreatorEmail string    `json:"creator_email"`
 	Name         string    `json:"name"`
+	Week         int       `json:"week"`
 	Contents     []Content `json:"contents"`
 }
 

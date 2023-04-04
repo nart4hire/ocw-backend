@@ -3,13 +3,13 @@ package course
 import (
 	"errors"
 
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
+	domCourse "gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/get"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 	"gorm.io/gorm"
 )
 
-func (c CourseServiceImpl) GetCourse(payload get.GetByStringRequestPayload) (*course.Course, error) {
+func (c CourseServiceImpl) GetCourse(payload course.GetByStringRequestPayload) (*domCourse.Course, error) {
 	packet, err := c.CourseRepository.GetCourse(payload.ID)
 
 	if err != nil {
@@ -23,7 +23,7 @@ func (c CourseServiceImpl) GetCourse(payload get.GetByStringRequestPayload) (*co
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetMajor(payload get.GetByUUIDRequestPayload) (*course.Major, error) {
+func (c CourseServiceImpl) GetMajor(payload course.GetByUUIDRequestPayload) (*domCourse.Major, error) {
 	packet, err := c.CourseRepository.GetMajor(payload.ID)
 
 	if err != nil {
@@ -37,7 +37,7 @@ func (c CourseServiceImpl) GetMajor(payload get.GetByUUIDRequestPayload) (*cours
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetFaculty(payload get.GetByUUIDRequestPayload) (*course.Faculty, error) {
+func (c CourseServiceImpl) GetFaculty(payload course.GetByUUIDRequestPayload) (*domCourse.Faculty, error) {
 	packet, err := c.CourseRepository.GetFaculty(payload.ID)
 
 	if err != nil {
@@ -51,7 +51,7 @@ func (c CourseServiceImpl) GetFaculty(payload get.GetByUUIDRequestPayload) (*cou
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetAllCourse() ([]course.Course, error) {
+func (c CourseServiceImpl) GetAllCourse() ([]domCourse.Course, error) {
 	packet, err := c.CourseRepository.GetAllCourse()
 
 	if err != nil {
@@ -65,7 +65,7 @@ func (c CourseServiceImpl) GetAllCourse() ([]course.Course, error) {
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetAllMajor() ([]course.Major, error) {
+func (c CourseServiceImpl) GetAllMajor() ([]domCourse.Major, error) {
 	packet, err := c.CourseRepository.GetAllMajor()
 
 	if err != nil {
@@ -79,7 +79,7 @@ func (c CourseServiceImpl) GetAllMajor() ([]course.Major, error) {
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetAllFaculty() ([]course.Faculty, error) {
+func (c CourseServiceImpl) GetAllFaculty() ([]domCourse.Faculty, error) {
 	packet, err := c.CourseRepository.GetAllFaculty()
 
 	if err != nil {
@@ -94,7 +94,7 @@ func (c CourseServiceImpl) GetAllFaculty() ([]course.Faculty, error) {
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetAllCourseByMajor(payload get.GetByUUIDRequestPayload) ([]course.Course, error) {
+func (c CourseServiceImpl) GetAllCourseByMajor(payload course.GetByUUIDRequestPayload) ([]domCourse.Course, error) {
 	packet, err := c.CourseRepository.GetAllCourseByMajor(payload.ID)
 
 	if err != nil {
@@ -108,7 +108,7 @@ func (c CourseServiceImpl) GetAllCourseByMajor(payload get.GetByUUIDRequestPaylo
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetAllCourseByFaculty(payload get.GetByUUIDRequestPayload) ([]course.Course, error) {
+func (c CourseServiceImpl) GetAllCourseByFaculty(payload course.GetByUUIDRequestPayload) ([]domCourse.Course, error) {
 	packet, err := c.CourseRepository.GetAllCourseByFaculty(payload.ID)
 
 	if err != nil {
@@ -122,7 +122,7 @@ func (c CourseServiceImpl) GetAllCourseByFaculty(payload get.GetByUUIDRequestPay
 	return packet, nil
 }
 
-func (c CourseServiceImpl) GetAllMajorByFaculty(payload get.GetByUUIDRequestPayload) ([]course.Major, error) {
+func (c CourseServiceImpl) GetAllMajorByFaculty(payload course.GetByUUIDRequestPayload) ([]domCourse.Major, error) {
 	packet, err := c.CourseRepository.GetAllMajorByFaculty(payload.ID)
 
 	if err != nil {

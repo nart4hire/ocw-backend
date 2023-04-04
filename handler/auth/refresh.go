@@ -11,17 +11,17 @@ import (
 
 // Index godoc
 //
-//		@Tags					auth
-//		@Summary			Refresh Token
-//		@Description	Generate new access token
-//		@Produce			json
-//		@Accept				json
-//		@Param				Authorization header string true "Refresh token"
-//		@Success			200	{object}	web.BaseResponse{data=refresh.RefreshResponsePayload}
-//	  @Failure			400 {object}  web.BaseResponse
-//	  @Failure			401 {object}  web.BaseResponse
-//	  @Failure			500 {object}  web.BaseResponse
-//		@Router				/auth/refresh [post]
+//	@Tags			auth
+//	@Summary		Refresh Token
+//	@Description	Generate new access token
+//	@Produce		json
+//	@Accept			json
+//	@Param			Authorization	header		string	true	"Refresh token"
+//	@Success		200				{object}	web.BaseResponse{data=refresh.RefreshResponsePayload}
+//	@Failure		400				{object}	web.BaseResponse
+//	@Failure		401				{object}	web.BaseResponse
+//	@Failure		500				{object}	web.BaseResponse
+//	@Router			/auth/refresh [post]
 func (a AuthHandlerImpl) Refresh(w http.ResponseWriter, r *http.Request) {
 	payload := refresh.RefreshRequestPayload{}
 

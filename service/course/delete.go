@@ -4,12 +4,10 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/delete"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 )
 
-// TODO: Authorization Checks
-
-func (c CourseServiceImpl) DeleteCourse(payload delete.DeleteByStringRequestPayload) error {
+func (c CourseServiceImpl) DeleteCourse(payload course.DeleteByStringRequestPayload) error {
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.DeleteCourseToken, token.Access)
 
