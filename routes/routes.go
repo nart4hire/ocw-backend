@@ -6,6 +6,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/routes/common"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/course"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/material"
+	"gitlab.informatika.org/ocw/ocw-backend/routes/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/swagger"
 
@@ -19,6 +20,7 @@ type AppRouter struct {
 	common.CommonRoutes
 	auth.AuthRoutes
 	reset.ResetRoutes
+	quiz.QuizRoutes
 	course.CourseRoutes
 	material.MaterialRoutes
 

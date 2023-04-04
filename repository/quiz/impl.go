@@ -20,9 +20,9 @@ func New(
 }
 
 func (q *QuizRepositoryImpl) GetQuizes(courseId string) ([]quiz.Quiz, error) {
-	result := []quiz.Quiz{}
+	result := &[]quiz.Quiz{}
 	err := q.db.Where("course_id = ?", courseId).Find(result).Error
-	return result, err
+	return *result, err
 }
 
 func (q *QuizRepositoryImpl) GetQuizDetail(quizId uuid.UUID) (*quiz.Quiz, error) {
