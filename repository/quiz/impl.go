@@ -1,10 +1,12 @@
 package quiz
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/quiz"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
 	"gorm.io/gorm"
 )
@@ -22,13 +24,19 @@ func New(
 func (q *QuizRepositoryImpl) GetQuizes(courseId string) ([]quiz.Quiz, error) {
 	result := &[]quiz.Quiz{}
 	err := q.db.Where("course_id = ?", courseId).Find(result).Error
+
 	return *result, err
 }
 
 func (q *QuizRepositoryImpl) GetQuizDetail(quizId uuid.UUID) (*quiz.Quiz, error) {
 	result := &quiz.Quiz{}
-	err := q.db.Where("id = ?", quizId).Find(result).Error
-	return result, err
+	err := q.db.Where("id = ?", quizId).First(result).Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, web.NewResponseError("Record not found", "ERR_NOT_FOUND")
+	}
+
+	return result, nil
 }
 
 func (q *QuizRepositoryImpl) UpdateScore(takeId uuid.UUID, score int) error {

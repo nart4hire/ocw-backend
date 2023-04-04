@@ -43,11 +43,7 @@ func (m QuizHandlerImpl) GetQuizDetail(w http.ResponseWriter, r *http.Request) {
 		if ok {
 			payload := m.WrapperUtil.ErrorResponseWrap(respErr.Error(), respErr)
 
-			if respErr.Code != "NOT_OWNER" {
-				m.HttpUtil.WriteJson(w, http.StatusBadRequest, payload)
-			} else {
-				m.HttpUtil.WriteJson(w, http.StatusForbidden, payload)
-			}
+			m.HttpUtil.WriteJson(w, http.StatusBadRequest, payload)
 		} else {
 			payload := m.WrapperUtil.ErrorResponseWrap("internal server error", nil)
 			m.HttpUtil.WriteJson(w, http.StatusInternalServerError, payload)
