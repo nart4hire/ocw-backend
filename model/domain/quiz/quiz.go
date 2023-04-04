@@ -9,7 +9,7 @@ type Quiz struct {
 	Name         string    `json:"name"`
 	CourseId     string    `json:"course_id"`
 	CreatorEmail string    `json:"creator_email"`
-	QuizPath     string    `json:"quiz_path"`
+	QuizPath     string    `json:"-"`
 }
 
 func (Quiz) TableName() string {
