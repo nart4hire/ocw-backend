@@ -7,6 +7,16 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 )
 
+// Index godoc
+//
+//	@Tags					course
+//	@Summary			Get Course quiz
+//	@Description	Get all cours
+//	@Produce			json
+//	@Accept				json
+//	@Param				id path string true "Course id" Format(uuid)
+//	@Success			200	{object}	web.BaseResponse{data=[]quiz.Quiz}
+//	@Router				/course/{id}/quiz [get]
 func (m QuizHandlerImpl) GetAllQuizes(w http.ResponseWriter, r *http.Request) {
 	courseId := chi.URLParam(r, "id")
 

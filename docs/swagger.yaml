@@ -177,6 +177,17 @@ definitions:
       upload_link:
         type: string
     type: object
+  quiz.Quiz:
+    properties:
+      course_id:
+        type: string
+      creator_email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   refresh.RefreshResponsePayload:
     description: Refresh endpoint response when process success
     properties:
@@ -625,6 +636,35 @@ paths:
       summary: Get materials
       tags:
       - content
+  /course/{id}/quiz:
+    get:
+      consumes:
+      - application/json
+      description: Get all cours
+      parameters:
+      - description: Course id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/quiz.Quiz'
+                  type: array
+              type: object
+      summary: Get Course quiz
+      tags:
+      - course
   /material/{id}:
     delete:
       consumes:
@@ -730,6 +770,33 @@ paths:
       summary: Delete Content
       tags:
       - content
+  /quiz/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Quiz Detail
+      parameters:
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/quiz.Quiz'
+              type: object
+      summary: Get Quiz Detail
+      tags:
+      - quiz
   /reset/confirm:
     put:
       description: Do confirmation to reset password
