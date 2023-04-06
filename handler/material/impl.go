@@ -12,7 +12,7 @@ type MaterialHandlerImpl struct {
 	material.MaterialService
 	material.MaterialContentService
 	httputil.HttpUtil
+	logger.Logger
 	wrapper.WrapperUtil
 	course.CourseRepository
-	logger.Logger
 }

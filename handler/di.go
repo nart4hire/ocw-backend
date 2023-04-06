@@ -7,6 +7,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/handler/common"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/course"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/material"
+	"gitlab.informatika.org/ocw/ocw-backend/handler/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/handler/swagger"
 )
@@ -39,4 +40,8 @@ var HandlerSet = wire.NewSet(
 	// Material
 	wire.Struct(new(material.MaterialHandlerImpl), "*"),
 	wire.Bind(new(material.MaterialHandler), new(*material.MaterialHandlerImpl)),
+
+	// Quiz
+	wire.Struct(new(quiz.QuizHandlerImpl), "*"),
+	wire.Bind(new(quiz.QuizHandler), new(*quiz.QuizHandlerImpl)),
 )
