@@ -22,6 +22,16 @@ func (m MaterialServiceImpl) Get(courseId string) ([]materialDomain.Material, er
 	return materials, err
 }
 
+func (m MaterialServiceImpl) GetById(materialId uuid.UUID) (*materialDomain.Material, error) {
+	material, err := m.MaterialRepository.Get(materialId)
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, web.NewResponseErrorFromError(err, "ID_NOT_FOUND")
+	}
+
+	return material, err
+}
+
 func (m MaterialServiceImpl) Create(courseId string, email string, name string) (uuid.UUID, error) {
 	isSuccess := false
 	tx := m.TransactionBuilder.Build()

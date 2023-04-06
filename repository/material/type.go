@@ -9,6 +9,7 @@ import (
 type MaterialRepository interface {
 	New(courseId string, creatorEmail string, name string) (uuid.UUID, error)
 	Delete(id uuid.UUID) error
+	Get(materialId uuid.UUID) (*material.Material, error)
 	GetAll(courseId string) ([]material.Material, error)
 
 	IsUserContributor(id uuid.UUID, email string) (bool, error)
