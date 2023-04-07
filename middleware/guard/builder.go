@@ -10,7 +10,9 @@ import (
 )
 
 type GuardBuilder struct {
-	GuardMiddleware
+	token.TokenUtil
+	logger.Logger
+	wrapper.WrapperUtil
 }
 
 func NewBuilder(
@@ -19,25 +21,19 @@ func NewBuilder(
 	wrapper wrapper.WrapperUtil,
 ) *GuardBuilder {
 	return &GuardBuilder{
-		GuardMiddleware{
-			Token:       token,
-			Role:        []user.UserRole{},
-			Logger:      logger,
-			WrapperUtil: wrapper,
-		},
+		token,
+		logger,
+		wrapper,
 	}
 }
 
-func (g *GuardBuilder) AddRole(role ...user.UserRole) *GuardBuilder {
-	g.GuardMiddleware.Role = role
-	return g
-}
+func (g *GuardBuilder) Build(role ...user.UserRole) func(http.Handler) http.Handler {
+	handler := &GuardMiddleware{
+		Token:       g.TokenUtil,
+		Role:        role,
+		Logger:      g.Logger,
+		WrapperUtil: g.WrapperUtil,
+	}
 
-func (g *GuardBuilder) Build() func(http.Handler) http.Handler {
-	return g.GuardMiddleware.Handle
-}
-
-func (g *GuardBuilder) BuildSimple(role user.UserRole) func(http.Handler) http.Handler {
-	g.AddRole(role)
-	return g.Build()
+	return handler.Handle
 }

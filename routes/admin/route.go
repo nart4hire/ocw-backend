@@ -14,7 +14,7 @@ type AdminRoutes struct {
 
 func (adr AdminRoutes) Register(r chi.Router) {
 	r.Route("/admin", func(r chi.Router) {
-		r.Use(adr.GuardBuilder.BuildSimple(user.Admin))
+		r.Use(adr.GuardBuilder.Build(user.Admin))
 
 		r.Get("/user", adr.AdminHandler.GetAllUser)
 		r.Get("/user/{email}", adr.AdminHandler.GetUserByEmail)

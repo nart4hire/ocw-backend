@@ -36,7 +36,7 @@ func (c CourseRoutes) Register(r chi.Router) {
 	})
 
 	r.Route("/course/{id}/material", func(r chi.Router) {
-		r.Use(c.BuildSimple(user.Contributor))
+		r.Use(c.Build(user.Contributor))
 		r.Post("/", c.MaterialHandler.CreateMaterial)
 	})
 }
