@@ -36,5 +36,4 @@ func (q QuizRoutes) Register(r chi.Router) {
 		r.Use(guard)
 		r.Get("/", q.QuizHandler.GetQuizSolution)
 	})
-
 }
