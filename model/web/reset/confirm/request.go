@@ -1,7 +1,7 @@
 package confirm
 
 // Confirm Request Payload
-// @Description Information that should be available when you confirm a password reset
+//	@Description	Information that should be available when you confirm a password reset
 type ConfirmRequestPayload struct {
 	// Web Token that was appended to the link
 	ConfirmToken string

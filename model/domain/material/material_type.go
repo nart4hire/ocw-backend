@@ -10,8 +10,8 @@ import (
 type MaterialType int
 
 const (
-	Video MaterialType = iota
-	Handout
+	Handout MaterialType = iota + 1
+	Video
 	External
 )
 

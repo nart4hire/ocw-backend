@@ -1,11 +1,14 @@
 package material
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
-	materialRepo "gitlab.informatika.org/ocw/ocw-backend/model/domain/material"
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
+	materialDomain "gitlab.informatika.org/ocw/ocw-backend/model/domain/material"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/material"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
+	"gorm.io/gorm"
 )
 
 type MaterialServiceImpl struct {
@@ -14,32 +17,49 @@ type MaterialServiceImpl struct {
 	material.MaterialRepository
 }
 
-func (m MaterialServiceImpl) Create(courseId string, user user.User, contents []materialRepo.Content) (uuid.UUID, error) {
+func (m MaterialServiceImpl) Get(courseId string) ([]materialDomain.Material, error) {
+	materials, err := m.MaterialRepository.GetAll(courseId)
+	return materials, err
+}
+
+func (m MaterialServiceImpl) GetById(materialId uuid.UUID) (*materialDomain.Material, error) {
+	material, err := m.MaterialRepository.Get(materialId)
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, web.NewResponseErrorFromError(err, "ID_NOT_FOUND")
+	}
+
+	return material, err
+}
+
+func (m MaterialServiceImpl) Create(courseId string, email string, name string) (uuid.UUID, error) {
 	isSuccess := false
 	tx := m.TransactionBuilder.Build()
 
 	tx.Begin()
 	defer tx.Auto(&isSuccess)
 
-	id, err := m.MaterialRepository.NewWithTransaction(tx, courseId, user.Email)
+	id, err := m.MaterialRepository.NewWithTransaction(tx, courseId, email, name)
 
 	if err != nil {
 		return uuid.Nil, err
-	}
-
-	for _, content := range contents {
-		_, err = m.MaterialContentRepository.NewWithTransaction(tx, id, content.Type, content.Link)
-
-		if err != nil {
-			return uuid.Nil, err
-		}
 	}
 
 	isSuccess = true
 	return id, err
 }
 
-func (m MaterialServiceImpl) Delete(materialId uuid.UUID, user user.User) error {
+func (m MaterialServiceImpl) Delete(materialId uuid.UUID, email string) error {
 	// TODO: Pengecekan user apakah kontributor course bukan
+	_, err := m.MaterialRepository.IsUserContributor(materialId, email)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return web.NewResponseError("User is not the owner of material", "NOT_OWNER")
+		}
+
+		return err
+	}
+
 	return m.MaterialRepository.Delete(materialId)
 }

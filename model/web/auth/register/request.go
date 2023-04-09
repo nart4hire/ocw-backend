@@ -1,7 +1,7 @@
 package register
 
 // Register Request Payload
-// @Description Information that should be available when do a registration process
+//	@Description	Information that should be available when do a registration process
 type RegisterRequestPayload struct {
 	// User Email
 	Email string `json:"email" validate:"required,email" example:"someone@example.com"`

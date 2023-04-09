@@ -3,19 +3,19 @@ package course
 import (
 	"errors"
 
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
+	domCourse "gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
-	fupdate "gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/update"
-	mupdate "gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/update"
-	cupdate "gitlab.informatika.org/ocw/ocw-backend/model/web/course/update"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 	"gorm.io/gorm"
 )
 
 // TODO: Authorization Checks
 
-func (c CourseServiceImpl) UpdateCourse(payload cupdate.UpdateCourseRequestPayload) error {
+func (c CourseServiceImpl) UpdateCourse(payload course.UpdateCourseRequestPayload) error {
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.UpdateCourseToken, token.Access)
 
@@ -44,7 +44,7 @@ func (c CourseServiceImpl) UpdateCourse(payload cupdate.UpdateCourseRequestPaylo
 		payload.MajorID = major.ID
 	}
 
-	err = c.CourseRepository.UpdateCourse(course.Course{
+	err = c.CourseRepository.UpdateCourse(domCourse.Course{
 		ID: payload.ID,
 		Name: payload.Name,
 		Major_id: payload.MajorID,
@@ -65,7 +65,7 @@ func (c CourseServiceImpl) UpdateCourse(payload cupdate.UpdateCourseRequestPaylo
 	return nil
 }
 
-func (c CourseServiceImpl) UpdateMajor(payload mupdate.UpdateMajorRequestPayload) error {
+func (c CourseServiceImpl) UpdateMajor(payload major.UpdateMajorRequestPayload) error {
 	
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.UpdateMajorToken, token.Access)
@@ -95,7 +95,7 @@ func (c CourseServiceImpl) UpdateMajor(payload mupdate.UpdateMajorRequestPayload
 		payload.FacultyID = faculty.ID
 	}
 	
-	err = c.CourseRepository.UpdateMajor(course.Major{
+	err = c.CourseRepository.UpdateMajor(domCourse.Major{
 		ID: payload.ID,
 		Name: payload.Name,
 		Fac_id: payload.FacultyID,
@@ -113,7 +113,7 @@ func (c CourseServiceImpl) UpdateMajor(payload mupdate.UpdateMajorRequestPayload
 	return nil
 }
 
-func (c CourseServiceImpl) UpdateFaculty(payload fupdate.UpdateFacultyRequestPayload) error {
+func (c CourseServiceImpl) UpdateFaculty(payload faculty.UpdateFacultyRequestPayload) error {
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.UpdateFacultyToken, token.Access)
 
@@ -127,7 +127,7 @@ func (c CourseServiceImpl) UpdateFaculty(payload fupdate.UpdateFacultyRequestPay
 		return web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
 	}
 	
-	err = c.CourseRepository.UpdateFaculty(course.Faculty{
+	err = c.CourseRepository.UpdateFaculty(domCourse.Faculty{
 		ID: payload.ID,
 		Name: payload.Name,
 		Abbreviation: payload.Abbreviation,

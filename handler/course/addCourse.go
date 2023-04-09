@@ -7,12 +7,27 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/add"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 )
 
+// Index godoc
+//
+//	@Summary		Add a new course
+//	@Description	Add a new course with the given details
+//	@Tags			course
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string							true	"AddCourseToken"
+//	@Param			data			body		course.AddCourseRequestPayload	true	"Add Course payload"
+//	@Success		200				{object}	web.BaseResponse				"Success"
+//	@Failure		400				{object}	web.BaseResponse				"Bad Request"
+//	@Failure		401				{object}	web.BaseResponse				"Unauthorized"
+//	@Failure		403				{object}	web.BaseResponse				"Forbidden"
+//	@Failure		422				{object}	web.BaseResponse				"Unprocessable Entity"
+//	@Failure		500				{object}	web.BaseResponse				"Internal Server Error"
+//	@Router			/course [put]
 func (c CourseHandlerImpl) AddCourse(w http.ResponseWriter, r *http.Request) {
-	payload := add.AddCourseRequestPayload{}
-	validate := validator.New()
+	payload := course.AddCourseRequestPayload{}
 
 	// Validate payload
 	if r.Header.Get("Content-Type") != "application/json" {
@@ -27,6 +42,7 @@ func (c CourseHandlerImpl) AddCourse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	validate := validator.New()
 	if err := validate.Struct(payload); err != nil {
 		if _, ok := err.(*validator.InvalidValidationError); ok {
 			payload := c.WrapperUtil.ErrorResponseWrap(err.Error(), nil)

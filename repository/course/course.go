@@ -33,6 +33,20 @@ func (repo CourseRepositoryImpl) IsCourseExist(id string) (bool, error) {
 	return true, nil
 }
 
+func (repo CourseRepositoryImpl) IsUserCourseContributor(id string, email string) (bool, error) {
+	err := repo.db.Where("course_id = ? AND email = ?").Find(&course.Course{}).Error
+
+	if err == nil {
+		return true, nil
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
+
+	return false, err
+}
+
 func (repo CourseRepositoryImpl) IsMajorExist(id uuid.UUID) (bool, error) {
 	_, err := repo.GetMajor(id)
 
@@ -66,10 +80,18 @@ func (repo CourseRepositoryImpl) AddCourse(course course.Course) error {
 }
 
 func (repo CourseRepositoryImpl) AddMajor(major course.Major) error {
+	if id, err := uuid.NewUUID(); err != nil {
+		major.ID = id
+	}
+
 	return repo.db.Create(&major).Error
 }
 
 func (repo CourseRepositoryImpl) AddFaculty(faculty course.Faculty) error {
+	if id, err := uuid.NewUUID(); err != nil {
+		faculty.ID = id
+	}
+
 	return repo.db.Create(&faculty).Error
 }
 
@@ -141,7 +163,7 @@ func (repo CourseRepositoryImpl) GetAllFaculty() ([]course.Faculty, error) {
 
 func (repo CourseRepositoryImpl) GetAllCourseByMajor(id uuid.UUID) ([]course.Course, error) {
 	var result []course.Course
-	err := repo.db.InnerJoins("Major", repo.db.Where(&course.Major{ID: id})).Find(&result).Error
+	err := repo.db.Where("major_id = ?", id).Find(&result).Error
 
 	if err != nil {
 		return nil, err
@@ -152,7 +174,11 @@ func (repo CourseRepositoryImpl) GetAllCourseByMajor(id uuid.UUID) ([]course.Cou
 
 func (repo CourseRepositoryImpl) GetAllCourseByFaculty(id uuid.UUID) ([]course.Course, error) {
 	var result []course.Course
-	err := repo.db.InnerJoins("Faculty", repo.db.Where(&course.Faculty{ID: id})).InnerJoins("Major").Find(&result).Error
+	err := repo.db.
+		Joins("JOIN major ON major.id = course.major_id").
+		Joins("JOIN faculty ON faculty.id = major.fac_id").
+		Where("faculty.id = ?", id).
+		Find(&result).Error
 
 	if err != nil {
 		return nil, err
@@ -163,7 +189,7 @@ func (repo CourseRepositoryImpl) GetAllCourseByFaculty(id uuid.UUID) ([]course.C
 
 func (repo CourseRepositoryImpl) GetAllMajorByFaculty(id uuid.UUID) ([]course.Major, error) {
 	var result []course.Major
-	err := repo.db.InnerJoins("Faculty", repo.db.Where(&course.Faculty{ID: id})).Find(&result).Error
+	err := repo.db.Where("fac_id = ?", id).Find(&result).Error
 
 	if err != nil {
 		return nil, err

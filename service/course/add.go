@@ -3,17 +3,18 @@ package course
 import (
 	"errors"
 
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
+	"github.com/google/uuid"
+	domCourse "gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
-	cadd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/add"
-	fadd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/add"
-	madd "gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/add"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major"
 	"gorm.io/gorm"
 )
 
-func (c CourseServiceImpl) AddCourse(payload cadd.AddCourseRequestPayload) error {
+func (c CourseServiceImpl) AddCourse(payload course.AddCourseRequestPayload) error {
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.AddCourseToken, token.Access)
 
@@ -53,7 +54,7 @@ func (c CourseServiceImpl) AddCourse(payload cadd.AddCourseRequestPayload) error
 		return web.NewResponseError("Course ID Already Exists", web.IDExists)
 	}
 
-	err = c.CourseRepository.AddCourse(course.Course{
+	err = c.CourseRepository.AddCourse(domCourse.Course{
 		ID:           payload.ID,
 		Name:         payload.Name,
 		Major_id:     payload.MajorID,
@@ -70,7 +71,7 @@ func (c CourseServiceImpl) AddCourse(payload cadd.AddCourseRequestPayload) error
 	return nil
 }
 
-func (c CourseServiceImpl) AddMajor(payload madd.AddMajorRequestPayload) error {
+func (c CourseServiceImpl) AddMajor(payload major.AddMajorRequestPayload) error {
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.AddMajorToken, token.Access)
 
@@ -99,7 +100,14 @@ func (c CourseServiceImpl) AddMajor(payload madd.AddMajorRequestPayload) error {
 		payload.FacultyID = faculty.ID
 	}
 
-	err = c.CourseRepository.AddMajor(course.Major{
+	id, err := uuid.NewUUID()
+
+	if err != nil {
+		return err
+	}
+
+	err = c.CourseRepository.AddMajor(domCourse.Major{
+		ID:           id,
 		Name:         payload.Name,
 		Fac_id:       payload.FacultyID,
 		Abbreviation: payload.Abbreviation,
@@ -113,7 +121,7 @@ func (c CourseServiceImpl) AddMajor(payload madd.AddMajorRequestPayload) error {
 	return nil
 }
 
-func (c CourseServiceImpl) AddFaculty(payload fadd.AddFacultyRequestPayload) error {
+func (c CourseServiceImpl) AddFaculty(payload faculty.AddFacultyRequestPayload) error {
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.AddFacultyToken, token.Access)
 
@@ -124,10 +132,17 @@ func (c CourseServiceImpl) AddFaculty(payload fadd.AddFacultyRequestPayload) err
 
 	// Unauthorized Role
 	if claim.Role != user.Admin {
-		return web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
+		return web.NewResponseError("user is not allowed to access this resources", web.UnauthorizedAccess)
 	}
-	
-	err = c.CourseRepository.AddFaculty(course.Faculty{
+
+	id, err := uuid.NewUUID()
+
+	if err != nil {
+		return err
+	}
+
+	err = c.CourseRepository.AddFaculty(domCourse.Faculty{
+		ID:           id,
 		Name:         payload.Name,
 		Abbreviation: payload.Abbreviation,
 	})

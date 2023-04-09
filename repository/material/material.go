@@ -3,27 +3,48 @@ package material
 import (
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/material"
+	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
 	"gitlab.informatika.org/ocw/ocw-backend/repository/transaction"
+	"gorm.io/gorm"
 )
 
 type MaterialRepositoryImpl struct {
 	builder transaction.TransactionBuilder
+	db      *gorm.DB
 }
 
 func NewMaterial(
 	builder transaction.TransactionBuilder,
+	db db.Database,
 ) *MaterialRepositoryImpl {
-	return &MaterialRepositoryImpl{builder}
+	return &MaterialRepositoryImpl{builder, db.Connect()}
 }
 
-func (m MaterialRepositoryImpl) New(courseId string, creatorEmail string) (uuid.UUID, error) {
-	return m.NewWithTransaction(m.builder.Build(), courseId, creatorEmail)
+func (m MaterialRepositoryImpl) Get(materialId uuid.UUID) (*material.Material, error) {
+	res := &material.Material{}
+	err := m.db.Preload("Contents").Where("id = ?", materialId).Find(res).Error
+	return res, err
 }
 
-func (m MaterialRepositoryImpl) NewWithTransaction(tx transaction.Transaction, courseId string, creatorEmail string) (uuid.UUID, error) {
+func (m MaterialRepositoryImpl) IsUserContributor(id uuid.UUID, email string) (bool, error) {
+	err := m.db.Where("creator_email = ? AND id = ?", email, id).Find(&material.Material{}).Error
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (m MaterialRepositoryImpl) New(courseId string, creatorEmail string, name string) (uuid.UUID, error) {
+	return m.NewWithTransaction(m.builder.Build(), courseId, creatorEmail, name)
+}
+
+func (m MaterialRepositoryImpl) NewWithTransaction(tx transaction.Transaction, courseId string, creatorEmail string, name string) (uuid.UUID, error) {
 	materialData := &material.Material{
+		ID:           uuid.New(),
 		CourseId:     courseId,
 		CreatorEmail: creatorEmail,
+		Name:         name,
 	}
 
 	err := tx.GetTransaction().Create(materialData).Error
@@ -32,7 +53,7 @@ func (m MaterialRepositoryImpl) NewWithTransaction(tx transaction.Transaction, c
 		return uuid.Nil, err
 	}
 
-	return materialData.Id, nil
+	return materialData.ID, nil
 }
 
 func (m MaterialRepositoryImpl) Delete(id uuid.UUID) error {
@@ -49,7 +70,12 @@ func (m MaterialRepositoryImpl) GetAll(courseId string) ([]material.Material, er
 
 func (m MaterialRepositoryImpl) GetAllWithTransaction(tx transaction.Transaction, courseId string) ([]material.Material, error) {
 	result := []material.Material{}
-	err := tx.GetTransaction().Joins("Contents").Where("CourseId = ?", courseId).Find(&result).Error
+	trx := tx.GetTransaction()
+	err := trx.
+		Model(&material.Material{}).
+		Preload("Contents").
+		Where("course_id = ?", courseId).
+		Find(&result).Error
 
 	return result, err
 }

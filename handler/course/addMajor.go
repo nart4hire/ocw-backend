@@ -7,11 +7,27 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major/add"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major"
 )
 
+// Index godoc
+//
+//	@Summary		Add Major
+//	@Description	Add a new major to a faculty
+//	@Tags			course
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string							true	"AddMajorToken"
+//	@Param			data			body		major.AddMajorRequestPayload	true	"Add Major payload"
+//	@Success		200				{object}	web.BaseResponse				"Success"
+//	@Failure		400				{object}	web.BaseResponse				"Bad Request"
+//	@Failure		401				{object}	web.BaseResponse				"Unauthorized"
+//	@Failure		403				{object}	web.BaseResponse				"Forbidden"
+//	@Failure		422				{object}	web.BaseResponse				"Unprocessable Entity"
+//	@Failure		500				{object}	web.BaseResponse				"Internal Server Error"
+//	@Router			/course/major [put]
 func (c CourseHandlerImpl) AddMajor(w http.ResponseWriter, r *http.Request) {
-	payload := add.AddMajorRequestPayload{}
+	payload := major.AddMajorRequestPayload{}
 	validate := validator.New()
 
 	// Validate payload

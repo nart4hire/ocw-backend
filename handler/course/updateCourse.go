@@ -5,13 +5,31 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/update"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 )
 
+// Index godoc
+//
+//	@Summary		Update Course
+//	@Description	Update an existing course.
+//	@Tags			course
+//	@Accept			json
+//	@Produce		json
+//	@Param			id				path		int									true	"Course ID"
+//	@Param			Authorization	header		string								true	"UpdateCourseToken"
+//	@Param			data			body		course.UpdateCourseRequestPayload	true	"Update Course Payload"
+//	@Success		200				{object}	web.BaseResponse					"Success"
+//	@Failure		400				{object}	web.BaseResponse					"Bad Request"
+//	@Failure		401				{object}	web.BaseResponse					"Unauthorized"
+//	@Failure		403				{object}	web.BaseResponse					"Forbidden"
+//	@Failure		422				{object}	web.BaseResponse					"Unprocessable Entity"
+//	@Failure		500				{object}	web.BaseResponse					"Internal Server Error"
+//	@Router			/course/{id} [patch]
 func (c CourseHandlerImpl) UpdateCourse(w http.ResponseWriter, r *http.Request) {
-	payload := update.UpdateCourseRequestPayload{}
+	payload := course.UpdateCourseRequestPayload{}
 	validate := validator.New()
 
 	// Validate payload
@@ -64,6 +82,7 @@ func (c CourseHandlerImpl) UpdateCourse(w http.ResponseWriter, r *http.Request) 
 	}
 
 	payload.UpdateCourseToken = token[1]
+	payload.ID = chi.URLParam(r, "id")
 	err := c.CourseService.UpdateCourse(payload)
 
 	if err != nil {

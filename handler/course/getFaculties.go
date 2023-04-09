@@ -6,7 +6,16 @@ import (
 
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 )
-
+// Index godoc
+//
+//	@Summary		Get all faculties
+//	@Description	Retrieves a list of all faculties
+//	@Tags			course
+//	@Produce		json
+//	@Success		200	{object}	web.BaseResponse	"OK"
+//	@Failure		401	{object}	web.BaseResponse	"Unauthorized"
+//	@Failure		500	{object}	web.BaseResponse	"Internal Server Error"
+//	@Router			/course/faculty [get]
 func (c CourseHandlerImpl) GetFaculties(w http.ResponseWriter, r *http.Request) {
 	packet, err := c.CourseService.GetAllFaculty()
 

@@ -7,11 +7,27 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty/add"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty"
 )
 
+// Index godoc
+//
+//	@Summary		Add a new faculty
+//	@Description	Adds a new faculty with the given details
+//	@Tags			course
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string								true	"AddFacultyToken"
+//	@Param			data			body		faculty.AddFacultyRequestPayload	true	"Add Faculty payload"
+//	@Success		200				{object}	web.BaseResponse					"Success"
+//	@Failure		400				{object}	web.BaseResponse					"Bad Request"
+//	@Failure		401				{object}	web.BaseResponse					"Unauthorized"
+//	@Failure		403				{object}	web.BaseResponse					"Forbidden"
+//	@Failure		422				{object}	web.BaseResponse					"Unprocessable Entity"
+//	@Failure		500				{object}	web.BaseResponse					"Internal Server Error"
+//	@Router			/course/faculty [put]
 func (c CourseHandlerImpl) AddFaculty(w http.ResponseWriter, r *http.Request) {
-	payload := add.AddFacultyRequestPayload{}
+	payload := faculty.AddFacultyRequestPayload{}
 	validate := validator.New()
 
 	// Validate payload

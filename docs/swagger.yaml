@@ -56,6 +56,112 @@ definitions:
     - password
     - password_validation
     type: object
+  course.AddCourseRequestPayload:
+    description: Information that should be available when you add a course
+    properties:
+      abbreviation:
+        description: Course Name Abbreviation
+        type: string
+      addCourseToken:
+        description: Web Token that was appended to the link
+        type: string
+      description:
+        description: Course Description (Can be left empty)
+        type: string
+      email:
+        description: Contributor Email
+        example: someone@example.com
+        type: string
+      id:
+        description: Course ID
+        type: string
+      majabbr:
+        description: Course Major Abbreviation
+        type: string
+      major_id:
+        description: Major Id, will be set by the server
+        type: string
+      name:
+        description: Course Name
+        type: string
+    required:
+    - abbreviation
+    - email
+    - id
+    - name
+    type: object
+  course.UpdateCourseRequestPayload:
+    description: Information that should be available when you add a course
+    properties:
+      abbreviation:
+        description: Course Name Abbreviation
+        type: string
+      description:
+        description: Course Description (Can be left empty)
+        type: string
+      email:
+        description: Contributor Email
+        example: someone@example.com
+        type: string
+      id:
+        description: Course ID, Provided by query
+        type: string
+      lecturer:
+        description: Course Lecturer
+        type: string
+      majabbr:
+        description: Course Major Abbreviation
+        type: string
+      major_id:
+        description: Major Id, will be set by the server
+        type: string
+      name:
+        description: Course Name
+        type: string
+      updateCourseToken:
+        description: Web Token that was appended to the link
+        type: string
+    required:
+    - abbreviation
+    - email
+    - lecturer
+    - name
+    type: object
+  faculty.AddFacultyRequestPayload:
+    description: Information that should be available when you add a faculty
+    properties:
+      abbreviation:
+        description: Faculty Name Abbreviation
+        type: string
+      faculty_token:
+        description: Web Token that was appended to the link
+        type: string
+      name:
+        description: Faculty Name
+        type: string
+    required:
+    - abbreviation
+    - name
+    type: object
+  faculty.UpdateFacultyRequestPayload:
+    description: Information that should be available when you update a faculty
+    properties:
+      abbreviation:
+        description: Faculty Name Abbreviation
+        type: string
+      id:
+        description: Faculty ID, Provided by Query
+        type: string
+      name:
+        description: Faculty Name
+        type: string
+      updateFacultyToken:
+        description: Web Token that was appended to the link
+        type: string
+    required:
+    - abbreviation
+    - name
+    type: object
   login.LoginRequestPayload:
     description: Information that should be available when do a login process
     properties:
@@ -79,6 +185,200 @@ definitions:
         type: string
       refresh_token:
         description: Token that used to generate new access token
+        type: string
+    type: object
+  major.AddMajorRequestPayload:
+    description: Information that should be available when you add a major
+    properties:
+      abbreviation:
+        description: Major Name Abbreviation
+        type: string
+      facabbr:
+        description: Major Faculty Abbreviation
+        type: string
+      faculty_id:
+        description: Faculty Id, will be set by the server
+        type: string
+      major_token:
+        description: Web Token that was appended to the link
+        type: string
+      name:
+        description: Major Name
+        type: string
+    required:
+    - abbreviation
+    - name
+    type: object
+  major.UpdateMajorRequestPayload:
+    description: Information that should be available when you update a major
+    properties:
+      abbreviation:
+        description: Major Name Abbreviation
+        type: string
+      facabbr:
+        description: Major Faculty Abbreviation
+        type: string
+      faculty_id:
+        description: Faculty Id, will be set by the server
+        type: string
+      id:
+        description: Major ID, provided by query
+        type: string
+      name:
+        description: Major Name
+        type: string
+      updateMajorToken:
+        description: Web Token that was appended to the link
+        type: string
+    required:
+    - abbreviation
+    - name
+    type: object
+  material.Content:
+    properties:
+      id:
+        type: string
+      link:
+        type: string
+      material_id:
+        type: string
+      type:
+        $ref: '#/definitions/material.MaterialType'
+    type: object
+  material.CreateMaterialRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  material.CreateMaterialResponse:
+    properties:
+      material_id:
+        type: string
+    type: object
+  material.Material:
+    properties:
+      contents:
+        items:
+          $ref: '#/definitions/material.Content'
+        type: array
+      course_id:
+        type: string
+      creator_email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      week:
+        type: integer
+    type: object
+  material.MaterialType:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - Handout
+    - Video
+    - External
+  material.NewContentRequest:
+    properties:
+      link:
+        type: string
+      type:
+        $ref: '#/definitions/material.MaterialType'
+    required:
+    - type
+    type: object
+  material.NewContentResponse:
+    properties:
+      upload_link:
+        type: string
+    type: object
+  quiz.AnswerOption:
+    properties:
+      answer:
+        type: string
+      id:
+        type: string
+      is_solution:
+        type: boolean
+      media_id:
+        items:
+          type: string
+        type: array
+    type: object
+  quiz.FinishQuizPayload:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/quiz.Response'
+        type: array
+    type: object
+  quiz.Quiz:
+    properties:
+      course_id:
+        type: string
+      creator_email:
+        type: string
+      id:
+        type: string
+      nama:
+        type: string
+    type: object
+  quiz.QuizDetail:
+    properties:
+      course_id:
+        type: string
+      description:
+        type: string
+      help:
+        type: string
+      id:
+        type: string
+      media:
+        items:
+          $ref: '#/definitions/quiz.QuizMedia'
+        type: array
+      name:
+        type: string
+      problems:
+        items:
+          $ref: '#/definitions/quiz.QuizProblem'
+        type: array
+    type: object
+  quiz.QuizMedia:
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  quiz.QuizProblem:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/quiz.AnswerOption'
+        type: array
+      id:
+        type: string
+      media_id:
+        items:
+          type: string
+        type: array
+      question:
+        type: string
+    type: object
+  quiz.Response:
+    properties:
+      answer_id:
+        type: string
+      problem_id:
         type: string
     type: object
   refresh.RefreshResponsePayload:
@@ -435,6 +735,916 @@ paths:
       summary: Send Email Verification
       tags:
       - auth
+  /course:
+    get:
+      description: Retrieve a list of all available courses.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get all courses
+      tags:
+      - course
+    put:
+      consumes:
+      - application/json
+      description: Add a new course with the given details
+      parameters:
+      - description: AddCourseToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add Course payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/course.AddCourseRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add a new course
+      tags:
+      - course
+  /course/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a course with the specified ID
+      parameters:
+      - description: Course ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: DeleteCourseToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete course by ID
+      tags:
+      - course
+    get:
+      description: Retrieve a course by ID
+      parameters:
+      - description: ID of the course to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get a course by ID
+      tags:
+      - course
+    patch:
+      consumes:
+      - application/json
+      description: Update an existing course.
+      parameters:
+      - description: Course ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UpdateCourseToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update Course Payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/course.UpdateCourseRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update Course
+      tags:
+      - course
+  /course/{id}/material:
+    post:
+      consumes:
+      - application/json
+      description: Add new material
+      parameters:
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Material Request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/material.CreateMaterialRequest'
+      - description: Course id
+        example: IF3230
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/material.CreateMaterialResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add Material
+      tags:
+      - content
+  /course/{id}/materials:
+    get:
+      consumes:
+      - application/json
+      description: Get materials
+      parameters:
+      - description: Course id
+        example: IF3270
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/material.Material'
+                  type: array
+              type: object
+      summary: Get materials
+      tags:
+      - content
+  /course/{id}/quiz:
+    get:
+      consumes:
+      - application/json
+      description: Get all cours
+      parameters:
+      - description: Course id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/quiz.Quiz'
+                  type: array
+              type: object
+      summary: Get Course quiz
+      tags:
+      - course
+  /course/faculty:
+    get:
+      description: Retrieves a list of all faculties
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get all faculties
+      tags:
+      - course
+    put:
+      consumes:
+      - application/json
+      description: Adds a new faculty with the given details
+      parameters:
+      - description: AddFacultyToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add Faculty payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/faculty.AddFacultyRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add a new faculty
+      tags:
+      - course
+  /course/faculty/{id}:
+    get:
+      description: Retrieve faculty data by UUID
+      parameters:
+      - description: Faculty ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get faculty by ID
+      tags:
+      - course
+    patch:
+      description: Update a faculty with the given ID
+      parameters:
+      - description: Faculty ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Faculty Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/faculty.UpdateFacultyRequestPayload'
+      - description: UpdateFacultyToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update a faculty
+      tags:
+      - course
+  /course/faculty/courses/{id}:
+    get:
+      description: Retrieve all courses that belong to the faculty with the given
+        ID
+      parameters:
+      - description: Faculty ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get all courses by faculty ID
+      tags:
+      - course
+  /course/faculty/majors/{id}:
+    get:
+      description: Returns a list of majors associated with the given faculty ID
+      parameters:
+      - description: Faculty ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get majors by faculty ID
+      tags:
+      - course
+  /course/major:
+    get:
+      description: Get a list of all majors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get all majors
+      tags:
+      - course
+    put:
+      consumes:
+      - application/json
+      description: Add a new major to a faculty
+      parameters:
+      - description: AddMajorToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add Major payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/major.AddMajorRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add Major
+      tags:
+      - course
+  /course/major/{id}:
+    get:
+      description: Get a major by ID
+      parameters:
+      - description: Major ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get a major by ID
+      tags:
+      - course
+    put:
+      consumes:
+      - application/json
+      description: Update a major with the given ID
+      parameters:
+      - description: Major ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: UpdateMajorToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Update Major payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/major.UpdateMajorRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update a major
+      tags:
+      - course
+  /course/major/courses/{id}:
+    get:
+      description: Retrieve all courses related to a major
+      parameters:
+      - description: Major ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get courses by major
+      tags:
+      - course
+  /material/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete material
+      parameters:
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Material id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete material
+      tags:
+      - content
+    get:
+      consumes:
+      - application/json
+      description: Get material detail
+      parameters:
+      - description: Material id
+        example: IF3270
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/material.Material'
+              type: object
+      summary: Get material detail
+      tags:
+      - content
+    post:
+      consumes:
+      - application/json
+      description: Add content of material
+      parameters:
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add content request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/material.NewContentRequest'
+      - description: Material id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/material.NewContentResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add Content
+      tags:
+      - content
+  /material/{id}/content/{content-id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete content of material
+      parameters:
+      - description: Access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Material id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Content id
+        format: uuid
+        in: path
+        name: content-id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete Content
+      tags:
+      - content
+  /quiz/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Quiz Detail
+      parameters:
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/quiz.Quiz'
+              type: object
+      summary: Get Quiz Detail
+      tags:
+      - quiz
+  /quiz/{id}/solution:
+    get:
+      consumes:
+      - application/json
+      description: Take a quiz
+      parameters:
+      - description: Authenticate User (any role)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/quiz.QuizDetail'
+              type: object
+      summary: Get Quiz Solution
+      tags:
+      - quiz
+  /quiz/{id}/take:
+    post:
+      consumes:
+      - application/json
+      description: Finish quiz session and get the score
+      parameters:
+      - description: Authenticate User (any role)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Quiz Finish payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/quiz.FinishQuizPayload'
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/quiz.QuizDetail'
+              type: object
+      summary: Finish Quiz
+      tags:
+      - quiz
   /reset/confirm:
     put:
       description: Do confirmation to reset password
