@@ -132,7 +132,7 @@ func (c CourseServiceImpl) AddFaculty(payload faculty.AddFacultyRequestPayload) 
 
 	// Unauthorized Role
 	if claim.Role != user.Admin {
-		return web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
+		return web.NewResponseError("user is not allowed to access this resources", web.UnauthorizedAccess)
 	}
 
 	id, err := uuid.NewUUID()

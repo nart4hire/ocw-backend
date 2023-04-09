@@ -17,7 +17,7 @@ func (c MaterialRoutes) Register(r chi.Router) {
 		r.Get("/", c.DetailMaterial)
 
 		r.Route("/", func(r chi.Router) {
-			r.Use(c.GuardBuilder.BuildSimple(user.Contributor))
+			r.Use(c.GuardBuilder.Build(user.Contributor))
 
 			// Add
 			r.Post("/content", c.AddContent)

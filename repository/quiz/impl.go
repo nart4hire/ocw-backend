@@ -86,3 +86,12 @@ func (q *QuizRepositoryImpl) GetAllTake(quizId uuid.UUID, userEmail string) ([]q
 
 	return result, err
 }
+
+func (q *QuizRepositoryImpl) GetLastTake(quizId uuid.UUID, userEmail string) (*quiz.QuizTake, error) {
+	result := &quiz.QuizTake{}
+	err := q.db.
+		Where("quiz_id = ? AND email = ?", quizId, userEmail).
+		Last(result).Error
+
+	return result, err
+}

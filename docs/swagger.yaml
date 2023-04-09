@@ -298,6 +298,26 @@ definitions:
       upload_link:
         type: string
     type: object
+  quiz.AnswerOption:
+    properties:
+      answer:
+        type: string
+      id:
+        type: string
+      is_solution:
+        type: boolean
+      media_id:
+        items:
+          type: string
+        type: array
+    type: object
+  quiz.FinishQuizPayload:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/quiz.Response'
+        type: array
+    type: object
   quiz.Quiz:
     properties:
       course_id:
@@ -306,7 +326,59 @@ definitions:
         type: string
       id:
         type: string
+      nama:
+        type: string
+    type: object
+  quiz.QuizDetail:
+    properties:
+      course_id:
+        type: string
+      description:
+        type: string
+      help:
+        type: string
+      id:
+        type: string
+      media:
+        items:
+          $ref: '#/definitions/quiz.QuizMedia'
+        type: array
       name:
+        type: string
+      problems:
+        items:
+          $ref: '#/definitions/quiz.QuizProblem'
+        type: array
+    type: object
+  quiz.QuizMedia:
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      url:
+        type: string
+    type: object
+  quiz.QuizProblem:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/quiz.AnswerOption'
+        type: array
+      id:
+        type: string
+      media_id:
+        items:
+          type: string
+        type: array
+      question:
+        type: string
+    type: object
+  quiz.Response:
+    properties:
+      answer_id:
+        type: string
+      problem_id:
         type: string
     type: object
   refresh.RefreshResponsePayload:
@@ -1393,9 +1465,7 @@ paths:
             - $ref: '#/definitions/web.BaseResponse'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/material.Material'
-                  type: array
+                  $ref: '#/definitions/material.Material'
               type: object
       summary: Get material detail
       tags:
@@ -1503,6 +1573,76 @@ paths:
                   $ref: '#/definitions/quiz.Quiz'
               type: object
       summary: Get Quiz Detail
+      tags:
+      - quiz
+  /quiz/{id}/solution:
+    get:
+      consumes:
+      - application/json
+      description: Take a quiz
+      parameters:
+      - description: Authenticate User (any role)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/quiz.QuizDetail'
+              type: object
+      summary: Get Quiz Solution
+      tags:
+      - quiz
+  /quiz/{id}/take:
+    post:
+      consumes:
+      - application/json
+      description: Finish quiz session and get the score
+      parameters:
+      - description: Authenticate User (any role)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Quiz Finish payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/quiz.FinishQuizPayload'
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/quiz.QuizDetail'
+              type: object
+      summary: Finish Quiz
       tags:
       - quiz
   /reset/confirm:

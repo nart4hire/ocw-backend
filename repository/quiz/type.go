@@ -12,4 +12,5 @@ type QuizRepository interface {
 	NewTake(quizId uuid.UUID, userEmail string) (uuid.UUID, error)
 	IsActiveTake(quizId uuid.UUID, userEmail string) (bool, error)
 	GetAllTake(quizId uuid.UUID, userEmail string) ([]quiz.QuizTake, error)
+	GetLastTake(quizId uuid.UUID, userEmail string) (*quiz.QuizTake, error)
 }
