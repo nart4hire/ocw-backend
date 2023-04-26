@@ -29,7 +29,7 @@ type UpdateMajorRequestPayload struct {
 	UpdateMajorToken string
 
 	// Major ID, provided by query
-	ID uuid.UUID
+	ID uuid.UUID `json:"-" validate:"required"`
 
 	// Major Name
 	Name string `json:"name" validate:"required"`

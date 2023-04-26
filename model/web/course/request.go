@@ -37,7 +37,7 @@ type DeleteByStringRequestPayload struct {
 	DeleteCourseToken string
 
 	// Course ID, provided by query
-	ID string
+	ID string `json:"-" validate:"required"`
 }
 
 
@@ -45,14 +45,14 @@ type DeleteByStringRequestPayload struct {
 //	@Description	Information that should be available when you get using course id (string)
 type GetByStringRequestPayload struct {
 	// Course ID, provided by query
-	ID string
+	ID string `json:"-" validate:"required"`
 }
 
 // GetUUID Request Payload
 //	@Description	Information that should be available when you get using major/faculty id (string)
 type GetByUUIDRequestPayload struct {
 	// Major/Faculty ID, provided by query
-	ID uuid.UUID
+	ID uuid.UUID `json:"-" validate:"required"`
 }
 
 // UpdateCourse Request Payload
@@ -62,7 +62,7 @@ type UpdateCourseRequestPayload struct {
 	UpdateCourseToken string
 
 	// Course ID, Provided by query
-	ID string `json:"id"`
+	ID string `json:"-" validate:"required"`
 
 	// Course Name
 	Name string `json:"name" validate:"required"`

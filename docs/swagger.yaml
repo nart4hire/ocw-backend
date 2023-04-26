@@ -103,9 +103,6 @@ definitions:
         description: Contributor Email
         example: someone@example.com
         type: string
-      id:
-        description: Course ID, Provided by query
-        type: string
       lecturer:
         description: Course Lecturer
         type: string
@@ -149,9 +146,6 @@ definitions:
       abbreviation:
         description: Faculty Name Abbreviation
         type: string
-      id:
-        description: Faculty ID, Provided by Query
-        type: string
       name:
         description: Faculty Name
         type: string
@@ -161,6 +155,52 @@ definitions:
     required:
     - abbreviation
     - name
+    type: object
+  lesson.AddLessonRequestPayload:
+    description: Information that should be available when you add a lesson
+    properties:
+      addLessonToken:
+        description: Web Token that was appended to the link
+        type: string
+      course_id:
+        description: Course ID
+        type: string
+      description:
+        description: Lesson Description (Can be left empty)
+        type: string
+      name:
+        description: Lesson Name
+        type: string
+      order:
+        description: Lesson Order
+        type: integer
+    required:
+    - course_id
+    - name
+    - order
+    type: object
+  lesson.UpdateLessonRequestPayload:
+    description: Information that should be available when you update a lesson
+    properties:
+      course_id:
+        description: Course ID
+        type: string
+      description:
+        description: Lesson Description (Can be left empty)
+        type: string
+      name:
+        description: Lesson Name
+        type: string
+      order:
+        description: Lesson Order
+        type: integer
+      updateLessonToken:
+        description: Web Token that was appended to the link
+        type: string
+    required:
+    - course_id
+    - name
+    - order
     type: object
   login.LoginRequestPayload:
     description: Information that should be available when do a login process
@@ -220,9 +260,6 @@ definitions:
         type: string
       faculty_id:
         description: Faculty Id, will be set by the server
-        type: string
-      id:
-        description: Major ID, provided by query
         type: string
       name:
         description: Major Name
@@ -297,6 +334,52 @@ definitions:
     properties:
       upload_link:
         type: string
+    type: object
+  materials.AddLessonMaterialsRequestPayload:
+    description: Information that should be available when you add a lesson material
+    properties:
+      addLessonMaterialsToken:
+        description: Web Token that was appended to the link
+        type: string
+      contents:
+        description: Lesson Contents
+        type: string
+      lesson_id:
+        description: Lesson ID
+        type: string
+      material_id:
+        description: Lesson Material ID, optional
+        type: string
+      order:
+        description: Lesson Material Order
+        type: integer
+    required:
+    - contents
+    - lesson_id
+    - order
+    type: object
+  materials.UpdateLessonMaterialsRequestPayload:
+    description: Information that should be available when you update a lesson material
+    properties:
+      contents:
+        description: Lesson Contents
+        type: string
+      lesson_id:
+        description: Lesson ID
+        type: string
+      material_id:
+        description: Lesson Material ID, optional
+        type: string
+      order:
+        description: Lesson Material Order
+        type: integer
+      updateLessonMaterialsToken:
+        description: Web Token that was appended to the link
+        type: string
+    required:
+    - contents
+    - lesson_id
+    - order
     type: object
   quiz.AnswerOption:
     properties:
@@ -1417,6 +1500,361 @@ paths:
       summary: Get courses by major
       tags:
       - course
+  /lesson:
+    put:
+      consumes:
+      - application/json
+      description: Add a new lesson with the given details
+      parameters:
+      - description: AddLessonToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add Lesson payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lesson.AddLessonRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add a new lesson
+      tags:
+      - lesson
+  /lesson/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a lesson with the specified ID
+      parameters:
+      - description: Lesson ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: DeleteLessonToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete lesson by ID
+      tags:
+      - lesson
+    get:
+      description: Retrieve lesson data by UUID
+      parameters:
+      - description: Lesson ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get lesson by ID
+      tags:
+      - lesson
+    patch:
+      description: Update a lesson material with the given ID
+      parameters:
+      - description: Lesson Material ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Lesson Materials Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/materials.UpdateLessonMaterialsRequestPayload'
+      - description: UpdateLessonMaterialsToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update a lesson material
+      tags:
+      - lesson
+  /lesson/course/{id}:
+    get:
+      description: Retrieve lesson data by course ID
+      parameters:
+      - description: Course ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid ID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get lesson by course ID
+      tags:
+      - lesson
+  /lesson/material:
+    put:
+      consumes:
+      - application/json
+      description: Add a new lesson material with the given details
+      parameters:
+      - description: AddLessonMaterialsToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Add Lesson Material payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/materials.AddLessonMaterialsRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Add a new lesson material
+      tags:
+      - lesson
+  /lesson/material/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a lesson material with the specified ID
+      parameters:
+      - description: Lesson Material ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: DeleteLessonMaterialToken
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete lesson material by id
+      tags:
+      - lesson
+    get:
+      description: Retrieve lesson data by UUID
+      parameters:
+      - description: Lesson ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get lesson by ID
+      tags:
+      - lesson
+  /lesson/material/lesson/{id}:
+    get:
+      description: Retrieve lesson materials data by lesson ID
+      parameters:
+      - description: Lesson ID (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "400":
+          description: Invalid UUID provided in request path
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Get lesson materials by lesson ID
+      tags:
+      - lesson
   /material/{id}:
     delete:
       consumes:
