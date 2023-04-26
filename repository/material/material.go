@@ -20,6 +20,12 @@ func NewMaterial(
 	return &MaterialRepositoryImpl{builder, db.Connect()}
 }
 
+func (m MaterialRepositoryImpl) Get(materialId uuid.UUID) (*material.Material, error) {
+	res := &material.Material{}
+	err := m.db.Preload("Contents").Where("id = ?", materialId).Find(res).Error
+	return res, err
+}
+
 func (m MaterialRepositoryImpl) IsUserContributor(id uuid.UUID, email string) (bool, error) {
 	err := m.db.Where("creator_email = ? AND id = ?", email, id).Find(&material.Material{}).Error
 	if err != nil {

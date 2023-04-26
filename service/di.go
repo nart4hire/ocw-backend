@@ -5,13 +5,14 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/service/admin"
 	"gitlab.informatika.org/ocw/ocw-backend/service/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/service/common"
+	"gitlab.informatika.org/ocw/ocw-backend/service/course"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
 	"gitlab.informatika.org/ocw/ocw-backend/service/logger/hooks"
 	"gitlab.informatika.org/ocw/ocw-backend/service/material"
+	"gitlab.informatika.org/ocw/ocw-backend/service/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reporter"
 	"gitlab.informatika.org/ocw/ocw-backend/service/reset"
 	"gitlab.informatika.org/ocw/ocw-backend/service/verification"
-	"gitlab.informatika.org/ocw/ocw-backend/service/course"
 )
 
 var ServiceTestSet = wire.NewSet(
@@ -63,6 +64,12 @@ var ServiceTestSet = wire.NewSet(
 		wire.Struct(new(material.MaterialServiceImpl), "*"),
 		wire.Bind(new(material.MaterialContentService), new(*material.MaterialContentServiceImpl)),
 		wire.Bind(new(material.MaterialService), new(*material.MaterialServiceImpl)),
+	),
+
+	// Quiz service
+	wire.NewSet(
+		wire.Struct(new(quiz.QuizServiceImpl), "*"),
+		wire.Bind(new(quiz.QuizService), new(*quiz.QuizServiceImpl)),
 	),
 )
 

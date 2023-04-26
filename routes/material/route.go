@@ -14,13 +14,17 @@ type MaterialRoutes struct {
 
 func (c MaterialRoutes) Register(r chi.Router) {
 	r.Route("/material/{material-id}", func(r chi.Router) {
-		r.Use(c.GuardBuilder.BuildSimple(user.Contributor))
+		r.Get("/", c.DetailMaterial)
 
-		// Add
-		r.Post("/content", c.AddContent)
+		r.Route("/", func(r chi.Router) {
+			r.Use(c.GuardBuilder.Build(user.Contributor))
 
-		// Delete
-		r.Delete("/", c.DeleteMaterial)
-		r.Delete("/content/{content-id}", c.DeleteContent)
+			// Add
+			r.Post("/content", c.AddContent)
+
+			// Delete
+			r.Delete("/", c.DeleteMaterial)
+			r.Delete("/content/{content-id}", c.DeleteContent)
+		})
 	})
 }
