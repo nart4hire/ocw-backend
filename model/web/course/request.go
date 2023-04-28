@@ -27,7 +27,7 @@ type AddCourseRequestPayload struct {
 	Email string `json:"email" validate:"required,email" example:"someone@example.com"`
 
 	// Course Name Abbreviation
-	Abbreviation string `json:"abbreviation"`
+	Abbreviation string `json:"abbreviation" validate:"required"`
 }
 
 // DeleteCourse Request Payload

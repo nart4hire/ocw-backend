@@ -10,10 +10,6 @@ type QuizRepository interface {
 	GetQuizDetail(quizId uuid.UUID) (*quiz.Quiz, error)
 	UpdateScore(takeId uuid.UUID, score int) error
 	NewTake(quizId uuid.UUID, userEmail string) (uuid.UUID, error)
-	IsUserContributor(id string, email string) (bool, error)
-	NewQuiz(quiz quiz.Quiz) error
-	GetQuizPath(quizId uuid.UUID) (string, error)
-	Delete(quizId uuid.UUID) error 
 	IsActiveTake(quizId uuid.UUID, userEmail string) (bool, error)
 	GetAllTake(quizId uuid.UUID, userEmail string) ([]quiz.QuizTake, error)
 	GetLastTake(quizId uuid.UUID, userEmail string) (*quiz.QuizTake, error)
