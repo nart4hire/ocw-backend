@@ -8,13 +8,13 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
 )
 
-func TestSendMail(t *testing.T) {
+func DisabledTestSendMail(t *testing.T) {
 	smtpClient := smtp.New(&env.Environment{
-		SmtpUsername: "postmaster@bayusamudra.my.id",
-		SmtpPassword: "4868b913c0a48289beb3eccd13a35de4-70c38fed-8afa51c1",
+		SmtpUsername: "",
+		SmtpPassword: "",
 		SmtpIdentity: "",
-		SmtpServer:   "smtp.mailgun.org",
-		SmtpPort:     587,
+		SmtpServer:   "",
+		SmtpPort:     21,
 		SmtpAuthType: "plain",
 	})
 
