@@ -18,6 +18,8 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY --from=build /app/bin/server.app /app
+RUN touch /app/.env
+RUN touch /app/.env.local
 
 STOPSIGNAL SIGKILL
 ENTRYPOINT [ "/app/server.app" ]
