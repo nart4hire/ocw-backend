@@ -8,6 +8,9 @@ type AddCourseRequestPayload struct {
 	// Web Token that was appended to the link
 	AddCourseToken string
 
+	// Course ID
+	ID string `json:"id" validate:"required"`
+
 	// Course Name
 	Name string `json:"name" validate:"required"`
 
