@@ -4,21 +4,35 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/quiz"
+	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	userDomain "gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
+	atoken "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
+	model "gitlab.informatika.org/ocw/ocw-backend/model/web/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/storage"
 	quizRepo "gitlab.informatika.org/ocw/ocw-backend/repository/quiz"
+	"gitlab.informatika.org/ocw/ocw-backend/service/logger"
+	"gitlab.informatika.org/ocw/ocw-backend/utils/env"
+	tokenUtil "gitlab.informatika.org/ocw/ocw-backend/utils/token"
+	"gorm.io/gorm"
 )
 
 type QuizServiceImpl struct {
 	quizRepo.QuizRepository
 	storage.Storage
+	tokenUtil.TokenUtil
+	logger.Logger
+	*env.Environment
 }
 
+// TODO: should be for admins, make ones for users which doesnt expose minio link
 func (q QuizServiceImpl) ListAllQuiz(courseId string) ([]quiz.Quiz, error) {
 	return q.QuizRepository.GetQuizes(courseId)
 }
@@ -175,4 +189,115 @@ func (q QuizServiceImpl) DoFinishQuiz(ctx context.Context, quizId uuid.UUID, ema
 	}
 
 	return data, nil
+}
+
+func (q QuizServiceImpl) isQuizContributor(courseId string, email string) error {
+	_, err := q.QuizRepository.IsUserContributor(courseId, email)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return web.NewResponseError("course and user combination not found", "NOT_OWNER")
+		}
+
+		return err
+	}
+
+	return nil
+}
+
+func (q QuizServiceImpl) NewQuiz(payload model.AddQuizRequestPayload) (*model.LinkResponse, error) {
+	// Validate Role
+	claim, err := q.TokenUtil.Validate(payload.AddQuizToken, atoken.Access)
+
+	// Invalid Token
+	if err != nil {
+		return &model.LinkResponse{}, web.NewResponseErrorFromError(err, web.TokenError)
+	}
+
+	// Unauthorized Role
+	if claim.Role == user.Student {
+		return &model.LinkResponse{}, web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
+	}
+
+	// Validate Ownership
+	if err := q.isQuizContributor(payload.CourseID, claim.Email); err != nil {
+		return &model.LinkResponse{}, err
+	}
+
+	path := fmt.Sprintf("%s/%s.json", q.BucketQuizBasePath, strings.ReplaceAll(uuid.New().String(), "-", ""))
+	uploadLink, err := q.Storage.CreatePutSignedLink(context.Background(), path)
+
+	if err != nil {
+		q.Logger.Error("Some error happened when generate link")
+		q.Logger.Error(err.Error())
+		return &model.LinkResponse{}, err
+	}
+
+	return &model.LinkResponse{UploadLink: uploadLink}, nil
+}
+
+func (q QuizServiceImpl) GetQuiz(payload model.UpdateQuizRequestPayload) (*model.LinkResponse, error) {
+	// Validate Role
+	claim, err := q.TokenUtil.Validate(payload.UpdateQuizToken, atoken.Access)
+
+	// Invalid Token
+	if err != nil {
+		return &model.LinkResponse{}, web.NewResponseErrorFromError(err, web.TokenError)
+	}
+
+	// Unauthorized Role
+	if claim.Role == user.Student {
+		return &model.LinkResponse{}, web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
+	}
+
+	// Get Quiz Detail
+	quiz, err := q.QuizRepository.GetQuizDetail(payload.ID)
+
+	if err != nil {
+		return &model.LinkResponse{}, err
+	}
+
+	// Validate Ownership
+	if err := q.isQuizContributor(quiz.CourseId, claim.Email); err != nil {
+		return &model.LinkResponse{}, err
+	}
+
+	uploadLink, err := q.QuizRepository.GetQuizPath(payload.ID)
+
+	if err != nil {
+		q.Logger.Error("Some error happened when retrieving link")
+		q.Logger.Error(err.Error())
+		return &model.LinkResponse{}, err
+	}
+
+	return &model.LinkResponse{UploadLink: uploadLink}, nil
+}
+
+func (q QuizServiceImpl) DeleteQuiz(payload model.DeleteRequestPayload) error {
+	// Validate Role
+	claim, err := q.TokenUtil.Validate(payload.DeleteToken, atoken.Access)
+
+	// Invalid Token
+	if err != nil {
+		return web.NewResponseErrorFromError(err, web.TokenError)
+	}
+
+	// Unauthorized Role
+	if claim.Role == user.Student {
+		return web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
+	}
+
+	// Get Quiz Detail
+	quiz, err := q.QuizRepository.GetQuizDetail(payload.ID)
+
+	if err != nil {
+		return err
+	}
+
+	// Validate Ownership
+	if err := q.isQuizContributor(quiz.CourseId, claim.Email); err != nil {
+		return err
+	}
+
+	return q.QuizRepository.Delete(payload.ID)
 }

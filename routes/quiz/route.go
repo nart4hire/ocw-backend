@@ -14,7 +14,6 @@ type QuizRoutes struct {
 
 func (q QuizRoutes) Register(r chi.Router) {
 	r.Get("/course/{id}/quiz", q.QuizHandler.GetAllQuizes)
-	r.Get("/quiz/{id}", q.QuizHandler.GetQuizDetail)
 
 	guard := q.GuardBuilder.Build(
 		user.Student,
@@ -35,5 +34,19 @@ func (q QuizRoutes) Register(r chi.Router) {
 	r.Route("/quiz/{id}/solution", func(r chi.Router) {
 		r.Use(guard)
 		r.Get("/", q.QuizHandler.GetQuizSolution)
+	})
+
+	r.Route("/quiz/{id}", func(r chi.Router) {
+		r.Get("/", q.QuizHandler.GetQuizDetail)
+		r.Route("/", func(r chi.Router) {
+			r.Use(guard)
+			r.Put("/", q.QuizHandler.NewQuiz)
+			r.Delete("/", q.QuizHandler.DeleteQuiz)
+		})
+	})
+
+	r.Route("/quiz/link/{id}", func(r chi.Router) {
+		r.Use(guard)
+		r.Get("/", q.QuizHandler.GetQuizLink)
 	})
 }

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gitlab.informatika.org/ocw/ocw-backend/model/domain/course"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/db"
@@ -63,6 +64,35 @@ func (q *QuizRepositoryImpl) NewTake(quizId uuid.UUID, userEmail string) (uuid.U
 	).Error
 
 	return id, err
+}
+
+func (q *QuizRepositoryImpl) IsUserContributor(id string, email string) (bool, error) {
+	err := q.db.Where("id = ? AND email = ?", id, email).Find(&course.Course{}).Error
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func(q *QuizRepositoryImpl) NewQuiz(quiz quiz.Quiz) error {
+	return q.db.Create(&quiz).Error
+}
+
+func(q *QuizRepositoryImpl) GetQuizPath(quizId uuid.UUID) (string, error) {
+	result := quiz.Quiz{}
+	err := q.db.Where("id = ?", quizId).Find(&result).Error
+
+	if err != nil {
+		return "", err
+	}
+
+	return result.QuizPath, nil
+}
+
+func(q *QuizRepositoryImpl) Delete(quizId uuid.UUID) error {
+	return q.db.Delete(&quiz.Quiz{}, quizId).Error
 }
 
 func (q *QuizRepositoryImpl) IsActiveTake(quizId uuid.UUID, userEmail string) (bool, error) {
