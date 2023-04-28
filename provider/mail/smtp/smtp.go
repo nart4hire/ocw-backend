@@ -13,10 +13,20 @@ type SmtpMailProvider struct {
 }
 
 func New(env *env.Environment) *SmtpMailProvider {
-	auth := smtp.CRAMMD5Auth(
-		env.SmtpUsername,
-		env.SmtpPassword,
-	)
+	var auth smtp.Auth
+	if env.SmtpAuthType == "CRAM" {
+		auth = smtp.CRAMMD5Auth(
+			env.SmtpUsername,
+			env.SmtpPassword,
+		)
+	} else if env.SmtpAuthType == "plain" {
+		auth = smtp.PlainAuth(
+			env.SmtpIdentity,
+			env.SmtpUsername,
+			env.SmtpPassword,
+			env.SmtpServer,
+		)
+	}
 
 	return &SmtpMailProvider{
 		Environment: env,
