@@ -1,9 +1,10 @@
 FROM cosmtrek/air
 
 RUN apt install -y make
+RUN apt install -y git
 
 RUN go install github.com/google/wire/cmd/wire@latest
-RUN go install github.com/swaggo/swag/cmd/swag@latest
+RUN go install github.com/swaggo/swag/cmd/swag@v1.8.10
 
 COPY . /app
 

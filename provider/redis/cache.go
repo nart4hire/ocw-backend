@@ -43,23 +43,29 @@ func NewRedisEnv(
 			IdleTimeout: 240 * time.Second,
 			Dial: func() (redis.Conn, error) {
 				defer resolver(log)
-				conn, err := redis.Dial("tcp", env.RedisConnection+":"+env.RedisPort)
+
+				dialOptions := []redis.DialOption{
+					redis.DialUseTLS(env.RedisUseTLS),
+				}
+
+				if env.RedisUseAuth {
+					dialOptions = append(dialOptions,
+						redis.DialUsername(env.RedisUsername),
+						redis.DialPassword(env.RedisPassword),
+					)
+				}
+
+				conn, err := redis.Dial(
+					"tcp",
+					env.RedisConnection+":"+env.RedisPort,
+					dialOptions...,
+				)
 
 				if err != nil {
 					log.Warning("failed connect to redis server: tcp " + env.RedisConnection + ":" + env.RedisPort)
 					log.Warning(err.Error())
 
 					return nil, err
-				}
-
-				if env.RedisUseAuth {
-					if _, err := conn.Do("AUTH", env.RedisUsername, env.RedisPassword); err != nil {
-						conn.Close()
-
-						log.Warning("failed connect to redis server: authentication failed")
-
-						return nil, err
-					}
 				}
 
 				return conn, err

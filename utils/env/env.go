@@ -36,6 +36,7 @@ type Environment struct {
 	SmtpPassword string `env:"SMTP_PASSWORD"`
 	SmtpServer   string `env:"SMTP_SERVER"`
 	SmtpPort     int    `env:"SMTP_PORT" envDefault:"25"`
+	SmtpAuthType string `env:"SMTP_TYPE" envDefault:"CRAM"`
 
 	FrontendBaseURL   string `env:"FE_BASE_URL"`
 	ResetPasswordPath string `env:"RESET_PASSWORD_PATH" envDefault:"/resetPassword"`
@@ -51,6 +52,7 @@ type Environment struct {
 	RedisPassword   string `env:"REDIS_PASSWORD"`
 	RedisUseAuth    bool   `env:"REDIS_USE_AUTH" envDefault:"false"`
 	RedisPrefixKey  string `env:"REDIS_PREFIX_KEY" envDefault:"app:"`
+	RedisUseTLS     bool   `env:"REDIS_USE_TLS" envDefault:"false"`
 
 	BucketEndpoint  string `env:"BUCKET_ENDPOINT"`
 	BucketSecretKey string `env:"BUCKET_SECRET_KEY"`

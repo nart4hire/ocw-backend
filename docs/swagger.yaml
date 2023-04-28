@@ -2013,6 +2013,44 @@ paths:
       summary: Get Quiz Detail
       tags:
       - quiz
+  /quiz/{id}/finish:
+    post:
+      consumes:
+      - application/json
+      description: Finish quiz session and get the score
+      parameters:
+      - description: Authenticate User (any role)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Quiz Finish payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/quiz.FinishQuizPayload'
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/web.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/quiz.QuizDetail'
+              type: object
+      summary: Finish Quiz
+      tags:
+      - quiz
   /quiz/{id}/solution:
     get:
       consumes:
@@ -2049,19 +2087,13 @@ paths:
     post:
       consumes:
       - application/json
-      description: Finish quiz session and get the score
+      description: Take a quiz
       parameters:
       - description: Authenticate User (any role)
         in: header
         name: Authorization
         required: true
         type: string
-      - description: Quiz Finish payload
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/quiz.FinishQuizPayload'
       - description: Quiz id
         format: uuid
         in: path
@@ -2080,7 +2112,7 @@ paths:
                 data:
                   $ref: '#/definitions/quiz.QuizDetail'
               type: object
-      summary: Finish Quiz
+      summary: Take Quiz
       tags:
       - quiz
   /reset/confirm:
