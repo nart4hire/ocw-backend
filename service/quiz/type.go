@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/quiz"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
 )
 
 type QuizService interface {
@@ -13,5 +14,5 @@ type QuizService interface {
 
 	DoTakeQuiz(ctx context.Context, quizId uuid.UUID, email string) (*quiz.QuizDetail, error)
 	DoFinishQuiz(ctx context.Context, quizId uuid.UUID, email string, studentAnswer []quiz.Response) (*quiz.QuizTake, error)
-	GetSolutionQuiz(ctx context.Context, quizId uuid.UUID, email string) (*quiz.QuizDetail, error)
+	GetSolutionQuiz(ctx context.Context, quizId uuid.UUID, user token.UserClaim) (*quiz.QuizDetail, error)
 }

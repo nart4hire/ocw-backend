@@ -7,7 +7,9 @@ import (
 
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/quiz"
+	userDomain "gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/storage"
 	quizRepo "gitlab.informatika.org/ocw/ocw-backend/repository/quiz"
 )
@@ -76,26 +78,30 @@ func (q QuizServiceImpl) DoTakeQuiz(ctx context.Context, quizId uuid.UUID, email
 	return result, nil
 }
 
-func (q QuizServiceImpl) GetSolutionQuiz(ctx context.Context, quizId uuid.UUID, email string) (*quiz.QuizDetail, error) {
+func (q QuizServiceImpl) GetSolutionQuiz(ctx context.Context, quizId uuid.UUID, user token.UserClaim) (*quiz.QuizDetail, error) {
 	result, err := q.getQuizDetail(ctx, quizId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = q.GetLastTake(quizId, email)
+	last, err := q.GetLastTake(quizId, user.Email)
 
 	if err != nil {
 		return nil, err
 	}
 
-	taken, err := q.IsActiveTake(quizId, email)
+	if last == nil && user.Role == userDomain.Student {
+		return nil, web.NewResponseError("user is not allow to access this data", "ERR_NOT_ALLOWED")
+	}
+
+	taken, err := q.IsActiveTake(quizId, user.Email)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if taken {
+	if taken && user.Role == userDomain.Student {
 		return nil, web.NewResponseError("user is not allow to access this data", "ERR_NOT_ALLOWED")
 	}
 

@@ -95,5 +95,9 @@ func (q *QuizRepositoryImpl) GetLastTake(quizId uuid.UUID, userEmail string) (*q
 		Where("quiz_id = ? AND email = ?", quizId, userEmail).
 		Last(result).Error
 
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
 	return result, err
 }

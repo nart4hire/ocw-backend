@@ -104,7 +104,7 @@ func (m QuizHandlerImpl) GetQuizSolution(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	detail, err := m.GetSolutionQuiz(r.Context(), quizId, user.Email)
+	detail, err := m.GetSolutionQuiz(r.Context(), quizId, user)
 
 	if err != nil {
 		respErr, ok := err.(web.ResponseError)
