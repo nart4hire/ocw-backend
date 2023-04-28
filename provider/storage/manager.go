@@ -1,7 +1,10 @@
 package storage
 
 import (
+	"bufio"
+	"bytes"
 	"context"
+	"io"
 
 	"github.com/minio/minio-go/v7"
 )
@@ -18,7 +21,15 @@ func (s S3Storage) Get(ctx context.Context, path string) ([]byte, error) {
 		return result, err
 	}
 
-	_, err = obj.Read(result)
+	var buffer bytes.Buffer
+	writter := bufio.NewWriter(&buffer)
+
+	_, err = io.Copy(writter, obj)
+	if err != nil {
+		return result, err
+	}
+
+	result = buffer.Bytes()
 
 	return result, err
 }

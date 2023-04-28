@@ -43,9 +43,11 @@ func (q *QuizRepositoryImpl) GetQuizDetail(quizId uuid.UUID) (*quiz.Quiz, error)
 func (q *QuizRepositoryImpl) UpdateScore(takeId uuid.UUID, score int) error {
 	return q.db.
 		Model(&quiz.QuizTake{}).
-		Update("score", score).
-		Update("is_finished", true).
-		Where("id = ?", takeId).Error
+		Where("id = ?", takeId).
+		Updates(quiz.QuizTake{
+			Score:      score,
+			IsFinished: true,
+		}).Error
 }
 
 func (q *QuizRepositoryImpl) NewTake(quizId uuid.UUID, userEmail string) (uuid.UUID, error) {
@@ -94,18 +96,18 @@ func(q *QuizRepositoryImpl) Delete(quizId uuid.UUID) error {
 }
 
 func (q *QuizRepositoryImpl) IsActiveTake(quizId uuid.UUID, userEmail string) (bool, error) {
-	result := struct{ cnt int }{}
+	var result int64 = 0
 	err := q.db.
-		Select("COUNT(*) as cnt").
+		Model(&quiz.QuizTake{}).
 		Where("quiz_id = ? AND email = ? AND is_finished = false", quizId, userEmail).
-		Find(result).
+		Count(&result).
 		Error
 
 	if err != nil {
 		return false, nil
 	}
 
-	return result.cnt > 0, nil
+	return result > 0, nil
 }
 
 func (q *QuizRepositoryImpl) GetAllTake(quizId uuid.UUID, userEmail string) ([]quiz.QuizTake, error) {

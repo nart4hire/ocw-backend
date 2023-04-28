@@ -6,6 +6,7 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/routes/auth"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/common"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/course"
+	"gitlab.informatika.org/ocw/ocw-backend/routes/lesson"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/material"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/routes/reset"
@@ -19,6 +20,7 @@ var routesCollectionSet = wire.NewSet(
 	wire.Struct(new(admin.AdminRoutes), "*"),
 	wire.Struct(new(reset.ResetRoutes), "*"),
 	wire.Struct(new(course.CourseRoutes), "*"),
+	wire.Struct(new(lesson.LessonRoutes), "*"),
 	wire.Struct(new(material.MaterialRoutes), "*"),
 	wire.Struct(new(quiz.QuizRoutes), "*"),
 )
