@@ -1,8 +1,11 @@
 package auth
 
 import (
+	"errors"
+
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/register"
+	"gorm.io/gorm"
 )
 
 func (auth AuthServiceImpl) Register(payload register.RegisterRequestPayload) error {
@@ -19,6 +22,11 @@ func (auth AuthServiceImpl) Register(payload register.RegisterRequestPayload) er
 		Role:        user.Student,
 		IsActivated: false,
 	})
+
+	if errors.Is(err, gorm.ErrDuplicatedKey) {
+		auth.SendVerifyMail(payload.Email)
+		return nil
+	}
 
 	if err == nil {
 		auth.SendVerifyMail(payload.Email)
