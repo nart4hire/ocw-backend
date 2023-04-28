@@ -85,7 +85,6 @@ definitions:
         description: Course Name
         type: string
     required:
-    - abbreviation
     - email
     - id
     - name
@@ -1986,7 +1985,50 @@ paths:
       summary: Delete Content
       tags:
       - content
+  /quiz:
+    put:
+      consumes:
+      - application/json
+      description: New Quiz
+      parameters:
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: New Quiz
+      tags:
+      - quiz
   /quiz/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Quiz
+      parameters:
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Delete Quiz
+      tags:
+      - quiz
     get:
       consumes:
       - application/json
