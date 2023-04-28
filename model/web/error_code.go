@@ -13,7 +13,6 @@ const (
 	MajorNotExist      string = "MAJOR_NOT_EXIST"
 	CourseNotExist     string = "COURSE_NOT_EXIST"
 	IDExists           string = "ID_ALREADY_EXISTS"
-	NotExist           string = "NOT_EXIST"
 
 	TokenError string = "TOKEN_ERROR"
 )

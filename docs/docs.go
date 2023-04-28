@@ -1690,39 +1690,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/quiz": {
-            "put": {
-                "description": "New Quiz",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "quiz"
-                ],
-                "summary": "New Quiz",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "format": "uuid",
-                        "description": "Quiz id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/web.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/quiz/{id}": {
             "get": {
                 "description": "Get Quiz Detail",
@@ -1763,37 +1730,6 @@ const docTemplate = `{
                                     }
                                 }
                             ]
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete Quiz",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "quiz"
-                ],
-                "summary": "Delete Quiz",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "format": "uuid",
-                        "description": "Quiz id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/web.BaseResponse"
                         }
                     }
                 }
@@ -2090,6 +2026,7 @@ const docTemplate = `{
             "description": "Information that should be available when you add a course",
             "type": "object",
             "required": [
+                "abbreviation",
                 "email",
                 "id",
                 "name"
