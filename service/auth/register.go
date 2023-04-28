@@ -24,12 +24,18 @@ func (auth AuthServiceImpl) Register(payload register.RegisterRequestPayload) er
 	})
 
 	if errors.Is(err, gorm.ErrDuplicatedKey) {
-		auth.SendVerifyMail(payload.Email)
+		err := auth.SendVerifyMail(payload.Email)
+		if err != nil {
+			auth.Logger.Warning("Failed to send email: " + err.Error())
+		}
 		return nil
 	}
 
 	if err == nil {
-		auth.SendVerifyMail(payload.Email)
+		err := auth.SendVerifyMail(payload.Email)
+		if err != nil {
+			auth.Logger.Warning("Failed to send email: " + err.Error())
+		}
 	}
 
 	return err

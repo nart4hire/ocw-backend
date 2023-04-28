@@ -1735,6 +1735,67 @@ const docTemplate = `{
                 }
             }
         },
+        "/quiz/{id}/finish": {
+            "post": {
+                "description": "Finish quiz session and get the score",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "quiz"
+                ],
+                "summary": "Finish Quiz",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authenticate User (any role)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Quiz Finish payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/quiz.FinishQuizPayload"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Quiz id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/web.BaseResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/quiz.QuizDetail"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/quiz/{id}/solution": {
             "get": {
                 "description": "Take a quiz",
@@ -1789,7 +1850,7 @@ const docTemplate = `{
         },
         "/quiz/{id}/take": {
             "post": {
-                "description": "Finish quiz session and get the score",
+                "description": "Take a quiz",
                 "consumes": [
                     "application/json"
                 ],
@@ -1799,7 +1860,7 @@ const docTemplate = `{
                 "tags": [
                     "quiz"
                 ],
-                "summary": "Finish Quiz",
+                "summary": "Take Quiz",
                 "parameters": [
                     {
                         "type": "string",
@@ -1807,15 +1868,6 @@ const docTemplate = `{
                         "name": "Authorization",
                         "in": "header",
                         "required": true
-                    },
-                    {
-                        "description": "Quiz Finish payload",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/quiz.FinishQuizPayload"
-                        }
                     },
                     {
                         "type": "string",
