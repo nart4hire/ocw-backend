@@ -380,6 +380,22 @@ definitions:
     - lesson_id
     - order
     type: object
+  quiz.AddQuizRequestPayload:
+    description: Information that should be available when you add a quiz
+    properties:
+      addQuizToken:
+        description: Web Token that was appended to the link
+        type: string
+      course_id:
+        description: Course ID
+        type: string
+      name:
+        description: Quiz Name
+        type: string
+    required:
+    - course_id
+    - name
+    type: object
   quiz.AnswerOption:
     properties:
       answer:
@@ -1997,6 +2013,12 @@ paths:
         name: id
         required: true
         type: string
+      - description: Add Course payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/quiz.AddQuizRequestPayload'
       produces:
       - application/json
       responses:

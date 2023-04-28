@@ -2245,6 +2245,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Add Course payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/quiz.AddQuizRequestPayload"
+                        }
                     }
                 ],
                 "responses": {
@@ -3116,6 +3125,28 @@ const docTemplate = `{
                 },
                 "updateLessonMaterialsToken": {
                     "description": "Web Token that was appended to the link",
+                    "type": "string"
+                }
+            }
+        },
+        "quiz.AddQuizRequestPayload": {
+            "description": "Information that should be available when you add a quiz",
+            "type": "object",
+            "required": [
+                "course_id",
+                "name"
+            ],
+            "properties": {
+                "addQuizToken": {
+                    "description": "Web Token that was appended to the link",
+                    "type": "string"
+                },
+                "course_id": {
+                    "description": "Course ID",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Quiz Name",
                     "type": "string"
                 }
             }

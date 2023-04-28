@@ -30,6 +30,7 @@ import (
 //	@Router			/course/{id} [patch]
 func (c CourseHandlerImpl) UpdateCourse(w http.ResponseWriter, r *http.Request) {
 	payload := course.UpdateCourseRequestPayload{}
+	payload.ID = chi.URLParam(r, "id")
 	validate := validator.New()
 
 	// Validate payload
@@ -82,7 +83,6 @@ func (c CourseHandlerImpl) UpdateCourse(w http.ResponseWriter, r *http.Request) 
 	}
 
 	payload.UpdateCourseToken = token[1]
-	payload.ID = chi.URLParam(r, "id")
 	err := c.CourseService.UpdateCourse(payload)
 
 	if err != nil {

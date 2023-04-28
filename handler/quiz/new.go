@@ -17,6 +17,7 @@ import (
 //	@Produce			json
 //	@Accept				json
 //	@Param				id path string true "Quiz id" Format(uuid)
+//	@Param			    data body quiz.AddQuizRequestPayload true "Add Quiz payload"
 //	@Success			200	{object}	web.BaseResponse
 //	@Router				/quiz [put]
 func (m QuizHandlerImpl) NewQuiz(w http.ResponseWriter, r *http.Request) {
