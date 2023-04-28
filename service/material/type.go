@@ -6,7 +6,7 @@ import (
 )
 
 type MaterialService interface {
-	Create(courseId string, email string, name string) (uuid.UUID, error)
+	Create(courseId string, email string, name string, week int) (uuid.UUID, error)
 	Delete(materialId uuid.UUID, email string) error
 	Get(courseId string) ([]material.Material, error)
 	GetById(materialId uuid.UUID) (*material.Material, error)

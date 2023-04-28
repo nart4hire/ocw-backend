@@ -285,8 +285,11 @@ definitions:
     properties:
       name:
         type: string
+      week:
+        type: integer
     required:
     - name
+    - week
     type: object
   material.CreateMaterialResponse:
     properties:
@@ -2013,7 +2016,7 @@ paths:
         name: id
         required: true
         type: string
-      - description: Add Course payload
+      - description: Add Quiz payload
         in: body
         name: data
         required: true

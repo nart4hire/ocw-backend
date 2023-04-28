@@ -35,16 +35,17 @@ func (m MaterialRepositoryImpl) IsUserContributor(id uuid.UUID, email string) (b
 	return true, nil
 }
 
-func (m MaterialRepositoryImpl) New(courseId string, creatorEmail string, name string) (uuid.UUID, error) {
-	return m.NewWithTransaction(m.builder.Build(), courseId, creatorEmail, name)
+func (m MaterialRepositoryImpl) New(courseId string, creatorEmail string, name string, week int) (uuid.UUID, error) {
+	return m.NewWithTransaction(m.builder.Build(), courseId, creatorEmail, name, week)
 }
 
-func (m MaterialRepositoryImpl) NewWithTransaction(tx transaction.Transaction, courseId string, creatorEmail string, name string) (uuid.UUID, error) {
+func (m MaterialRepositoryImpl) NewWithTransaction(tx transaction.Transaction, courseId string, creatorEmail string, name string, week int) (uuid.UUID, error) {
 	materialData := &material.Material{
 		ID:           uuid.New(),
 		CourseId:     courseId,
 		CreatorEmail: creatorEmail,
 		Name:         name,
+		Week:         week,
 	}
 
 	err := tx.GetTransaction().Create(materialData).Error

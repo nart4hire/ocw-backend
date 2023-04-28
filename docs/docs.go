@@ -2247,7 +2247,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Add Course payload",
+                        "description": "Add Quiz payload",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -2990,11 +2990,15 @@ const docTemplate = `{
         "material.CreateMaterialRequest": {
             "type": "object",
             "required": [
-                "name"
+                "name",
+                "week"
             ],
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "week": {
+                    "type": "integer"
                 }
             }
         },
