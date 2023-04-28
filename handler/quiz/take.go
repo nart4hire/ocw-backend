@@ -138,7 +138,7 @@ func (m QuizHandlerImpl) GetQuizSolution(w http.ResponseWriter, r *http.Request)
 //	@Param			  data	body		quiz.FinishQuizPayload							true	"Quiz Finish payload"
 //	@Param				id path string true "Quiz id" Format(uuid)
 //	@Success			200	{object}	web.BaseResponse{data=quiz.QuizDetail}
-//	@Router				/quiz/{id}/take [post]
+//	@Router				/quiz/{id}/finish [post]
 func (m QuizHandlerImpl) FinishQuiz(w http.ResponseWriter, r *http.Request) {
 	payload := quiz.FinishQuizPayload{}
 
