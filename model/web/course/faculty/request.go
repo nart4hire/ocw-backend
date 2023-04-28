@@ -22,7 +22,7 @@ type UpdateFacultyRequestPayload struct {
 	UpdateFacultyToken string
 
 	// Faculty ID, Provided by Query
-	ID uuid.UUID
+	ID uuid.UUID `json:"-" validate:"required"`
 
 	// Faculty Name
 	Name string `json:"name" validate:"required"`
