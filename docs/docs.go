@@ -2729,9 +2729,7 @@ const docTemplate = `{
             "description": "Information that should be available when you add a course",
             "type": "object",
             "required": [
-                "abbreviation",
                 "email",
-                "lecturer",
                 "name"
             ],
             "properties": {
@@ -2747,10 +2745,6 @@ const docTemplate = `{
                     "description": "Contributor Email",
                     "type": "string",
                     "example": "someone@example.com"
-                },
-                "lecturer": {
-                    "description": "Course Lecturer",
-                    "type": "string"
                 },
                 "majabbr": {
                     "description": "Course Major Abbreviation",

@@ -80,10 +80,7 @@ type UpdateCourseRequestPayload struct {
 	Email string `json:"email" validate:"required,email" example:"someone@example.com"`
 
 	// Course Name Abbreviation
-	Abbreviation string `json:"abbreviation" validate:"required"`
-
-	// Course Lecturer
-	Lecturer string `json:"lecturer" validate:"required"`
+	Abbreviation string `json:"abbreviation"`
 }
 
 
