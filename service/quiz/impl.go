@@ -10,11 +10,9 @@ import (
 
 	"github.com/google/uuid"
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/quiz"
-	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	userDomain "gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
-	atoken "gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
 	model "gitlab.informatika.org/ocw/ocw-backend/model/web/quiz"
 	"gitlab.informatika.org/ocw/ocw-backend/provider/storage"
 	quizRepo "gitlab.informatika.org/ocw/ocw-backend/repository/quiz"
@@ -207,7 +205,7 @@ func (q QuizServiceImpl) isQuizContributor(courseId string, email string) error 
 
 func (q QuizServiceImpl) NewQuiz(payload model.AddQuizRequestPayload) (*model.LinkResponse, error) {
 	// Validate Role
-	claim, err := q.TokenUtil.Validate(payload.AddQuizToken, atoken.Access)
+	claim, err := q.TokenUtil.Validate(payload.AddQuizToken, token.Access)
 
 	// Invalid Token
 	if err != nil {
@@ -215,7 +213,7 @@ func (q QuizServiceImpl) NewQuiz(payload model.AddQuizRequestPayload) (*model.Li
 	}
 
 	// Unauthorized Role
-	if claim.Role == user.Student {
+	if claim.Role == userDomain.Student {
 		return &model.LinkResponse{}, web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
 	}
 
@@ -233,12 +231,26 @@ func (q QuizServiceImpl) NewQuiz(payload model.AddQuizRequestPayload) (*model.Li
 		return &model.LinkResponse{}, err
 	}
 
+	q.QuizRepository.NewQuiz(quiz.Quiz{
+		Id:           uuid.New(),
+		Name:         payload.Name,
+		CourseId:     payload.CourseID,
+		CreatorEmail: claim.Email,
+		QuizPath:     uploadLink,
+	})
+
+	if err != nil {
+		q.Logger.Error("Some error happened when insert to repository")
+		q.Logger.Error(err.Error())
+		return &model.LinkResponse{}, err
+	}
+
 	return &model.LinkResponse{UploadLink: uploadLink}, nil
 }
 
 func (q QuizServiceImpl) GetQuiz(payload model.UpdateQuizRequestPayload) (*model.LinkResponse, error) {
 	// Validate Role
-	claim, err := q.TokenUtil.Validate(payload.UpdateQuizToken, atoken.Access)
+	claim, err := q.TokenUtil.Validate(payload.UpdateQuizToken, token.Access)
 
 	// Invalid Token
 	if err != nil {
@@ -246,7 +258,7 @@ func (q QuizServiceImpl) GetQuiz(payload model.UpdateQuizRequestPayload) (*model
 	}
 
 	// Unauthorized Role
-	if claim.Role == user.Student {
+	if claim.Role == userDomain.Student {
 		return &model.LinkResponse{}, web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
 	}
 
@@ -275,7 +287,7 @@ func (q QuizServiceImpl) GetQuiz(payload model.UpdateQuizRequestPayload) (*model
 
 func (q QuizServiceImpl) DeleteQuiz(payload model.DeleteRequestPayload) error {
 	// Validate Role
-	claim, err := q.TokenUtil.Validate(payload.DeleteToken, atoken.Access)
+	claim, err := q.TokenUtil.Validate(payload.DeleteToken, token.Access)
 
 	// Invalid Token
 	if err != nil {
@@ -283,7 +295,7 @@ func (q QuizServiceImpl) DeleteQuiz(payload model.DeleteRequestPayload) error {
 	}
 
 	// Unauthorized Role
-	if claim.Role == user.Student {
+	if claim.Role == userDomain.Student {
 		return web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
 	}
 
