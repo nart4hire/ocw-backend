@@ -51,7 +51,6 @@ func (c CourseServiceImpl) UpdateCourse(payload course.UpdateCourseRequestPayloa
 		Description: payload.Description,
 		Email: payload.Email,
 		Abbreviation: payload.Abbreviation,
-		Lecturer: payload.Lecturer,
 	})
 
 	if err != nil {
