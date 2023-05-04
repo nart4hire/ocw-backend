@@ -75,6 +75,9 @@ definitions:
       id:
         description: Course ID
         type: string
+      lecturer:
+        description: Course Lecturer Name
+        type: string
       majabbr:
         description: Course Major Abbreviation
         type: string
@@ -101,6 +104,9 @@ definitions:
       email:
         description: Contributor Email
         example: someone@example.com
+        type: string
+      lecturer:
+        description: Course Lecturer Name
         type: string
       majabbr:
         description: Course Major Abbreviation

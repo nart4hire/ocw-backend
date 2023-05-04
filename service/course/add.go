@@ -61,6 +61,7 @@ func (c CourseServiceImpl) AddCourse(payload course.AddCourseRequestPayload) err
 		Description:  payload.Description,
 		Email:        payload.Email,
 		Abbreviation: payload.Abbreviation,
+		Lecturer:     payload.Lecturer,
 	})
 
 	if err != nil {
