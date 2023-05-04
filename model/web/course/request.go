@@ -28,6 +28,9 @@ type AddCourseRequestPayload struct {
 
 	// Course Name Abbreviation
 	Abbreviation string `json:"abbreviation"`
+
+	// Course Lecturer Name
+	Lecturer string `json:"lecturer"`
 }
 
 // DeleteCourse Request Payload
@@ -39,7 +42,6 @@ type DeleteByStringRequestPayload struct {
 	// Course ID, provided by query
 	ID string `json:"-" validate:"required"`
 }
-
 
 // GetID Request Payload
 //	@Description	Information that should be available when you get using course id (string)
@@ -81,6 +83,7 @@ type UpdateCourseRequestPayload struct {
 
 	// Course Name Abbreviation
 	Abbreviation string `json:"abbreviation"`
+
+	// Course Lecturer Name
+	Lecturer string `json:"lecturer"`
 }
-
-

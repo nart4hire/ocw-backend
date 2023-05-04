@@ -2711,6 +2711,10 @@ const docTemplate = `{
                     "description": "Course ID",
                     "type": "string"
                 },
+                "lecturer": {
+                    "description": "Course Lecturer Name",
+                    "type": "string"
+                },
                 "majabbr": {
                     "description": "Course Major Abbreviation",
                     "type": "string"
@@ -2745,6 +2749,10 @@ const docTemplate = `{
                     "description": "Contributor Email",
                     "type": "string",
                     "example": "someone@example.com"
+                },
+                "lecturer": {
+                    "description": "Course Lecturer Name",
+                    "type": "string"
                 },
                 "majabbr": {
                     "description": "Course Major Abbreviation",
