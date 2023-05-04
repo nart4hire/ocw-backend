@@ -40,10 +40,10 @@ func (q *QuizRepositoryImpl) GetQuizDetail(quizId uuid.UUID) (*quiz.Quiz, error)
 	return result, nil
 }
 
-func (q *QuizRepositoryImpl) UpdateScore(quizId uuid.UUID, score int) error {
+func (q *QuizRepositoryImpl) UpdateScore(email string, quizId uuid.UUID, score int) error {
 	return q.db.
 		Model(&quiz.QuizTake{}).
-		Where("quiz_id = ?", quizId).
+		Where("quiz_id = ? AND email = ?", quizId, email).
 		Updates(quiz.QuizTake{
 			Score:      score,
 			IsFinished: true,
