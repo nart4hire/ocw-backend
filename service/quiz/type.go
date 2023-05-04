@@ -18,6 +18,6 @@ type QuizService interface {
 	GetSolutionQuiz(ctx context.Context, quizId uuid.UUID, user token.UserClaim) (*quiz.QuizDetail, error)
 	isQuizContributor(courseId string, email string) error
 	NewQuiz(payload model.AddQuizRequestPayload) (*model.LinkResponse, error)
-	GetQuiz(payload model.UpdateQuizRequestPayload) (*model.LinkResponse, error)
+	UpdateQuiz(payload model.UpdateQuizRequestPayload) (*model.LinkResponse, error)
 	DeleteQuiz(payload model.DeleteRequestPayload) error
 }
