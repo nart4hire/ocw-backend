@@ -2340,6 +2340,46 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "description": "Update Quiz",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "quiz"
+                ],
+                "summary": "Update Quiz",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Quiz id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Quiz payload",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/quiz.UpdateQuizRequestPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.BaseResponse"
+                        }
+                    }
+                }
             }
         },
         "/quiz/{id}/finish": {
@@ -3281,6 +3321,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "problem_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "quiz.UpdateQuizRequestPayload": {
+            "description": "Information that should be available when you update a quiz",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Quiz ID, Set by param",
+                    "type": "string"
+                },
+                "updateQuizToken": {
+                    "description": "Web Token that was appended to the link",
                     "type": "string"
                 }
             }

@@ -19,5 +19,6 @@ type QuizService interface {
 	isQuizContributor(courseId string, email string) error
 	NewQuiz(payload model.AddQuizRequestPayload) (*model.LinkResponse, error)
 	UpdateQuiz(payload model.UpdateQuizRequestPayload) (*model.LinkResponse, error)
+	GetQuizLink(payload model.GetRequestPayload) (*model.PathResponse, error)
 	DeleteQuiz(payload model.DeleteRequestPayload) error
 }

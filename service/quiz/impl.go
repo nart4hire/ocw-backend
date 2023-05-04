@@ -300,6 +300,35 @@ func (q QuizServiceImpl) UpdateQuiz(payload model.UpdateQuizRequestPayload) (*mo
 	return &model.LinkResponse{UploadLink: uploadLink}, nil
 }
 
+func (q QuizServiceImpl) GetQuizLink(payload model.GetRequestPayload) (*model.PathResponse, error) {
+	// Validate Role
+	claim, err := q.TokenUtil.Validate(payload.GetToken, token.Access)
+
+	// Invalid Token
+	if err != nil {
+		return &model.PathResponse{}, web.NewResponseErrorFromError(err, web.TokenError)
+	}
+
+	// Unauthorized Role
+	if claim.Role == userDomain.Student {
+		return &model.PathResponse{}, web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
+	}
+
+	// Get Quiz Detail
+	quiz, err := q.QuizRepository.GetQuizDetail(payload.ID)
+
+	if err != nil {
+		return &model.PathResponse{}, err
+	}
+
+	// Validate Ownership
+	if err := q.isQuizContributor(quiz.CourseId, claim.Email); err != nil {
+		return &model.PathResponse{}, err
+	}
+
+	return &model.PathResponse{Path: quiz.QuizPath}, nil
+}
+
 func (q QuizServiceImpl) DeleteQuiz(payload model.DeleteRequestPayload) error {
 	// Validate Role
 	claim, err := q.TokenUtil.Validate(payload.DeleteToken, token.Access)

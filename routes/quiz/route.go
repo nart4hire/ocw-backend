@@ -40,6 +40,7 @@ func (q QuizRoutes) Register(r chi.Router) {
 		r.Get("/", q.QuizHandler.GetQuizDetail)
 		r.Route("/", func(r chi.Router) {
 			r.Use(guard)
+			r.Patch("/", q.QuizHandler.UpdateQuiz)
 			r.Delete("/", q.QuizHandler.DeleteQuiz)
 		})
 	})
