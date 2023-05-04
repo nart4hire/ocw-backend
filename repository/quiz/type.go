@@ -13,6 +13,7 @@ type QuizRepository interface {
 	IsUserContributor(id string, email string) (bool, error)
 	NewQuiz(quiz quiz.Quiz) error
 	UpdateQuiz(quiz quiz.Quiz) error
+	GetQuizLink(quizId uuid.UUID) (string, error)
 	Delete(quizId uuid.UUID) error
 	IsActiveTake(quizId uuid.UUID, userEmail string) (bool, error)
 	GetAllTake(quizId uuid.UUID, userEmail string) ([]quiz.QuizTake, error)

@@ -70,7 +70,7 @@ func (m QuizHandlerImpl) GetQuizDetail(w http.ResponseWriter, r *http.Request) {
 //	@Router				/quiz/link/{id} [get]
 
 func (m QuizHandlerImpl) GetQuizLink(w http.ResponseWriter, r *http.Request) {
-	payload := quiz.UpdateQuizRequestPayload{}
+	payload := quiz.GetRequestPayload{}
 	quizId := chi.URLParam(r, "id")
 
 	if quizId == "" {
@@ -111,9 +111,9 @@ func (m QuizHandlerImpl) GetQuizLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload.UpdateQuizToken = token[1]
+	payload.GetToken = token[1]
 	payload.ID = id
-	response, err := m.QuizService.UpdateQuiz(payload)
+	response, err := m.QuizService.GetQuizLink(payload)
 
 	if err != nil {
 		respErr, ok := err.(web.ResponseError)

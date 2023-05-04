@@ -84,6 +84,17 @@ func (q *QuizRepositoryImpl) UpdateQuiz(quiz quiz.Quiz) error {
 	return q.db.Save(quiz).Error
 }
 
+func (q *QuizRepositoryImpl) GetQuizLink(quizId uuid.UUID) (string, error) {
+	result := &quiz.Quiz{}
+	err := q.db.Where("id = ?", quizId).First(result).Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return "", web.NewResponseError("Record not found", "ERR_NOT_FOUND")
+	}
+
+	return result.QuizPath, nil
+}
+
 func (q *QuizRepositoryImpl) Delete(quizId uuid.UUID) error {
 	return q.db.Delete(&quiz.Quiz{}, quizId).Error
 }
