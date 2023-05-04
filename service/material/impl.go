@@ -32,14 +32,14 @@ func (m MaterialServiceImpl) GetById(materialId uuid.UUID) (*materialDomain.Mate
 	return material, err
 }
 
-func (m MaterialServiceImpl) Create(courseId string, email string, name string) (uuid.UUID, error) {
+func (m MaterialServiceImpl) Create(courseId string, email string, name string, week int) (uuid.UUID, error) {
 	isSuccess := false
 	tx := m.TransactionBuilder.Build()
 
 	tx.Begin()
 	defer tx.Auto(&isSuccess)
 
-	id, err := m.MaterialRepository.NewWithTransaction(tx, courseId, email, name)
+	id, err := m.MaterialRepository.NewWithTransaction(tx, courseId, email, name, week)
 
 	if err != nil {
 		return uuid.Nil, err

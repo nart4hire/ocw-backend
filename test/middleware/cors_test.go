@@ -16,14 +16,14 @@ func TestPreflight(t *testing.T) {
 			Headers: map[string]string{
 				"Access-Control-Request-Method":  "GET",
 				"Access-Control-Request-Headers": "accept, origin, authorization, content-type, referer",
-				"Origin":                         "https://inkubatorit.com",
+				"Origin":                         "https://test.com",
 			},
 		})
 
 		assert.Nil(t, err)
 
 		assert.Equal(t, res.StatusCode, http.StatusOK)
-		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "https://inkubatorit.com")
+		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "https://test.com")
 		assert.Contains(t, res.Header.Get("Access-Control-Allow-Methods"), "GET")
 	})
 
@@ -34,14 +34,14 @@ func TestPreflight(t *testing.T) {
 			Headers: map[string]string{
 				"Access-Control-Request-Method":  "GET",
 				"Access-Control-Request-Headers": "accept, origin, authorization, content-type, referer",
-				"Origin":                         "https://inkubatorit.com",
+				"Origin":                         "https://test.com",
 			},
 		})
 
 		assert.Nil(t, err)
 
 		assert.Equal(t, res.StatusCode, http.StatusOK)
-		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "https://inkubatorit.com")
+		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "https://test.com")
 		assert.Contains(t, res.Header.Get("Access-Control-Allow-Methods"), "GET")
 	})
 
@@ -52,14 +52,14 @@ func TestPreflight(t *testing.T) {
 			Headers: map[string]string{
 				"Access-Control-Request-Method":  "PATCH",
 				"Access-Control-Request-Headers": "accept, origin, authorization, content-type, referer",
-				"Origin":                         "https://inkubatorit.com",
+				"Origin":                         "https://test.com",
 			},
 		})
 
 		assert.Nil(t, err)
 
 		assert.Equal(t, res.StatusCode, http.StatusOK)
-		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "https://inkubatorit.com")
+		assert.Equal(t, res.Header.Get("Access-Control-Allow-Origin"), "https://test.com")
 		assert.Equal(t, res.Header.Get("Access-Control-Allow-Methods"), "PATCH")
 	})
 }

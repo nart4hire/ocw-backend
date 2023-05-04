@@ -7,14 +7,14 @@ import (
 )
 
 type MaterialRepository interface {
-	New(courseId string, creatorEmail string, name string) (uuid.UUID, error)
+	New(courseId string, creatorEmail string, name string, week int) (uuid.UUID, error)
 	Delete(id uuid.UUID) error
 	Get(materialId uuid.UUID) (*material.Material, error)
 	GetAll(courseId string) ([]material.Material, error)
 
 	IsUserContributor(id uuid.UUID, email string) (bool, error)
 
-	NewWithTransaction(tx transaction.Transaction, courseId string, creatorEmail string, name string) (uuid.UUID, error)
+	NewWithTransaction(tx transaction.Transaction, courseId string, creatorEmail string, name string, week int) (uuid.UUID, error)
 	DeleteWithTransaction(tx transaction.Transaction, id uuid.UUID) error
 	GetAllWithTransaction(tx transaction.Transaction, courseId string) ([]material.Material, error)
 }

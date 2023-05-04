@@ -10,11 +10,11 @@ func (as AdminServiceImpl) AddUser(payload req.AdminAddUserPayload) error {
 	var role user.UserRole
 
 	// TODO: move this
-	if (payload.Role == "admin") {
+	if payload.Role == "admin" {
 		role = user.Admin
-	} else if (payload.Role == "contributor") {
+	} else if payload.Role == "contributor" {
 		role = user.Contributor
-	} else if (payload.Role == "member") {
+	} else if payload.Role == "member" {
 		role = user.Student
 	}
 

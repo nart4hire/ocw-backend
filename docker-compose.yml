@@ -14,11 +14,12 @@ services:
     networks:
       - api_network
   backend:
-    build:
+    build: 
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
-      - .:/app
+      - .env.local:/app/.env.local
+      - .env:/app/.env
     ports:
       - 8888:8080
     env_file: .env.docker

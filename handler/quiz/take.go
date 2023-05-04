@@ -104,7 +104,7 @@ func (m QuizHandlerImpl) GetQuizSolution(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	detail, err := m.GetSolutionQuiz(r.Context(), quizId, user.Email)
+	detail, err := m.GetSolutionQuiz(r.Context(), quizId, user)
 
 	if err != nil {
 		respErr, ok := err.(web.ResponseError)
@@ -138,7 +138,7 @@ func (m QuizHandlerImpl) GetQuizSolution(w http.ResponseWriter, r *http.Request)
 //	@Param			  data	body		quiz.FinishQuizPayload							true	"Quiz Finish payload"
 //	@Param				id path string true "Quiz id" Format(uuid)
 //	@Success			200	{object}	web.BaseResponse{data=quiz.QuizDetail}
-//	@Router				/quiz/{id}/take [post]
+//	@Router				/quiz/{id}/finish [post]
 func (m QuizHandlerImpl) FinishQuiz(w http.ResponseWriter, r *http.Request) {
 	payload := quiz.FinishQuizPayload{}
 

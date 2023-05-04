@@ -7,9 +7,9 @@ import (
 	"gitlab.informatika.org/ocw/ocw-backend/model/domain/user"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/auth/token"
+	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/faculty"
 	"gitlab.informatika.org/ocw/ocw-backend/model/web/course/major"
-	"gitlab.informatika.org/ocw/ocw-backend/model/web/course"
 	"gorm.io/gorm"
 )
 
@@ -45,13 +45,13 @@ func (c CourseServiceImpl) UpdateCourse(payload course.UpdateCourseRequestPayloa
 	}
 
 	err = c.CourseRepository.UpdateCourse(domCourse.Course{
-		ID: payload.ID,
-		Name: payload.Name,
-		Major_id: payload.MajorID,
-		Description: payload.Description,
-		Email: payload.Email,
+		ID:           payload.ID,
+		Name:         payload.Name,
+		Major_id:     payload.MajorID,
+		Description:  payload.Description,
+		Email:        payload.Email,
 		Abbreviation: payload.Abbreviation,
-		Lecturer: payload.Lecturer,
+		Lecturer:     payload.Lecturer,
 	})
 
 	if err != nil {
@@ -66,7 +66,7 @@ func (c CourseServiceImpl) UpdateCourse(payload course.UpdateCourseRequestPayloa
 }
 
 func (c CourseServiceImpl) UpdateMajor(payload major.UpdateMajorRequestPayload) error {
-	
+
 	// Validate Role
 	claim, err := c.TokenUtil.Validate(payload.UpdateMajorToken, token.Access)
 
@@ -94,11 +94,11 @@ func (c CourseServiceImpl) UpdateMajor(payload major.UpdateMajorRequestPayload) 
 
 		payload.FacultyID = faculty.ID
 	}
-	
+
 	err = c.CourseRepository.UpdateMajor(domCourse.Major{
-		ID: payload.ID,
-		Name: payload.Name,
-		Fac_id: payload.FacultyID,
+		ID:           payload.ID,
+		Name:         payload.Name,
+		Fac_id:       payload.FacultyID,
 		Abbreviation: payload.Abbreviation,
 	})
 
@@ -126,10 +126,10 @@ func (c CourseServiceImpl) UpdateFaculty(payload faculty.UpdateFacultyRequestPay
 	if claim.Role != user.Admin {
 		return web.NewResponseErrorFromError(err, web.UnauthorizedAccess)
 	}
-	
+
 	err = c.CourseRepository.UpdateFaculty(domCourse.Faculty{
-		ID: payload.ID,
-		Name: payload.Name,
+		ID:           payload.ID,
+		Name:         payload.Name,
 		Abbreviation: payload.Abbreviation,
 	})
 

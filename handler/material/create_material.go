@@ -82,6 +82,7 @@ func (m MaterialHandlerImpl) CreateMaterial(w http.ResponseWriter, r *http.Reque
 		courseId,
 		user.Email,
 		payload.Name,
+		payload.Week,
 	)
 
 	if err != nil {

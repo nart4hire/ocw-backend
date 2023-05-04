@@ -27,7 +27,10 @@ type AddCourseRequestPayload struct {
 	Email string `json:"email" validate:"required,email" example:"someone@example.com"`
 
 	// Course Name Abbreviation
-	Abbreviation string `json:"abbreviation" validate:"required"`
+	Abbreviation string `json:"abbreviation"`
+
+	// Course Lecturer Name
+	Lecturer string `json:"lecturer"`
 }
 
 // DeleteCourse Request Payload
@@ -37,22 +40,21 @@ type DeleteByStringRequestPayload struct {
 	DeleteCourseToken string
 
 	// Course ID, provided by query
-	ID string
+	ID string `json:"-" validate:"required"`
 }
-
 
 // GetID Request Payload
 //	@Description	Information that should be available when you get using course id (string)
 type GetByStringRequestPayload struct {
 	// Course ID, provided by query
-	ID string
+	ID string `json:"-" validate:"required"`
 }
 
 // GetUUID Request Payload
 //	@Description	Information that should be available when you get using major/faculty id (string)
 type GetByUUIDRequestPayload struct {
 	// Major/Faculty ID, provided by query
-	ID uuid.UUID
+	ID uuid.UUID `json:"-" validate:"required"`
 }
 
 // UpdateCourse Request Payload
@@ -62,7 +64,7 @@ type UpdateCourseRequestPayload struct {
 	UpdateCourseToken string
 
 	// Course ID, Provided by query
-	ID string `json:"id"`
+	ID string `json:"-"`
 
 	// Course Name
 	Name string `json:"name" validate:"required"`
@@ -80,10 +82,8 @@ type UpdateCourseRequestPayload struct {
 	Email string `json:"email" validate:"required,email" example:"someone@example.com"`
 
 	// Course Name Abbreviation
-	Abbreviation string `json:"abbreviation" validate:"required"`
+	Abbreviation string `json:"abbreviation"`
 
-	// Course Lecturer
-	Lecturer string `json:"lecturer" validate:"required"`
+	// Course Lecturer Name
+	Lecturer string `json:"lecturer"`
 }
-
-
