@@ -40,10 +40,10 @@ func (q *QuizRepositoryImpl) GetQuizDetail(quizId uuid.UUID) (*quiz.Quiz, error)
 	return result, nil
 }
 
-func (q *QuizRepositoryImpl) UpdateScore(takeId uuid.UUID, score int) error {
+func (q *QuizRepositoryImpl) UpdateScore(quizId uuid.UUID, score int) error {
 	return q.db.
 		Model(&quiz.QuizTake{}).
-		Where("id = ?", takeId).
+		Where("quiz_id = ?", quizId).
 		Updates(quiz.QuizTake{
 			Score:      score,
 			IsFinished: true,
@@ -76,15 +76,15 @@ func (q *QuizRepositoryImpl) IsUserContributor(id string, email string) (bool, e
 	return true, nil
 }
 
-func(q *QuizRepositoryImpl) NewQuiz(quiz quiz.Quiz) error {
+func (q *QuizRepositoryImpl) NewQuiz(quiz quiz.Quiz) error {
 	return q.db.Create(&quiz).Error
 }
 
-func(q *QuizRepositoryImpl) UpdateQuiz(quiz quiz.Quiz) error {
+func (q *QuizRepositoryImpl) UpdateQuiz(quiz quiz.Quiz) error {
 	return q.db.Save(quiz).Error
 }
 
-func(q *QuizRepositoryImpl) Delete(quizId uuid.UUID) error {
+func (q *QuizRepositoryImpl) Delete(quizId uuid.UUID) error {
 	return q.db.Delete(&quiz.Quiz{}, quizId).Error
 }
 

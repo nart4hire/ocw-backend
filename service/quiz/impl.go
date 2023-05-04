@@ -180,7 +180,7 @@ func (q QuizServiceImpl) DoFinishQuiz(ctx context.Context, quizId uuid.UUID, ema
 		return nil, err
 	}
 
-	err = q.QuizRepository.UpdateScore(data.Id, int(score))
+	err = q.QuizRepository.UpdateScore(quizId, int(score))
 
 	if err != nil {
 		return nil, err
