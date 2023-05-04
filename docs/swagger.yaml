@@ -483,6 +483,16 @@ definitions:
       problem_id:
         type: string
     type: object
+  quiz.UpdateQuizRequestPayload:
+    description: Information that should be available when you update a quiz
+    properties:
+      id:
+        description: Quiz ID, Set by param
+        type: string
+      updateQuizToken:
+        description: Web Token that was appended to the link
+        type: string
+    type: object
   refresh.RefreshResponsePayload:
     description: Refresh endpoint response when process success
     properties:
@@ -2079,6 +2089,33 @@ paths:
                   $ref: '#/definitions/quiz.Quiz'
               type: object
       summary: Get Quiz Detail
+      tags:
+      - quiz
+    patch:
+      consumes:
+      - application/json
+      description: Update Quiz
+      parameters:
+      - description: Quiz id
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Quiz payload
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/quiz.UpdateQuizRequestPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.BaseResponse'
+      summary: Update Quiz
       tags:
       - quiz
   /quiz/{id}/finish:

@@ -44,14 +44,23 @@ type DeleteRequestPayload struct {
 //
 //	@Description	Information that should be available when you get using uuid
 type GetRequestPayload struct {
+	// Web Token that was appended to the link
+	GetToken string
+
 	// Quiz/Problem/Answer ID, provided by query
 	ID uuid.UUID
 }
 
 // Link Response Payload
 //
-//	@Description	Information that you will get upon successful request
+//	@Description	Information that you will get upon successful add/update request
 type LinkResponse struct {
 	UploadLink string `json:"upload_link"`
 }
 
+// Path Response Payload
+//
+//	@Description	Information that you will get upon successful get request
+type PathResponse struct {
+	Path string `json:"path"`
+}
