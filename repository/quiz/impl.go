@@ -80,15 +80,8 @@ func(q *QuizRepositoryImpl) NewQuiz(quiz quiz.Quiz) error {
 	return q.db.Create(&quiz).Error
 }
 
-func(q *QuizRepositoryImpl) GetQuizPath(quizId uuid.UUID) (string, error) {
-	result := quiz.Quiz{}
-	err := q.db.Where("id = ?", quizId).Find(&result).Error
-
-	if err != nil {
-		return "", err
-	}
-
-	return result.QuizPath, nil
+func(q *QuizRepositoryImpl) UpdateQuiz(quiz quiz.Quiz) error {
+	return q.db.Save(quiz).Error
 }
 
 func(q *QuizRepositoryImpl) Delete(quizId uuid.UUID) error {

@@ -231,12 +231,12 @@ func (q QuizServiceImpl) NewQuiz(payload model.AddQuizRequestPayload) (*model.Li
 		return &model.LinkResponse{}, err
 	}
 
-	q.QuizRepository.NewQuiz(quiz.Quiz{
+	err = q.QuizRepository.NewQuiz(quiz.Quiz{
 		Id:           uuid.New(),
 		Name:         payload.Name,
 		CourseId:     payload.CourseID,
 		CreatorEmail: claim.Email,
-		QuizPath:     uploadLink,
+		QuizPath:     path,
 	})
 
 	if err != nil {
@@ -248,7 +248,7 @@ func (q QuizServiceImpl) NewQuiz(payload model.AddQuizRequestPayload) (*model.Li
 	return &model.LinkResponse{UploadLink: uploadLink}, nil
 }
 
-func (q QuizServiceImpl) GetQuiz(payload model.UpdateQuizRequestPayload) (*model.LinkResponse, error) {
+func (q QuizServiceImpl) UpdateQuiz(payload model.UpdateQuizRequestPayload) (*model.LinkResponse, error) {
 	// Validate Role
 	claim, err := q.TokenUtil.Validate(payload.UpdateQuizToken, token.Access)
 
@@ -263,21 +263,36 @@ func (q QuizServiceImpl) GetQuiz(payload model.UpdateQuizRequestPayload) (*model
 	}
 
 	// Get Quiz Detail
-	quiz, err := q.QuizRepository.GetQuizDetail(payload.ID)
+	prev, err := q.QuizRepository.GetQuizDetail(payload.ID)
 
 	if err != nil {
 		return &model.LinkResponse{}, err
 	}
 
 	// Validate Ownership
-	if err := q.isQuizContributor(quiz.CourseId, claim.Email); err != nil {
+	if err := q.isQuizContributor(prev.CourseId, claim.Email); err != nil {
 		return &model.LinkResponse{}, err
 	}
 
-	uploadLink, err := q.QuizRepository.GetQuizPath(payload.ID)
+	path := fmt.Sprintf("%s/%s.json", q.BucketQuizBasePath, strings.ReplaceAll(uuid.New().String(), "-", ""))
+	uploadLink, err := q.Storage.CreatePutSignedLink(context.Background(), path)
 
 	if err != nil {
-		q.Logger.Error("Some error happened when retrieving link")
+		q.Logger.Error("Some error happened when generate link")
+		q.Logger.Error(err.Error())
+		return &model.LinkResponse{}, err
+	}
+
+	err = q.QuizRepository.UpdateQuiz(quiz.Quiz{
+		Id:           prev.Id,
+		Name:         prev.Name,
+		CourseId:     prev.CourseId,
+		CreatorEmail: prev.CreatorEmail,
+		QuizPath:     path,
+	})
+
+	if err != nil {
+		q.Logger.Error("Some error happened when inserting new link")
 		q.Logger.Error(err.Error())
 		return &model.LinkResponse{}, err
 	}

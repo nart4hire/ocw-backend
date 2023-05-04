@@ -113,7 +113,7 @@ func (m QuizHandlerImpl) GetQuizLink(w http.ResponseWriter, r *http.Request) {
 
 	payload.UpdateQuizToken = token[1]
 	payload.ID = id
-	response, err := m.QuizService.GetQuiz(payload)
+	response, err := m.QuizService.UpdateQuiz(payload)
 
 	if err != nil {
 		respErr, ok := err.(web.ResponseError)
