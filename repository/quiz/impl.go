@@ -41,12 +41,18 @@ func (q *QuizRepositoryImpl) GetQuizDetail(quizId uuid.UUID) (*quiz.Quiz, error)
 }
 
 func (q *QuizRepositoryImpl) UpdateScore(email string, quizId uuid.UUID, score int) error {
-	return q.db.
-		Model(&quiz.QuizTake{}).
-		Where("quiz_id = ? AND email = ?", quizId, email).
-		Updates(quiz.QuizTake{
+	tx := q.db.Begin()
+	defer tx.Commit()
+
+	tx.Where("quiz_id = ? AND email = ?", quizId, email).Delete(&quiz.QuizTake{})
+
+	return tx.
+		Create(quiz.QuizTake{
 			Score:      score,
 			IsFinished: true,
+			QuizId:     quizId,
+			Email:      email,
+			Id:         uuid.New(),
 		}).Error
 }
 
